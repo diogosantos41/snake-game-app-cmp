@@ -89,35 +89,40 @@ fun GameScreen(
 
 @Composable
 fun Board(state: GameState) {
-    BoxWithConstraints(Modifier.padding(16.dp)) {
+    BoxWithConstraints(Modifier.padding(12.dp)) {
         val tileSize = maxWidth / BOARD_SIZE
 
         Box(
-            Modifier
+            modifier = Modifier
                 .size(maxWidth)
-                .border(2.dp, Color.Red)
+                .border(4.dp, Color.Red)
         )
 
-        Box(
-            Modifier
-                .offset(
-                    x = tileSize * (state.food?.first ?: 5),
-                    y = tileSize * (state.food?.second ?: 5)
-                )
-                .size(tileSize)
-                .background(
-                    Color.Red, CircleShape
-                )
-        )
+
+        state.food?.let { food ->
+            Box(
+                modifier = Modifier
+                    .offset(
+                        x = tileSize * (food.first),
+                        y = tileSize * (food.second)
+                    )
+                    .size(tileSize)
+                    .background(
+                        Color.Red, CircleShape
+                    )
+            )
+        }
 
         state.snake.forEach {
             Box(
                 modifier = Modifier
                     .offset(x = tileSize * it.first, y = tileSize * it.second)
                     .size(tileSize)
+                    .padding(all = 1.dp)
                     .background(
                         Color.Red
                     )
+
             )
         }
     }

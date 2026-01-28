@@ -18,8 +18,9 @@ import kotlin.random.Random
 class GameViewModel : ViewModel() {
 
     companion object {
-        const val BOARD_SIZE = 16
-        const val TICK_SPEED = 120L
+        const val BOARD_SIZE = 20
+        const val TICK_SPEED = 140L
+        const val SNAKE_START_LENGTH = 3
     }
 
     private var hasLoadedInitialData = false
@@ -40,7 +41,7 @@ class GameViewModel : ViewModel() {
 
     private val mutex = Mutex()
 
-    private var move = Pair(1, 0)
+    private var nextMove = Pair(1, 0)
         set(value) {
             viewModelScope.launch {
                 mutex.withLock {
@@ -51,41 +52,52 @@ class GameViewModel : ViewModel() {
 
     fun initializeGameLogic() {
         viewModelScope.launch {
-            var snakeLength = 4
+            var snakeLength = SNAKE_START_LENGTH
 
             _state.update {
                 it.copy(
-                    food = Pair(5, 5),
+                    food = Pair(
+                        Random.nextInt(BOARD_SIZE),
+                        Random.nextInt(BOARD_SIZE)
+                    ),
                     snake = listOf(Pair(7, 7))
                 )
             }
 
             while (state.value.currentPlayState == PlayState.PLAYING) {
                 delay(TICK_SPEED)
-                _state.update {
-                    val newPosition = it.snake.first().let { poz ->
+                _state.update { it ->
+                    val newSnakeHeadPosition = it.snake.first().let { currentSnakeHeadPosition ->
                         mutex.withLock {
                             Pair(
-                                (poz.first + move.first + BOARD_SIZE) % BOARD_SIZE,
-                                (poz.second + move.second + BOARD_SIZE) % BOARD_SIZE
+                                (currentSnakeHeadPosition.first + nextMove.first + BOARD_SIZE) % BOARD_SIZE,
+                                (currentSnakeHeadPosition.second + nextMove.second + BOARD_SIZE) % BOARD_SIZE
                             )
                         }
                     }
 
-                    if (newPosition == it.food) {
+                    val snakeAteFood = newSnakeHeadPosition == it.food
+                    val snakeHitItself = it.snake.contains(newSnakeHeadPosition)
+
+                    if (snakeAteFood) {
                         snakeLength++
                     }
 
-                    if (it.snake.contains(newPosition)) {
-                        snakeLength = 4
+                    if (snakeHitItself) {
+                        _state.update {
+                            it.copy(
+                                currentPlayState = PlayState.FINISHED
+                            )
+                        }
+                        return@launch
                     }
 
                     it.copy(
-                        food = if (newPosition == it.food) Pair(
+                        food = if (snakeAteFood) Pair(
                             Random.nextInt(BOARD_SIZE),
                             Random.nextInt(BOARD_SIZE)
                         ) else it.food,
-                        snake = listOf(newPosition) + it.snake.take(snakeLength - 1)
+                        snake = listOf(newSnakeHeadPosition) + it.snake.take(snakeLength - 1)
                     )
                 }
             }
@@ -95,7 +107,7 @@ class GameViewModel : ViewModel() {
     fun onAction(action: GameAction) {
         when (action) {
             is GameAction.OnDirectionChanged -> {
-                move = when (action.direction) {
+                nextMove = when (action.direction) {
                     Direction.UP -> 0 to -1
                     Direction.DOWN -> 0 to 1
                     Direction.LEFT -> -1 to 0
