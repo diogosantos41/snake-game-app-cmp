@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -51,35 +52,33 @@ fun GameScreen(
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Board(state)
-        val buttonSize = Modifier.size(64.dp)
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(24.dp)
         ) {
             Button(
                 onClick = { onAction(GameAction.OnDirectionChanged(Direction.UP)) },
-                modifier = buttonSize
+                modifier = Modifier.size(150.dp)
             ) {
                 Icon(Icons.Default.KeyboardArrowUp, null)
             }
             Row {
                 Button(
                     onClick = { onAction(GameAction.OnDirectionChanged(Direction.LEFT)) },
-                    modifier = buttonSize
+                    modifier = Modifier.size(150.dp)
                 ) {
                     Icon(Icons.Default.KeyboardArrowLeft, null)
                 }
-                Spacer(modifier = buttonSize)
+                Spacer(modifier = Modifier.width(80.dp))
                 Button(
                     onClick = { onAction(GameAction.OnDirectionChanged(Direction.RIGHT)) },
-                    modifier = buttonSize
+                    modifier = Modifier.size(150.dp)
                 ) {
                     Icon(Icons.Default.KeyboardArrowRight, null)
                 }
             }
             Button(
                 onClick = { onAction(GameAction.OnDirectionChanged(Direction.DOWN)) },
-                modifier = buttonSize
+                modifier = Modifier.size(150.dp)
             ) {
                 Icon(Icons.Default.KeyboardArrowDown, null)
             }
