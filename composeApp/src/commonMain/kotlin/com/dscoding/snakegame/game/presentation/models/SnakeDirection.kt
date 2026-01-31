@@ -1,6 +1,6 @@
 package com.dscoding.snakegame.game.presentation.models
 
-enum class Direction {
+enum class SnakeDirection {
     UP,
     DOWN,
     LEFT,

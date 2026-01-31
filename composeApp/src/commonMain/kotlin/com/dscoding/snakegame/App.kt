@@ -14,15 +14,12 @@ import com.dscoding.snakegame.game.presentation.GameViewModel
 @Composable
 @Preview
 fun App() {
-
-    val viewModel = remember { GameViewModel() }
-
     SnakeGameTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            GameRoot(viewModel = viewModel)
+            GameRoot()
         }
     }
 }

@@ -27,14 +27,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
+import com.dscoding.snakegame.core.presentation.theme.Violet
 import com.dscoding.snakegame.game.presentation.GameViewModel.Companion.BOARD_SIZE
-import com.dscoding.snakegame.game.presentation.models.Direction
+import com.dscoding.snakegame.game.presentation.models.SnakeDirection
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun GameRoot(
-    viewModel: GameViewModel = viewModel()
+    viewModel: GameViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -56,28 +57,28 @@ fun GameScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Button(
-                onClick = { onAction(GameAction.OnDirectionChanged(Direction.UP)) },
+                onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.UP)) },
                 modifier = Modifier.size(150.dp)
             ) {
                 Icon(Icons.Default.KeyboardArrowUp, null)
             }
             Row {
                 Button(
-                    onClick = { onAction(GameAction.OnDirectionChanged(Direction.LEFT)) },
+                    onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.LEFT)) },
                     modifier = Modifier.size(150.dp)
                 ) {
                     Icon(Icons.Default.KeyboardArrowLeft, null)
                 }
                 Spacer(modifier = Modifier.width(80.dp))
                 Button(
-                    onClick = { onAction(GameAction.OnDirectionChanged(Direction.RIGHT)) },
+                    onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.RIGHT)) },
                     modifier = Modifier.size(150.dp)
                 ) {
                     Icon(Icons.Default.KeyboardArrowRight, null)
                 }
             }
             Button(
-                onClick = { onAction(GameAction.OnDirectionChanged(Direction.DOWN)) },
+                onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.DOWN)) },
                 modifier = Modifier.size(150.dp)
             ) {
                 Icon(Icons.Default.KeyboardArrowDown, null)
@@ -94,7 +95,7 @@ fun Board(state: GameState) {
         Box(
             modifier = Modifier
                 .size(maxWidth)
-                .border(4.dp, Color.Red)
+                .border(2.dp, Color.Gray)
         )
 
 
@@ -112,14 +113,14 @@ fun Board(state: GameState) {
             )
         }
 
-        state.snake.forEach {
+        state.snake.forEachIndexed { index, body ->
             Box(
                 modifier = Modifier
-                    .offset(x = tileSize * it.first, y = tileSize * it.second)
+                    .offset(x = tileSize * body.first, y = tileSize * body.second)
                     .size(tileSize)
-                    .padding(all = 1.dp)
+                    .padding(all = 0.2.dp)
                     .background(
-                        Color.Red
+                        if(index == 0) Color.Blue else Violet
                     )
 
             )
