@@ -24,18 +24,15 @@ class GameEngineImpl : GameEngine {
 
     private val isPaused = MutableStateFlow(false)
 
-    override suspend fun runGame(): Flow<GameEngineResult> = flow {
+    override fun runGame(): Flow<GameEngineResult> = flow {
+        resetGame()
         var snakeLength = SNAKE_START_LENGTH
         var snake: List<Pair<Int, Int>> = listOf(7 to 7)
         var food: Pair<Int, Int> = spawnFoodAvoidingSnake(snake)
 
         emit(GameEngineResult.Tick(ateFood = false, food = food, snake = snake))
 
-        while (true) {
-            if (isPaused.value) {
-                while (isPaused.value) delay(50)
-            }
-
+        while (!isPaused.value) {
             delay(TICK_SPEED)
 
             val move = pendingNextMoves.removeFirstOrNull() ?: lastMove
@@ -77,10 +74,17 @@ class GameEngineImpl : GameEngine {
     }
 
     override fun pauseGame() {
+        pendingNextMoves.clear()
         isPaused.value = true
     }
 
     override fun resumeGame() {
+        isPaused.value = false
+    }
+
+    private fun resetGame() {
+        pendingNextMoves.clear()
+        lastMove = MovementInput.RIGHT.delta
         isPaused.value = false
     }
 

@@ -19,6 +19,8 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -27,11 +29,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dscoding.snakegame.core.presentation.designsystem.StartGameDialog
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.core.presentation.theme.Violet
 import com.dscoding.snakegame.game.presentation.GameViewModel.Companion.BOARD_SIZE
+import com.dscoding.snakegame.game.presentation.models.PlayState
 import com.dscoding.snakegame.game.presentation.models.SnakeDirection
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import snakegame.composeapp.generated.resources.Res
+import snakegame.composeapp.generated.resources.score
+import snakegame.composeapp.generated.resources.snake_game
 
 @Composable
 fun GameRoot(
@@ -50,45 +58,50 @@ fun GameScreen(
     state: GameState,
     onAction: (GameAction) -> Unit,
 ) {
-
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Board(state)
+    Scaffold { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(paddingValues)
         ) {
-            Button(
-                onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.UP)) },
-                modifier = Modifier.size(150.dp)
+            Text(text = "${stringResource(Res.string.score)}: ${state.score}")
+            Board(state, onAction)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Icon(Icons.Default.KeyboardArrowUp, null)
-            }
-            Row {
                 Button(
-                    onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.LEFT)) },
-                    modifier = Modifier.size(150.dp)
+                    onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.UP)) },
+                    modifier = Modifier.size(120.dp)
                 ) {
-                    Icon(Icons.Default.KeyboardArrowLeft, null)
+                    Icon(Icons.Default.KeyboardArrowUp, null)
                 }
-                Spacer(modifier = Modifier.width(80.dp))
+                Row {
+                    Button(
+                        onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.LEFT)) },
+                        modifier = Modifier.size(120.dp)
+                    ) {
+                        Icon(Icons.Default.KeyboardArrowLeft, null)
+                    }
+                    Spacer(modifier = Modifier.width(60.dp))
+                    Button(
+                        onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.RIGHT)) },
+                        modifier = Modifier.size(120.dp)
+                    ) {
+                        Icon(Icons.Default.KeyboardArrowRight, null)
+                    }
+                }
                 Button(
-                    onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.RIGHT)) },
-                    modifier = Modifier.size(150.dp)
+                    onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.DOWN)) },
+                    modifier = Modifier.size(120.dp)
                 ) {
-                    Icon(Icons.Default.KeyboardArrowRight, null)
+                    Icon(Icons.Default.KeyboardArrowDown, null)
                 }
-            }
-            Button(
-                onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.DOWN)) },
-                modifier = Modifier.size(150.dp)
-            ) {
-                Icon(Icons.Default.KeyboardArrowDown, null)
             }
         }
     }
 }
 
 @Composable
-fun Board(state: GameState) {
+fun Board(state: GameState, onAction: (GameAction) -> Unit) {
     BoxWithConstraints(Modifier.padding(12.dp)) {
         val tileSize = maxWidth / BOARD_SIZE
 
@@ -112,7 +125,6 @@ fun Board(state: GameState) {
                     )
             )
         }
-
         state.snake.forEachIndexed { index, body ->
             Box(
                 modifier = Modifier
@@ -120,11 +132,20 @@ fun Board(state: GameState) {
                     .size(tileSize)
                     .padding(all = 0.2.dp)
                     .background(
-                        if(index == 0) Color.Blue else Violet
+                        if (index == 0) Color.Blue else Violet
                     )
 
             )
         }
+    }
+    if (state.currentPlayState == PlayState.READY_TO_PLAY
+        || state.currentPlayState == PlayState.FINISHED
+    ) {
+        StartGameDialog(
+            title = stringResource(Res.string.snake_game),
+            onStartGameClick = { onAction(GameAction.OnGameStarted) },
+            onDismiss = { onAction(GameAction.OnGameStarted) }
+        )
     }
 }
 

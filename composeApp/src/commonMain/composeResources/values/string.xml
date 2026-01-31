@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="snake_game">Snake Game</string>
+    <string name="start">Start</string>
+    <string name="score">Score</string>
+</resources>
