@@ -11,15 +11,15 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.concurrent.Volatile
 import kotlin.random.Random
 
 class GameViewModel : ViewModel() {
 
     companion object {
-        const val BOARD_SIZE = 24
-        const val TICK_SPEED = 180L
+        const val BOARD_SIZE = 16
+        const val TICK_SPEED = 140L
         const val SNAKE_START_LENGTH = 3
+        const val INPUT_BUFFER_SIZE = 3
     }
 
     private var hasLoadedInitialData = false
@@ -38,8 +38,35 @@ class GameViewModel : ViewModel() {
             initialValue = GameState()
         )
 
-    @Volatile
-    private var nextMove: Pair<Int, Int> = 1 to 0
+    private var lastMove: Pair<Int, Int> = 1 to 0
+
+    private val pendingNextMoves = ArrayDeque<Pair<Int, Int>>(INPUT_BUFFER_SIZE)
+
+    fun onAction(action: GameAction) {
+        when (action) {
+            is GameAction.OnDirectionChanged -> {
+                val requestedDirection = when (action.direction) {
+                    Direction.UP -> 0 to -1
+                    Direction.DOWN -> 0 to 1
+                    Direction.LEFT -> -1 to 0
+                    Direction.RIGHT -> 1 to 0
+                }
+
+                if (pendingNextMoves.size >= INPUT_BUFFER_SIZE) return
+
+                if (!isReverse(
+                        requestedDirection,
+                        currentIntendedDirection()
+                    ) && requestedDirection != currentIntendedDirection()
+                ) {
+                    pendingNextMoves.addLast(requestedDirection)
+                }
+            }
+
+            GameAction.OnGamePaused -> _state.update { it.copy(currentPlayState = PlayState.PAUSED) }
+            GameAction.OnGameStarted -> _state.update { it.copy(currentPlayState = PlayState.PLAYING) }
+        }
+    }
 
     fun initializeGameLogic() {
         viewModelScope.launch {
@@ -55,13 +82,13 @@ class GameViewModel : ViewModel() {
             while (state.value.currentPlayState == PlayState.PLAYING) {
                 delay(TICK_SPEED)
 
-                val move = nextMove
+                val move = pendingNextMoves.removeFirstOrNull() ?: lastMove
+                lastMove = move
 
                 val currentSnakeHeadPosition = state.value.snake.first()
-                val newSnakeHeadPosition = Pair(
-                    (currentSnakeHeadPosition.first + move.first + BOARD_SIZE) % BOARD_SIZE,
-                    (currentSnakeHeadPosition.second + move.second + BOARD_SIZE) % BOARD_SIZE
-                )
+                val newSnakeHeadPosition =
+                    ((currentSnakeHeadPosition.first + move.first + BOARD_SIZE) % BOARD_SIZE) to
+                            ((currentSnakeHeadPosition.second + move.second + BOARD_SIZE) % BOARD_SIZE)
 
                 val snakeAteFood = newSnakeHeadPosition == state.value.food
                 val snakeHitItself = state.value.snake.contains(newSnakeHeadPosition)
@@ -72,48 +99,27 @@ class GameViewModel : ViewModel() {
                         it.copy(
                             currentPlayState = PlayState.FINISHED
                         )
-                        return@launch
                     }
+                    return@launch
                 }
 
                 _state.update {
                     it.copy(
                         food = if (snakeAteFood) {
                             Random.nextInt(BOARD_SIZE) to Random.nextInt(BOARD_SIZE)
-                        } else state.value.food,
-                        snake = listOf(newSnakeHeadPosition) + state.value.snake.take(snakeLength - 1)
+                        } else it.food,
+                        snake = listOf(newSnakeHeadPosition) + it.snake.take(snakeLength - 1)
                     )
                 }
             }
         }
     }
 
-    fun onAction(action: GameAction) {
-        when (action) {
-            is GameAction.OnDirectionChanged -> {
-                val requestedMove = when (action.direction) {
-                    Direction.UP -> 0 to -1
-                    Direction.DOWN -> 0 to 1
-                    Direction.LEFT -> -1 to 0
-                    Direction.RIGHT -> 1 to 0
-                }
-                setNextMoveIfAllowed(requestedMove)
-            }
-
-            GameAction.OnGamePaused -> {
-                _state.update { it.copy(currentPlayState = PlayState.PAUSED) }
-            }
-
-            GameAction.OnGameStarted -> {
-                _state.update { it.copy(currentPlayState = PlayState.PLAYING) }
-            }
-        }
+    private fun isReverse(positionA: Pair<Int, Int>, positionB: Pair<Int, Int>): Boolean {
+        return positionA.first == -positionB.first && positionA.second == -positionB.second
     }
 
-    private fun setNextMoveIfAllowed(requested: Pair<Int, Int>) {
-        val isReverse = requested.first == -nextMove.first && requested.second == -nextMove.second
-        if (!isReverse) {
-            nextMove = requested
-        }
+    private fun currentIntendedDirection(): Pair<Int, Int> {
+        return pendingNextMoves.lastOrNull() ?: lastMove
     }
 }
