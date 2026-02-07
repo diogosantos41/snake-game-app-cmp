@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,25 +21,27 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dscoding.snakegame.core.presentation.designsystem.StartGameDialog
+import com.dscoding.snakegame.core.presentation.theme.GameOrange
+import com.dscoding.snakegame.core.presentation.theme.GameYellow
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
-import com.dscoding.snakegame.core.presentation.theme.Violet
+import com.dscoding.snakegame.core.presentation.util.tileGridBackground
 import com.dscoding.snakegame.game.presentation.GameViewModel.Companion.BOARD_SIZE
+import com.dscoding.snakegame.game.presentation.components.GameToolbar
 import com.dscoding.snakegame.game.presentation.models.PlayState
 import com.dscoding.snakegame.game.presentation.models.SnakeDirection
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import snakegame.composeapp.generated.resources.Res
-import snakegame.composeapp.generated.resources.score
 import snakegame.composeapp.generated.resources.snake_game
 
 @Composable
@@ -58,42 +61,65 @@ fun GameScreen(
     state: GameState,
     onAction: (GameAction) -> Unit,
 ) {
-    Scaffold { paddingValues ->
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(paddingValues)
+    Scaffold(
+        topBar = {
+            GameToolbar(
+                currentScore = state.score,
+                highScore = 200,
+                onSettingsClick = {},
+            )
+        }
+    ) { paddingValues ->
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(GameOrange)
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = 0.dp
+                ),
         ) {
-            Text(text = "${stringResource(Res.string.score)}: ${state.score}")
-            Board(state, onAction)
+            val tileSize = maxWidth / BOARD_SIZE
+
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .tileGridBackground(
+                        tileSize = tileSize,
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Button(
-                    onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.UP)) },
-                    modifier = Modifier.size(120.dp)
+                Board(state, onAction)
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Icon(Icons.Default.KeyboardArrowUp, null)
-                }
-                Row {
                     Button(
-                        onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.LEFT)) },
+                        onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.UP)) },
                         modifier = Modifier.size(120.dp)
                     ) {
-                        Icon(Icons.Default.KeyboardArrowLeft, null)
+                        Icon(Icons.Default.KeyboardArrowUp, null)
                     }
-                    Spacer(modifier = Modifier.width(60.dp))
+                    Row {
+                        Button(
+                            onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.LEFT)) },
+                            modifier = Modifier.size(120.dp)
+                        ) {
+                            Icon(Icons.Default.KeyboardArrowLeft, null)
+                        }
+                        Spacer(modifier = Modifier.width(60.dp))
+                        Button(
+                            onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.RIGHT)) },
+                            modifier = Modifier.size(120.dp)
+                        ) {
+                            Icon(Icons.Default.KeyboardArrowRight, null)
+                        }
+                    }
                     Button(
-                        onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.RIGHT)) },
+                        onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.DOWN)) },
                         modifier = Modifier.size(120.dp)
                     ) {
-                        Icon(Icons.Default.KeyboardArrowRight, null)
+                        Icon(Icons.Default.KeyboardArrowDown, null)
                     }
-                }
-                Button(
-                    onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.DOWN)) },
-                    modifier = Modifier.size(120.dp)
-                ) {
-                    Icon(Icons.Default.KeyboardArrowDown, null)
                 }
             }
         }
@@ -102,7 +128,7 @@ fun GameScreen(
 
 @Composable
 fun Board(state: GameState, onAction: (GameAction) -> Unit) {
-    BoxWithConstraints(Modifier.padding(12.dp)) {
+    BoxWithConstraints {
         val tileSize = maxWidth / BOARD_SIZE
 
         Box(
@@ -110,7 +136,6 @@ fun Board(state: GameState, onAction: (GameAction) -> Unit) {
                 .size(maxWidth)
                 .border(2.dp, Color.Gray)
         )
-
 
         state.food?.let { food ->
             Box(
@@ -121,7 +146,7 @@ fun Board(state: GameState, onAction: (GameAction) -> Unit) {
                     )
                     .size(tileSize)
                     .background(
-                        Color.Red, CircleShape
+                        GameYellow, CircleShape
                     )
             )
         }
@@ -130,9 +155,10 @@ fun Board(state: GameState, onAction: (GameAction) -> Unit) {
                 modifier = Modifier
                     .offset(x = tileSize * body.first, y = tileSize * body.second)
                     .size(tileSize)
-                    .padding(all = 0.2.dp)
+                    .padding(all = 2.dp)
                     .background(
-                        if (index == 0) Color.Blue else Violet
+                        if (index == 0) White else White
+
                     )
 
             )

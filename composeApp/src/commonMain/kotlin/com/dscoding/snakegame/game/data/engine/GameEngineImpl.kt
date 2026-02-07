@@ -13,7 +13,6 @@ import kotlin.random.Random
 class GameEngineImpl : GameEngine {
 
     companion object {
-        const val BOARD_SIZE = 16
         const val TICK_SPEED = 140L
         const val SNAKE_START_LENGTH = 3
         const val INPUT_BUFFER_SIZE = 3
@@ -22,9 +21,12 @@ class GameEngineImpl : GameEngine {
     private var lastMove: Pair<Int, Int> = MovementInput.RIGHT.delta
     private val pendingNextMoves = ArrayDeque<Pair<Int, Int>>(INPUT_BUFFER_SIZE)
 
+    private var gameBoardSize = 0
+
     private val isPaused = MutableStateFlow(false)
 
-    override fun runGame(): Flow<GameEngineResult> = flow {
+    override fun runGame(boardSize: Int): Flow<GameEngineResult> = flow {
+        gameBoardSize = boardSize
         resetGame()
         var snakeLength = SNAKE_START_LENGTH
         var snake: List<Pair<Int, Int>> = listOf(7 to 7)
@@ -40,8 +42,8 @@ class GameEngineImpl : GameEngine {
 
             val snakeHeadPosition = snake.first()
             val newSnakeHeadPosition =
-                ((snakeHeadPosition.first + move.first + BOARD_SIZE) % BOARD_SIZE) to
-                        ((snakeHeadPosition.second + move.second + BOARD_SIZE) % BOARD_SIZE)
+                ((snakeHeadPosition.first + move.first + gameBoardSize) % gameBoardSize) to
+                        ((snakeHeadPosition.second + move.second + gameBoardSize) % gameBoardSize)
 
             val snakeAteFood = newSnakeHeadPosition == food
             val snakeHitItself = snake.contains(newSnakeHeadPosition)
@@ -98,7 +100,7 @@ class GameEngineImpl : GameEngine {
 
     private fun spawnFoodAvoidingSnake(snake: List<Pair<Int, Int>>): Pair<Int, Int> {
         while (true) {
-            val spawnLocation = Random.nextInt(BOARD_SIZE) to Random.nextInt(BOARD_SIZE)
+            val spawnLocation = Random.nextInt(gameBoardSize) to Random.nextInt(gameBoardSize)
             if (spawnLocation !in snake) return spawnLocation
         }
     }

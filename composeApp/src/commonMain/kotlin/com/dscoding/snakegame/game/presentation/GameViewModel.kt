@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.update
 class GameViewModel(private val gameEngine: GameEngine) : ViewModel() {
 
     companion object {
-        const val BOARD_SIZE = 16
+        const val BOARD_SIZE = 14
     }
 
     private var hasLoadedInitialData = false
@@ -69,7 +69,7 @@ class GameViewModel(private val gameEngine: GameEngine) : ViewModel() {
         gameEngineJob?.cancel()
         gameEngineJob = null
         gameEngineJob = gameEngine
-            .runGame()
+            .runGame(boardSize = BOARD_SIZE)
             .onTick { tick ->
                 _state.update {
                     it.copy(

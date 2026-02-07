@@ -5,7 +5,7 @@ import com.dscoding.snakegame.game.domain.models.MovementInput
 import kotlinx.coroutines.flow.Flow
 
 interface GameEngine {
-    fun runGame(): Flow<GameEngineResult>
+    fun runGame(boardSize: Int): Flow<GameEngineResult>
 
     fun requestDirectionChange(movementInput: MovementInput)
     fun pauseGame()
