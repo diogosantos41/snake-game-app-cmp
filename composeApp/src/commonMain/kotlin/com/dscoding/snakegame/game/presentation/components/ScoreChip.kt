@@ -1,10 +1,11 @@
 package com.dscoding.snakegame.game.presentation.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -16,36 +17,45 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 
 
 @Composable
 fun ScoreChip(
-    icon: String,
+    title: String,
     value: Int,
     modifier: Modifier = Modifier
 ) {
-    Surface(
-        color = Color.White.copy(alpha = 0f),
-        shape = RoundedCornerShape(1.dp),
-        modifier = modifier
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(horizontal = 4.dp, vertical = 8.dp)
+        Text(
+            text = title,
+            color = Color.White,
+            style = MaterialTheme.typography.labelLarge.copy(fontWeight = Bold)
+        )
+
+        Spacer(Modifier.height(2.dp))
+
+        Surface(
+            shape = RoundedCornerShape(10.dp),
+            color = Color.Black.copy(alpha = 0.5f)
         ) {
-            Text(
-                text = icon,
-                fontSize = 16.sp
-            )
-            Spacer(Modifier.width(8.dp))
-            Text(
-                text = "$value",
-                color = Color.White,
-                style = MaterialTheme.typography.labelLarge.copy(fontWeight = Bold)
-            )
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(width = 80.dp, height = 44.dp)
+                    .padding(horizontal = 10.dp)
+            ) {
+                Text(
+                    text = value.toString(),
+                    color = Color.White,
+                    style = MaterialTheme.typography.headlineSmall.copy(
+                        fontWeight = Bold
+                    )
+                )
+            }
         }
     }
 }
@@ -55,7 +65,7 @@ fun ScoreChip(
 fun ScoreChipPreview() {
     SnakeGameTheme {
         ScoreChip(
-            icon = "🏆",
+            title = "Score",
             value = 200,
             modifier = Modifier.padding(5.dp)
         )

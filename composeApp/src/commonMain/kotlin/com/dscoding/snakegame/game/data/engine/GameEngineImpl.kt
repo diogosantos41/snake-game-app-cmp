@@ -1,9 +1,10 @@
 package com.dscoding.snakegame.game.data.engine
 
+import com.dscoding.snakegame.game.data.engine.mappers.toMovementDirection
 import com.dscoding.snakegame.game.domain.GameEngine
 import com.dscoding.snakegame.game.domain.models.GameEndReason
 import com.dscoding.snakegame.game.domain.models.GameEngineResult
-import com.dscoding.snakegame.game.domain.models.MovementInput
+import com.dscoding.snakegame.game.domain.models.MovementDirection
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +19,8 @@ class GameEngineImpl : GameEngine {
         const val INPUT_BUFFER_SIZE = 3
     }
 
-    private var lastMove: Pair<Int, Int> = MovementInput.RIGHT.delta
+    private val defaultMovementDirection = MovementDirection.RIGHT
+    private var lastMove: Pair<Int, Int> = defaultMovementDirection.delta
     private val pendingNextMoves = ArrayDeque<Pair<Int, Int>>(INPUT_BUFFER_SIZE)
 
     private var gameBoardSize = 0
@@ -32,7 +34,14 @@ class GameEngineImpl : GameEngine {
         var snake: List<Pair<Int, Int>> = listOf(7 to 7)
         var food: Pair<Int, Int> = spawnFoodAvoidingSnake(snake)
 
-        emit(GameEngineResult.Tick(ateFood = false, food = food, snake = snake))
+        emit(
+            GameEngineResult.Tick(
+                ateFood = false,
+                food = food,
+                snake = snake,
+                movementDirection = defaultMovementDirection
+            )
+        )
 
         while (!isPaused.value) {
             delay(TICK_SPEED)
@@ -60,14 +69,21 @@ class GameEngineImpl : GameEngine {
 
             snake = listOf(newSnakeHeadPosition) + snake.take(snakeLength - 1)
 
-            emit(GameEngineResult.Tick(ateFood = snakeAteFood, food = food, snake = snake))
+            emit(
+                GameEngineResult.Tick(
+                    ateFood = snakeAteFood,
+                    food = food,
+                    snake = snake,
+                    movementDirection = lastMove.toMovementDirection()
+                )
+            )
         }
     }
 
-    override fun requestDirectionChange(movementInput: MovementInput) {
+    override fun requestDirectionChange(movementDirection: MovementDirection) {
         if (pendingNextMoves.size >= INPUT_BUFFER_SIZE) return
 
-        val requestedMove = movementInput.delta
+        val requestedMove = movementDirection.delta
         val intendedMove = currentIntendedDirection()
 
         if (!isReverse(requestedMove, intendedMove) && requestedMove != intendedMove) {
@@ -86,7 +102,7 @@ class GameEngineImpl : GameEngine {
 
     private fun resetGame() {
         pendingNextMoves.clear()
-        lastMove = MovementInput.RIGHT.delta
+        lastMove = MovementDirection.RIGHT.delta
         isPaused.value = false
     }
 

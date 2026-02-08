@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.dscoding.snakegame.game.domain.GameEngine
 import com.dscoding.snakegame.game.domain.models.onGameEnded
 import com.dscoding.snakegame.game.domain.models.onTick
-import com.dscoding.snakegame.game.presentation.mappers.toMovementInput
 import com.dscoding.snakegame.game.presentation.models.PlayState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,8 +41,7 @@ class GameViewModel(private val gameEngine: GameEngine) : ViewModel() {
     fun onAction(action: GameAction) {
         when (action) {
             is GameAction.OnDirectionClick -> {
-                val requestedMovementInput = action.snakeDirection.toMovementInput()
-                gameEngine.requestDirectionChange(requestedMovementInput)
+                gameEngine.requestDirectionChange(action.movementDirection)
             }
 
             GameAction.OnGamePaused -> {
@@ -75,7 +73,8 @@ class GameViewModel(private val gameEngine: GameEngine) : ViewModel() {
                     it.copy(
                         food = tick.food,
                         snake = tick.snake,
-                        score = it.score + if (tick.ateFood) 1 else 0
+                        score = it.score + if (tick.ateFood) 1 else 0,
+                        currentMovementDirection = tick.movementDirection
                     )
                 }
             }.onGameEnded {

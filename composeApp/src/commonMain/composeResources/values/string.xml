@@ -3,4 +3,5 @@
     <string name="snake_game">Snake Game</string>
     <string name="start">Start</string>
     <string name="score">Score</string>
+    <string name="high_score">Highscore</string>
 </resources>

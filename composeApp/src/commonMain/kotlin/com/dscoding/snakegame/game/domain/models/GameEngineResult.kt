@@ -9,6 +9,7 @@ sealed interface GameEngineResult {
         val ateFood: Boolean,
         val snake: List<Pair<Int, Int>>,
         val food: Pair<Int, Int>,
+        val movementDirection: MovementDirection
     ) : GameEngineResult
 
     data class GameEnded(

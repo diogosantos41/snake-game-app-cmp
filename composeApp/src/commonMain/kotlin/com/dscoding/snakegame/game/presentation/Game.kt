@@ -18,9 +18,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.Tune
@@ -43,14 +43,17 @@ import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.core.presentation.theme.blackAlphaGradient
 import com.dscoding.snakegame.core.presentation.theme.orangeAlphaGradient
 import com.dscoding.snakegame.core.presentation.util.tileGridBackground
+import com.dscoding.snakegame.game.domain.models.MovementDirection
 import com.dscoding.snakegame.game.presentation.GameViewModel.Companion.BOARD_SIZE
 import com.dscoding.snakegame.game.presentation.components.DiamondDirectionButton
 import com.dscoding.snakegame.game.presentation.components.ScoreChip
+import com.dscoding.snakegame.game.presentation.components.SnakeHead
 import com.dscoding.snakegame.game.presentation.models.PlayState
-import com.dscoding.snakegame.game.presentation.models.SnakeDirection
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import snakegame.composeapp.generated.resources.Res
+import snakegame.composeapp.generated.resources.high_score
+import snakegame.composeapp.generated.resources.score
 import snakegame.composeapp.generated.resources.snake_game
 
 @Composable
@@ -108,31 +111,31 @@ fun GameScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         ScoreChip(
-                            icon = "🍓",
+                            title = stringResource(Res.string.score),
                             value = state.score
                         )
                         DiamondDirectionButton(
-                            onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.UP)) },
+                            onClick = { onAction(GameAction.OnDirectionClick(MovementDirection.UP)) },
                             icon = Icons.Default.KeyboardArrowUp,
                         )
                         ScoreChip(
-                            icon = "🏆",
-                            value = state.score
+                            title = stringResource(Res.string.high_score),
+                            value = state.highScore
                         )
                     }
                     Row {
                         DiamondDirectionButton(
-                            onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.LEFT)) },
-                            icon = Icons.Default.KeyboardArrowLeft,
+                            onClick = { onAction(GameAction.OnDirectionClick(MovementDirection.LEFT)) },
+                            icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                         )
                         Spacer(modifier = Modifier.width(60.dp))
                         DiamondDirectionButton(
-                            onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.RIGHT)) },
-                            icon = Icons.Default.KeyboardArrowRight,
+                            onClick = { onAction(GameAction.OnDirectionClick(MovementDirection.RIGHT)) },
+                            icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         )
                     }
                     DiamondDirectionButton(
-                        onClick = { onAction(GameAction.OnDirectionClick(SnakeDirection.DOWN)) },
+                        onClick = { onAction(GameAction.OnDirectionClick(MovementDirection.DOWN)) },
                         icon = Icons.Default.KeyboardArrowDown,
                     )
                     Spacer(Modifier.weight(1f))
@@ -193,7 +196,7 @@ fun Board(state: GameState, onAction: (GameAction) -> Unit) {
         Box(
             modifier = Modifier
                 .size(maxWidth)
-                .border(0.5.dp, White.copy(alpha = 0.5f))
+                .border(0.3.dp, White.copy(alpha = 0.3f))
         )
 
         state.food?.let { food ->
@@ -210,17 +213,35 @@ fun Board(state: GameState, onAction: (GameAction) -> Unit) {
             )
         }
         state.snake.forEachIndexed { index, body ->
-            Box(
-                modifier = Modifier
-                    .offset(x = tileSize * body.first, y = tileSize * body.second)
-                    .size(tileSize)
-                    .padding(all = 2.dp)
-                    .background(
-                        if (index == 0) White else White
+            val darknessStep = 0.005f
+            val shade = (1f - index * darknessStep).coerceIn(0.6f, 1f)
 
-                    )
-
+            val bodyColor = Color(
+                red = shade,
+                green = shade,
+                blue = shade,
+                alpha = 1f
             )
+
+            if (index == 0) {
+                SnakeHead(
+                    offsetX = tileSize * body.first,
+                    offsetY = tileSize * body.second,
+                    size = tileSize,
+                    movementDirection = state.currentMovementDirection
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .offset(
+                            x = tileSize * body.first,
+                            y = tileSize * body.second
+                        )
+                        .size(tileSize)
+                        .padding(2.dp)
+                        .background(bodyColor)
+                )
+            }
         }
     }
     if (state.currentPlayState == PlayState.READY_TO_PLAY
@@ -240,7 +261,9 @@ private fun GameScreenPreview() {
     SnakeGameTheme {
         GameScreen(
             state = GameState(
-                currentPlayState = PlayState.PLAYING
+                currentPlayState = PlayState.PLAYING,
+                score = 20,
+                highScore = 200
             ),
             onAction = {}
         )
