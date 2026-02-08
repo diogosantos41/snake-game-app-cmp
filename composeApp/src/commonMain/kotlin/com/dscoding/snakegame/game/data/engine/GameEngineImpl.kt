@@ -99,6 +99,7 @@ class GameEngineImpl : GameEngine {
     }
 
     private fun spawnFoodAvoidingSnake(snake: List<Pair<Int, Int>>): Pair<Int, Int> {
+        // TODO fix sometimes the food spawns inside the head
         while (true) {
             val spawnLocation = Random.nextInt(gameBoardSize) to Random.nextInt(gameBoardSize)
             if (spawnLocation !in snake) return spawnLocation
