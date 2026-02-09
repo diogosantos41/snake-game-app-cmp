@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
@@ -27,9 +29,9 @@ fun SnakeHead(
     val eyeSize = size * 0.18f
     val eyeInset = size * 0.12f
 
-    val tongueWidth = size * 0.06f
-    val tongueLength = size * 0.20f
-    val tongueInset = size * 0.15f
+    val tongueWidth = size * 0.12f
+    val tongueLength = size * 0.24f
+    val tongueInset = size * 0.18f
 
     val rotation = when (movementDirection) {
         MovementDirection.UP -> 0f
@@ -57,13 +59,16 @@ fun SnakeHead(
                 modifier = Modifier
                     .offset(x = eyeInset, y = eyeInset)
                     .size(eyeSize)
+                    .clip(shape = CircleShape)
                     .background(Color.Black)
+
             )
             Box(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .offset(x = -eyeInset, y = eyeInset)
                     .size(eyeSize)
+                    .clip(shape = CircleShape)
                     .background(Color.Black)
             )
 

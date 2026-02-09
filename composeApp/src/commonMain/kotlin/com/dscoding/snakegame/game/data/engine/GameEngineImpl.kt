@@ -54,7 +54,7 @@ class GameEngineImpl : GameEngine {
                 ((snakeHeadPosition.first + move.first + gameBoardSize) % gameBoardSize) to
                         ((snakeHeadPosition.second + move.second + gameBoardSize) % gameBoardSize)
 
-            val snakeAteFood = newSnakeHeadPosition == food
+            val snakeAteFood = newSnakeHeadPosition == food || snake.contains(food)
             val snakeHitItself = snake.contains(newSnakeHeadPosition)
 
             if (snakeHitItself) {
@@ -115,7 +115,6 @@ class GameEngineImpl : GameEngine {
     }
 
     private fun spawnFoodAvoidingSnake(snake: List<Pair<Int, Int>>): Pair<Int, Int> {
-        // TODO fix sometimes the food spawns inside the head
         while (true) {
             val spawnLocation = Random.nextInt(gameBoardSize) to Random.nextInt(gameBoardSize)
             if (spawnLocation !in snake) return spawnLocation

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
@@ -38,7 +37,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dscoding.snakegame.core.presentation.designsystem.StartGameDialog
-import com.dscoding.snakegame.core.presentation.theme.GameYellow
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.core.presentation.theme.blackAlphaGradient
 import com.dscoding.snakegame.core.presentation.theme.orangeAlphaGradient
@@ -47,6 +45,7 @@ import com.dscoding.snakegame.game.domain.models.MovementDirection
 import com.dscoding.snakegame.game.presentation.GameViewModel.Companion.BOARD_SIZE
 import com.dscoding.snakegame.game.presentation.components.DiamondDirectionButton
 import com.dscoding.snakegame.game.presentation.components.ScoreChip
+import com.dscoding.snakegame.game.presentation.components.SnakeFood
 import com.dscoding.snakegame.game.presentation.components.SnakeHead
 import com.dscoding.snakegame.game.presentation.models.PlayState
 import org.jetbrains.compose.resources.stringResource
@@ -200,16 +199,10 @@ fun Board(state: GameState, onAction: (GameAction) -> Unit) {
         )
 
         state.food?.let { food ->
-            Box(
-                modifier = Modifier
-                    .offset(
-                        x = tileSize * (food.first),
-                        y = tileSize * (food.second)
-                    )
-                    .size(tileSize)
-                    .background(
-                        GameYellow, CircleShape
-                    )
+            SnakeFood(
+                offsetX = tileSize * (food.first),
+                offsetY = tileSize * (food.second),
+                size = tileSize
             )
         }
         state.snake.forEachIndexed { index, body ->
