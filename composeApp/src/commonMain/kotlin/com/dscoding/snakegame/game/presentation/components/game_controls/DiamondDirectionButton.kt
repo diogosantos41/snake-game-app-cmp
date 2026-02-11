@@ -1,4 +1,4 @@
-package com.dscoding.snakegame.game.presentation.components
+package com.dscoding.snakegame.game.presentation.components.game_controls
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -34,18 +34,12 @@ fun DiamondDirectionButton(
         shape = RoundedCornerShape(14.dp),
         colors = ButtonDefaults.buttonColors(containerColor = containerColor),
         contentPadding = PaddingValues(0.dp),
-        modifier = modifier
-            .size(size)
-            .graphicsLayer { rotationZ = 45f }
-    ) {
+        modifier = modifier.size(size).graphicsLayer { rotationZ = 45f }) {
         Icon(
             imageVector = icon,
             contentDescription = null,
             tint = iconTint,
-            modifier = Modifier
-                .size(iconSize)
-                .graphicsLayer { rotationZ = -45f }
-        )
+            modifier = Modifier.size(iconSize).graphicsLayer { rotationZ = -45f })
     }
 }
 

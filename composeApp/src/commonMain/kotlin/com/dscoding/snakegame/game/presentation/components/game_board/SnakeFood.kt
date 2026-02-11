@@ -1,4 +1,4 @@
-package com.dscoding.snakegame.game.presentation.components
+package com.dscoding.snakegame.game.presentation.components.game_board
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -48,7 +48,7 @@ fun SnakeFood(offsetX: Dp, offsetY: Dp, size: Dp) {
 
 @Preview
 @Composable
-fun SnakeFoodPreview() {
+private fun SnakeFoodPreview() {
     SnakeGameTheme {
         SnakeFood(
             offsetX = 0.dp,

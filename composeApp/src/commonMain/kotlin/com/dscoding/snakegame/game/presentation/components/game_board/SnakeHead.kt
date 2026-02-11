@@ -1,4 +1,4 @@
-package com.dscoding.snakegame.game.presentation.components
+package com.dscoding.snakegame.game.presentation.components.game_board
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -85,7 +85,7 @@ fun SnakeHead(
 
 @Preview
 @Composable
-fun SnakeHeadPreview() {
+private fun SnakeHeadPreview() {
     SnakeGameTheme {
         Box(modifier = Modifier.padding(8.dp)) {
             SnakeHead(

@@ -1,4 +1,4 @@
-package com.dscoding.snakegame.game.presentation.components
+package com.dscoding.snakegame.game.presentation.components.game_controls
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
