@@ -30,6 +30,7 @@ import snakegame.composeapp.generated.resources.score
 fun GameControls(
     score: Int,
     highscore: Int,
+    showDirectionPad: Boolean,
     onDirectionClick: (movementDirection: MovementDirection) -> Unit,
     onPauseClick: () -> Unit,
     onSettingsClick: () -> Unit,
@@ -74,8 +75,14 @@ fun GameControls(
                 )
             }
         }
-        DirectionPad(onDirectionClick = onDirectionClick, modifier = Modifier.offset(y = (-25).dp))
+        if (showDirectionPad) {
+            DirectionPad(
+                onDirectionClick = onDirectionClick,
+                modifier = Modifier.offset(y = (-25).dp)
+            )
+        }
     }
+
 }
 
 @Preview(showBackground = true)
@@ -85,6 +92,7 @@ private fun GameControlsPreview() {
         GameControls(
             score = 10,
             highscore = 20,
+            showDirectionPad = true,
             onDirectionClick = {},
             onPauseClick = {},
             onSettingsClick = {},

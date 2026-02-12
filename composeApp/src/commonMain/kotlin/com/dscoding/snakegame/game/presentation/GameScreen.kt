@@ -17,10 +17,13 @@ import com.dscoding.snakegame.core.presentation.designsystem.StartGameDialog
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.core.presentation.theme.orangeAlphaGradient
 import com.dscoding.snakegame.core.presentation.util.tileGridBackground
+import com.dscoding.snakegame.game.domain.models.MovementDirection
 import com.dscoding.snakegame.game.presentation.GameViewModel.Companion.BOARD_SIZE
 import com.dscoding.snakegame.game.presentation.components.game_board.GameBoard
 import com.dscoding.snakegame.game.presentation.components.game_controls.GameControls
+import com.dscoding.snakegame.game.presentation.models.ControlMode
 import com.dscoding.snakegame.game.presentation.models.PlayState
+import com.dscoding.snakegame.game.presentation.utils.snakeSwipeControls
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import snakegame.composeapp.generated.resources.Res
@@ -51,7 +54,12 @@ fun GameScreen(
                 .padding(
                     top = paddingValues.calculateTopPadding(),
                     bottom = 0.dp
-                ),
+                )
+                .snakeSwipeControls(
+                    enabled = state.movementControlMode == ControlMode.SWIPE
+                ) { direction ->
+                    onAction(GameAction.OnDirectionClick(direction))
+                },
         ) {
             val tileSize = maxWidth / BOARD_SIZE
 
@@ -71,6 +79,7 @@ fun GameScreen(
                 GameControls(
                     score = state.score,
                     highscore = state.highScore,
+                    showDirectionPad = state.movementControlMode == ControlMode.BUTTONS,
                     onDirectionClick = {
                         onAction(GameAction.OnDirectionClick(it))
                     },
@@ -97,9 +106,13 @@ private fun GameScreenPreview() {
     SnakeGameTheme {
         GameScreen(
             state = GameState(
-                currentPlayState = PlayState.FINISHED,
+                currentPlayState = PlayState.PLAYING,
+                movementControlMode = ControlMode.BUTTONS,
                 score = 20,
-                highScore = 200
+                highScore = 200,
+                food = 10 to 3,
+                snake = (1..8).map { it to 5 },
+                currentMovementDirection = MovementDirection.LEFT,
             ),
             onAction = {}
         )
