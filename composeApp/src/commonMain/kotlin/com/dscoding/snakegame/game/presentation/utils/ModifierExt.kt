@@ -9,8 +9,8 @@ import com.dscoding.snakegame.game.domain.models.MovementDirection
 import kotlin.math.abs
 
 fun Modifier.snakeSwipeControls(
-    enabled: Boolean = true,
-    threshold: Dp = 24.dp,
+    enabled: Boolean,
+    threshold: Dp = 12.dp,
     onDirection: (MovementDirection) -> Unit
 ): Modifier = pointerInput(enabled, threshold) {
     if (!enabled) return@pointerInput
@@ -18,30 +18,34 @@ fun Modifier.snakeSwipeControls(
     val thresholdPx = threshold.toPx()
     var directionLocked = false
 
+    var totalDx = 0f
+    var totalDy = 0f
+
+    fun reset() {
+        directionLocked = false
+        totalDx = 0f
+        totalDy = 0f
+    }
+
     detectDragGestures(
-        onDragStart = {
-            directionLocked = false
-        },
-        onDragCancel = {
-            directionLocked = false
-        },
-        onDragEnd = {
-            directionLocked = false
-        },
+        onDragStart = { reset() },
+        onDragEnd = { reset() },
+        onDragCancel = { reset() },
         onDrag = { change, dragAmount ->
             change.consume()
-
             if (directionLocked) return@detectDragGestures
 
-            val dx = dragAmount.x
-            val dy = dragAmount.y
+            totalDx += dragAmount.x
+            totalDy += dragAmount.y
 
-            if (abs(dx) < thresholdPx && abs(dy) < thresholdPx) return@detectDragGestures
+            if (abs(totalDx) < thresholdPx && abs(totalDy) < thresholdPx) {
+                return@detectDragGestures
+            }
 
-            val dir = if (abs(dx) > abs(dy)) {
-                if (dx > 0) MovementDirection.RIGHT else MovementDirection.LEFT
+            val dir = if (abs(totalDx) > abs(totalDy)) {
+                if (totalDx > 0) MovementDirection.RIGHT else MovementDirection.LEFT
             } else {
-                if (dy > 0) MovementDirection.DOWN else MovementDirection.UP
+                if (totalDy > 0) MovementDirection.DOWN else MovementDirection.UP
             }
 
             directionLocked = true

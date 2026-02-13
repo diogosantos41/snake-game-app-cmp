@@ -2,6 +2,7 @@ package com.dscoding.snakegame.game.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dscoding.snakegame.core.domain.GamePreferences
 import com.dscoding.snakegame.game.domain.GameEngine
 import com.dscoding.snakegame.game.domain.models.onGameEnded
 import com.dscoding.snakegame.game.domain.models.onTick
@@ -9,12 +10,16 @@ import com.dscoding.snakegame.game.presentation.models.PlayState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class GameViewModel(private val gameEngine: GameEngine) : ViewModel() {
+class GameViewModel(
+    private val gameEngine: GameEngine,
+    private val gamePreferences: GamePreferences
+) : ViewModel() {
 
     companion object {
         const val BOARD_SIZE = 14
@@ -25,18 +30,18 @@ class GameViewModel(private val gameEngine: GameEngine) : ViewModel() {
     private var gameEngineJob: Job? = null
 
     private val _state = MutableStateFlow(GameState())
-    val state = _state
-        .onStart {
-            if (!hasLoadedInitialData) {
-                //----
-                hasLoadedInitialData = true
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000L),
-            initialValue = GameState()
+    val state = combine(
+        _state,
+        gamePreferences.observeHighscore()
+    ) { currentState, highscore ->
+        currentState.copy(
+            highScore = highscore
         )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000L),
+        initialValue = GameState()
+    )
 
     fun onAction(action: GameAction) {
         when (action) {
@@ -78,11 +83,20 @@ class GameViewModel(private val gameEngine: GameEngine) : ViewModel() {
                     )
                 }
             }.onGameEnded {
+                saveHighscore()
                 _state.update {
                     it.copy(
                         currentPlayState = PlayState.FINISHED,
                     )
                 }
             }.launchIn(viewModelScope)
+    }
+
+    private fun saveHighscore() {
+        viewModelScope.launch {
+            val finalScore = _state.value.score
+            val currentHigh = state.value.highScore
+            if (finalScore > currentHigh) gamePreferences.setHighscore(finalScore)
+        }
     }
 }
