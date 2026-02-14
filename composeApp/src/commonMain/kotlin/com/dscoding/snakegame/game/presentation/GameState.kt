@@ -6,6 +6,7 @@ import com.dscoding.snakegame.game.presentation.models.PlayState
 
 data class GameState(
     val currentPlayState: PlayState = PlayState.READY_TO_PLAY,
+    val countdownSecondsRemaining: Int? = null,
     val movementControlMode: ControlMode = ControlMode.SWIPE,
     val score: Int = 0,
     val highScore: Int = 0,

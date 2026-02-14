@@ -13,12 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dscoding.snakegame.core.presentation.designsystem.StartGameDialog
+import com.dscoding.snakegame.core.presentation.components.PortraitGuard
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.core.presentation.theme.orangeAlphaGradient
 import com.dscoding.snakegame.core.presentation.util.tileGridBackground
 import com.dscoding.snakegame.game.domain.models.MovementDirection
 import com.dscoding.snakegame.game.presentation.GameViewModel.Companion.BOARD_SIZE
+import com.dscoding.snakegame.game.presentation.components.StartCountdown
+import com.dscoding.snakegame.game.presentation.components.StartGameDialog
 import com.dscoding.snakegame.game.presentation.components.game_board.GameBoard
 import com.dscoding.snakegame.game.presentation.components.game_controls.GameControls
 import com.dscoding.snakegame.game.presentation.models.ControlMode
@@ -46,56 +48,67 @@ fun GameScreen(
     state: GameState,
     onAction: (GameAction) -> Unit,
 ) {
-    Scaffold { paddingValues ->
-        BoxWithConstraints(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(brush = orangeAlphaGradient)
-                .padding(
-                    top = paddingValues.calculateTopPadding(),
-                    bottom = 0.dp
-                )
-                .snakeSwipeControls(
-                    enabled = state.movementControlMode == ControlMode.SWIPE
-                ) { direction ->
-                    onAction(GameAction.OnDirectionClick(direction))
-                },
-        ) {
-            val tileSize = maxWidth / BOARD_SIZE
-
-            Column(
+    PortraitGuard {
+        Scaffold { paddingValues ->
+            BoxWithConstraints(
                 modifier = Modifier
                     .fillMaxSize()
-                    .tileGridBackground(
-                        tileSize = tileSize,
-                    ),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                GameBoard(
-                    food = state.food,
-                    snake = state.snake,
-                    currentMovementDirection = state.currentMovementDirection
-                )
-                GameControls(
-                    score = state.score,
-                    highscore = state.highScore,
-                    showDirectionPad = state.movementControlMode == ControlMode.BUTTONS,
-                    onDirectionClick = {
-                        onAction(GameAction.OnDirectionClick(it))
+                    .background(brush = orangeAlphaGradient)
+                    .padding(
+                        top = paddingValues.calculateTopPadding(),
+                        bottom = 0.dp
+                    )
+                    .snakeSwipeControls(
+                        enabled = state.movementControlMode == ControlMode.SWIPE
+                    ) { direction ->
+                        onAction(GameAction.OnDirectionClick(direction))
                     },
-                    onPauseClick = {},
-                    onSettingsClick = {}
+            ) {
+                val tileSize = maxWidth / BOARD_SIZE
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .tileGridBackground(
+                            tileSize = tileSize,
+                        ),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    GameBoard(
+                        food = state.food,
+                        snake = state.snake,
+                        currentMovementDirection = state.currentMovementDirection
+                    )
+                    GameControls(
+                        score = state.score,
+                        highscore = state.highScore,
+                        showDirectionPad = state.movementControlMode == ControlMode.BUTTONS,
+                        onDirectionClick = {
+                            onAction(GameAction.OnDirectionClick(it))
+                        },
+                        onPauseClick = {},
+                        onSettingsClick = {}
+                    )
+                }
+            }
+
+            state.countdownSecondsRemaining?.let {
+                StartCountdown(
+                    secondsRemaining = "$it",
+                    modifier = Modifier.fillMaxSize()
                 )
             }
-        }
-        if (state.currentPlayState == PlayState.READY_TO_PLAY
-            || state.currentPlayState == PlayState.FINISHED
-        ) {
-            StartGameDialog(
-                title = stringResource(Res.string.snake_game),
-                onStartGameClick = { onAction(GameAction.OnGameStarted) },
-                onDismiss = { onAction(GameAction.OnGameStarted) }
-            )
+
+            if ((state.currentPlayState == PlayState.READY_TO_PLAY
+                        || state.currentPlayState == PlayState.FINISHED)
+                && state.countdownSecondsRemaining == null
+            ) {
+                StartGameDialog(
+                    title = stringResource(Res.string.snake_game),
+                    onStartGameClick = { onAction(GameAction.OnGameStarted) },
+                    onDismiss = { onAction(GameAction.OnGameStarted) }
+                )
+            }
         }
     }
 }

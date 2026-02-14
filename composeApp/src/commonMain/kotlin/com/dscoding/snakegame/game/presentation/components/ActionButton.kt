@@ -1,4 +1,4 @@
-package com.dscoding.snakegame.core.presentation.designsystem
+package com.dscoding.snakegame.game.presentation.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height

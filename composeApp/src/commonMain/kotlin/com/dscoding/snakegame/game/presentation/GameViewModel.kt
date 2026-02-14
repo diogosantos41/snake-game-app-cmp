@@ -8,6 +8,7 @@ import com.dscoding.snakegame.game.domain.models.onGameEnded
 import com.dscoding.snakegame.game.domain.models.onTick
 import com.dscoding.snakegame.game.presentation.models.PlayState
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -25,9 +26,9 @@ class GameViewModel(
         const val BOARD_SIZE = 14
     }
 
-    private var hasLoadedInitialData = false
-
     private var gameEngineJob: Job? = null
+
+    private var countdownJob: Job? = null
 
     private val _state = MutableStateFlow(GameState())
     val state = combine(
@@ -57,13 +58,15 @@ class GameViewModel(
             }
 
             GameAction.OnGameStarted -> {
-                _state.update {
-                    it.copy(
-                        currentPlayState = PlayState.PLAYING,
-                        score = 0
-                    )
+                startCountdownThen {
+                    _state.update {
+                        it.copy(
+                            currentPlayState = PlayState.PLAYING,
+                            score = 0
+                        )
+                    }
+                    runSnakeGame()
                 }
-                runSnakeGame()
             }
         }
     }
@@ -90,6 +93,18 @@ class GameViewModel(
                     )
                 }
             }.launchIn(viewModelScope)
+    }
+
+    private fun startCountdownThen(actionAfter: () -> Unit) {
+        countdownJob?.cancel()
+        countdownJob = viewModelScope.launch {
+            for (t in 3 downTo 1) {
+                _state.update { it.copy(countdownSecondsRemaining = t) }
+                delay(1_000)
+            }
+            _state.update { it.copy(countdownSecondsRemaining = null) }
+            actionAfter()
+        }
     }
 
     private fun saveHighscore() {
