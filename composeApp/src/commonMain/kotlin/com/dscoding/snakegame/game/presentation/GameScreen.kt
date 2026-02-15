@@ -17,7 +17,7 @@ import com.dscoding.snakegame.core.presentation.components.PortraitGuard
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.core.presentation.theme.orangeAlphaGradient
 import com.dscoding.snakegame.core.presentation.util.tileGridBackground
-import com.dscoding.snakegame.game.domain.models.MovementDirection
+import com.dscoding.snakegame.game.domain.game_engine.models.MovementDirection
 import com.dscoding.snakegame.game.presentation.GameViewModel.Companion.BOARD_SIZE
 import com.dscoding.snakegame.game.presentation.components.StartCountdown
 import com.dscoding.snakegame.game.presentation.components.StartGameDialog

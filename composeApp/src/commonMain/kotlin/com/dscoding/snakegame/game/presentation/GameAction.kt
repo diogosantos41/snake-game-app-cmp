@@ -1,6 +1,6 @@
 package com.dscoding.snakegame.game.presentation
 
-import com.dscoding.snakegame.game.domain.models.MovementDirection
+import com.dscoding.snakegame.game.domain.game_engine.models.MovementDirection
 
 sealed interface GameAction {
     data class OnDirectionClick(val movementDirection: MovementDirection) : GameAction

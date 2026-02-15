@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
-import com.dscoding.snakegame.game.domain.models.MovementDirection
+import com.dscoding.snakegame.game.domain.game_engine.models.MovementDirection
 
 
 @Composable

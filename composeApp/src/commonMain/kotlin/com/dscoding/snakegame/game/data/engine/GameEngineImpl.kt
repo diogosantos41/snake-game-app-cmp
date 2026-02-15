@@ -1,10 +1,10 @@
 package com.dscoding.snakegame.game.data.engine
 
 import com.dscoding.snakegame.game.data.engine.mappers.toMovementDirection
-import com.dscoding.snakegame.game.domain.GameEngine
-import com.dscoding.snakegame.game.domain.models.GameEndReason
-import com.dscoding.snakegame.game.domain.models.GameEngineResult
-import com.dscoding.snakegame.game.domain.models.MovementDirection
+import com.dscoding.snakegame.game.domain.game_engine.GameEngine
+import com.dscoding.snakegame.game.domain.game_engine.models.GameEndReason
+import com.dscoding.snakegame.game.domain.game_engine.models.GameEngineResult
+import com.dscoding.snakegame.game.domain.game_engine.models.MovementDirection
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

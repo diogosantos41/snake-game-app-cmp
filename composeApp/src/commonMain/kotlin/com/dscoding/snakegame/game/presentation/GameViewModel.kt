@@ -3,9 +3,12 @@ package com.dscoding.snakegame.game.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dscoding.snakegame.core.domain.GamePreferences
-import com.dscoding.snakegame.game.domain.GameEngine
-import com.dscoding.snakegame.game.domain.models.onGameEnded
-import com.dscoding.snakegame.game.domain.models.onTick
+import com.dscoding.snakegame.game.domain.audio.GameAudio
+import com.dscoding.snakegame.game.domain.audio.models.SoundEffect.EAT
+import com.dscoding.snakegame.game.domain.audio.models.SoundEffect.GAME_OVER
+import com.dscoding.snakegame.game.domain.game_engine.GameEngine
+import com.dscoding.snakegame.game.domain.game_engine.models.onGameEnded
+import com.dscoding.snakegame.game.domain.game_engine.models.onTick
 import com.dscoding.snakegame.game.presentation.models.PlayState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -19,7 +22,8 @@ import kotlinx.coroutines.launch
 
 class GameViewModel(
     private val gameEngine: GameEngine,
-    private val gamePreferences: GamePreferences
+    private val gamePreferences: GamePreferences,
+    private val gameAudio: GameAudio
 ) : ViewModel() {
 
     companion object {
@@ -72,11 +76,13 @@ class GameViewModel(
     }
 
     private fun runSnakeGame() {
+        gameAudio.startMusic()
         gameEngineJob?.cancel()
         gameEngineJob = null
         gameEngineJob = gameEngine
             .runGame(boardSize = BOARD_SIZE)
             .onTick { tick ->
+                if(tick.ateFood) gameAudio.playSoundEffect(EAT)
                 _state.update {
                     it.copy(
                         food = tick.food,
@@ -86,6 +92,8 @@ class GameViewModel(
                     )
                 }
             }.onGameEnded {
+                gameAudio.stopMusic()
+                gameAudio.playSoundEffect(GAME_OVER)
                 saveHighscore()
                 _state.update {
                     it.copy(

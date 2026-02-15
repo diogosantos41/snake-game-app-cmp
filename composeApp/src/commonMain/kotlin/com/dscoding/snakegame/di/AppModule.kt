@@ -3,7 +3,7 @@ package com.dscoding.snakegame.di
 import com.dscoding.snakegame.core.data.datastore.DataStoreGamePreferences
 import com.dscoding.snakegame.core.domain.GamePreferences
 import com.dscoding.snakegame.game.data.engine.GameEngineImpl
-import com.dscoding.snakegame.game.domain.GameEngine
+import com.dscoding.snakegame.game.domain.game_engine.GameEngine
 import com.dscoding.snakegame.game.presentation.GameViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf

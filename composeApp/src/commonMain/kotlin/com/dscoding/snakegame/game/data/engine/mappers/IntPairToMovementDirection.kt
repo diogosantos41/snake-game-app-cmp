@@ -1,6 +1,6 @@
 package com.dscoding.snakegame.game.data.engine.mappers
 
-import com.dscoding.snakegame.game.domain.models.MovementDirection
+import com.dscoding.snakegame.game.domain.game_engine.models.MovementDirection
 
 fun Pair<Int, Int>.toMovementDirection(): MovementDirection =
     when (this) {

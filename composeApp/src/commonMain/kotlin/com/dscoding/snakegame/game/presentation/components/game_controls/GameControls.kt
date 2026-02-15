@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.core.presentation.theme.blackAlphaGradient
-import com.dscoding.snakegame.game.domain.models.MovementDirection
+import com.dscoding.snakegame.game.domain.game_engine.models.MovementDirection
 import org.jetbrains.compose.resources.stringResource
 import snakegame.composeapp.generated.resources.Res
 import snakegame.composeapp.generated.resources.high_score
