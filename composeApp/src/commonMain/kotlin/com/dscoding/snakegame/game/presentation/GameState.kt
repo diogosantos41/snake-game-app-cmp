@@ -1,6 +1,6 @@
 package com.dscoding.snakegame.game.presentation
 
-import com.dscoding.snakegame.game.domain.game_engine.models.MovementDirection
+import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
 import com.dscoding.snakegame.game.presentation.models.ControlMode
 import com.dscoding.snakegame.game.presentation.models.PlayState
 

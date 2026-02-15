@@ -6,9 +6,12 @@ import com.dscoding.snakegame.core.domain.GamePreferences
 import com.dscoding.snakegame.game.domain.audio.GameAudio
 import com.dscoding.snakegame.game.domain.audio.models.SoundEffect.EAT
 import com.dscoding.snakegame.game.domain.audio.models.SoundEffect.GAME_OVER
-import com.dscoding.snakegame.game.domain.game_engine.GameEngine
-import com.dscoding.snakegame.game.domain.game_engine.models.onGameEnded
-import com.dscoding.snakegame.game.domain.game_engine.models.onTick
+import com.dscoding.snakegame.game.domain.engine.GameEngine
+import com.dscoding.snakegame.game.domain.engine.models.onGameEnded
+import com.dscoding.snakegame.game.domain.engine.models.onTick
+import com.dscoding.snakegame.game.domain.haptics.GameHaptics
+import com.dscoding.snakegame.game.domain.haptics.models.HapticType.HEAVY
+import com.dscoding.snakegame.game.domain.haptics.models.HapticType.LIGHT
 import com.dscoding.snakegame.game.presentation.models.PlayState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -23,7 +26,8 @@ import kotlinx.coroutines.launch
 class GameViewModel(
     private val gameEngine: GameEngine,
     private val gamePreferences: GamePreferences,
-    private val gameAudio: GameAudio
+    private val gameAudio: GameAudio,
+    private val gameHaptics: GameHaptics
 ) : ViewModel() {
 
     companion object {
@@ -82,7 +86,9 @@ class GameViewModel(
         gameEngineJob = gameEngine
             .runGame(boardSize = BOARD_SIZE)
             .onTick { tick ->
-                if(tick.ateFood) gameAudio.playSoundEffect(EAT)
+                if (tick.ateFood) {
+                    ateFoodFeedback()
+                }
                 _state.update {
                     it.copy(
                         food = tick.food,
@@ -92,8 +98,7 @@ class GameViewModel(
                     )
                 }
             }.onGameEnded {
-                gameAudio.stopMusic()
-                gameAudio.playSoundEffect(GAME_OVER)
+                gameEndedFeedback()
                 saveHighscore()
                 _state.update {
                     it.copy(
@@ -101,6 +106,17 @@ class GameViewModel(
                     )
                 }
             }.launchIn(viewModelScope)
+    }
+
+    private fun ateFoodFeedback() {
+        gameAudio.playSoundEffect(EAT)
+        gameHaptics.vibrate(LIGHT)
+    }
+
+    private fun gameEndedFeedback() {
+        gameAudio.stopMusic()
+        gameAudio.playSoundEffect(GAME_OVER)
+        gameHaptics.vibrate(HEAVY)
     }
 
     private fun startCountdownThen(actionAfter: () -> Unit) {

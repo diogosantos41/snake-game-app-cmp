@@ -1,4 +1,4 @@
-package com.dscoding.snakegame.game.domain.game_engine.models
+package com.dscoding.snakegame.game.domain.engine.models
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach

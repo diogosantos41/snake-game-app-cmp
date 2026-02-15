@@ -4,7 +4,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.dscoding.snakegame.data.audio.IosGameAudio
 import com.dscoding.snakegame.data.datastore.createDataStore
+import com.dscoding.snakegame.data.haptics.IosGameHaptics
 import com.dscoding.snakegame.game.domain.audio.GameAudio
+import com.dscoding.snakegame.game.domain.haptics.GameHaptics
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -14,4 +16,5 @@ actual val platformAppModule = module {
         createDataStore()
     }
     singleOf(::IosGameAudio) bind GameAudio::class
+    singleOf(::IosGameHaptics) bind GameHaptics::class
 }

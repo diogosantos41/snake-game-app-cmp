@@ -1,4 +1,4 @@
-package com.dscoding.snakegame.game.domain.game_engine.models
+package com.dscoding.snakegame.game.domain.engine.models
 
 sealed interface GameEndReason {
     data object HitSelf : GameEndReason

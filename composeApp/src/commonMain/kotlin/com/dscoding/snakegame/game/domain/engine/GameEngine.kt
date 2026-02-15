@@ -1,7 +1,7 @@
-package com.dscoding.snakegame.game.domain.game_engine
+package com.dscoding.snakegame.game.domain.engine
 
-import com.dscoding.snakegame.game.domain.game_engine.models.GameEngineResult
-import com.dscoding.snakegame.game.domain.game_engine.models.MovementDirection
+import com.dscoding.snakegame.game.domain.engine.models.GameEngineResult
+import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
 import kotlinx.coroutines.flow.Flow
 
 interface GameEngine {

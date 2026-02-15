@@ -1,4 +1,4 @@
-package com.dscoding.snakegame.game.domain.game_engine.models
+package com.dscoding.snakegame.game.domain.engine.models
 
 enum class MovementDirection(val delta: Pair<Int, Int>) {
     UP(0 to -1),

@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.dscoding.snakegame.game.domain.game_engine.models.MovementDirection
+import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
 import kotlin.math.abs
 
 fun Modifier.snakeSwipeControls(
