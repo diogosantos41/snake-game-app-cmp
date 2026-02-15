@@ -6,6 +6,8 @@ import android.media.MediaPlayer
 import android.media.SoundPool
 import android.util.Log
 import com.dscoding.snakegame.R
+import com.dscoding.snakegame.game.data.audio.GameAudioDefaults.MUSIC_VOLUME
+import com.dscoding.snakegame.game.data.audio.GameAudioDefaults.SFX_VOLUME
 import com.dscoding.snakegame.game.domain.audio.GameAudio
 import com.dscoding.snakegame.game.domain.audio.models.SoundEffect
 
@@ -48,7 +50,7 @@ class AndroidGameAudio(
             Log.d("AndroidGameAudio", "SFX not loaded yet: $effect")
             return
         }
-        soundPool.play(id, 1f, 1f, 0, 0, 1f)
+        soundPool.play(id, SFX_VOLUME, SFX_VOLUME, 0, 0, 1f)
     }
 
     override fun startMusic() {
@@ -56,7 +58,7 @@ class AndroidGameAudio(
 
         musicPlayer = MediaPlayer.create(appContext, R.raw.music)?.apply {
             isLooping = true
-            setVolume(0.3f, 0.3f)
+            setVolume(MUSIC_VOLUME, MUSIC_VOLUME)
             setOnErrorListener { _, what, extra ->
                 Log.e("AndroidGameAudio", "Music error what=$what extra=$extra")
                 true
