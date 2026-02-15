@@ -56,6 +56,7 @@ class AndroidGameAudio(
 
         musicPlayer = MediaPlayer.create(appContext, R.raw.music)?.apply {
             isLooping = true
+            setVolume(0.3f, 0.3f)
             setOnErrorListener { _, what, extra ->
                 Log.e("AndroidGameAudio", "Music error what=$what extra=$extra")
                 true
