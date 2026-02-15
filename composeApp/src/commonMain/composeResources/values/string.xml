@@ -4,4 +4,5 @@
     <string name="start">Start</string>
     <string name="score">Score</string>
     <string name="high_score">Highscore</string>
+    <string name="rotate_device_to_continue">Rotate your device to continue</string>
 </resources>
