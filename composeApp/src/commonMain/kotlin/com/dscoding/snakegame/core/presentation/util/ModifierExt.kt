@@ -18,7 +18,6 @@ fun Modifier.tileGridBackground(
 
     val offsetYPx = offsetY.toPx() % step
 
-    // Vertical lines (NO offset)
     var x = 0f
     while (x <= size.width) {
         drawLine(
@@ -30,7 +29,6 @@ fun Modifier.tileGridBackground(
         x += step
     }
 
-    // Horizontal lines (Y offset only)
     var y = -offsetYPx
     while (y <= size.height) {
         drawLine(

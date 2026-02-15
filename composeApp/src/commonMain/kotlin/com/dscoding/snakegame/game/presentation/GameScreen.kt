@@ -27,6 +27,7 @@ import com.dscoding.snakegame.game.presentation.components.game_controls.GameCon
 import com.dscoding.snakegame.game.presentation.models.ControlMode
 import com.dscoding.snakegame.game.presentation.models.PlayState
 import com.dscoding.snakegame.game.presentation.utils.isAppInForeground
+import com.dscoding.snakegame.game.presentation.utils.isOrientationLandscape
 import com.dscoding.snakegame.game.presentation.utils.snakeSwipeControls
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -40,17 +41,24 @@ fun GameRoot(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val isAppInForeground by isAppInForeground()
+    val isOrientationLandscape by isOrientationLandscape()
 
-    LaunchedEffect(isAppInForeground, state.currentPlayState) {
-        if (state.currentPlayState == PlayState.PLAYING && !isAppInForeground) {
+    LaunchedEffect(isAppInForeground, isOrientationLandscape, state.currentPlayState) {
+        val shouldPause =
+            state.currentPlayState == PlayState.PLAYING &&
+                    (!isAppInForeground || isOrientationLandscape)
+
+        if (shouldPause) {
             viewModel.onAction(GameAction.OnGamePaused)
         }
     }
 
-    GameScreen(
-        state = state,
-        onAction = viewModel::onAction
-    )
+    PortraitGuard(isLandscape = isOrientationLandscape) {
+        GameScreen(
+            state = state,
+            onAction = viewModel::onAction
+        )
+    }
 }
 
 @Composable
@@ -58,68 +66,66 @@ fun GameScreen(
     state: GameState,
     onAction: (GameAction) -> Unit,
 ) {
-    PortraitGuard {
-        Scaffold { paddingValues ->
-            BoxWithConstraints(
+    Scaffold { paddingValues ->
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(brush = orangeAlphaGradient)
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = 0.dp
+                )
+                .snakeSwipeControls(
+                    enabled = state.movementControlMode == ControlMode.SWIPE
+                ) { direction ->
+                    onAction(GameAction.OnDirectionClick(direction))
+                },
+        ) {
+            val tileSize = maxWidth / BOARD_SIZE
+
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(brush = orangeAlphaGradient)
-                    .padding(
-                        top = paddingValues.calculateTopPadding(),
-                        bottom = 0.dp
-                    )
-                    .snakeSwipeControls(
-                        enabled = state.movementControlMode == ControlMode.SWIPE
-                    ) { direction ->
-                        onAction(GameAction.OnDirectionClick(direction))
+                    .tileGridBackground(
+                        tileSize = tileSize,
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                GameBoard(
+                    food = state.food,
+                    snake = state.snake,
+                    currentMovementDirection = state.currentMovementDirection
+                )
+                GameControls(
+                    score = state.score,
+                    highscore = state.highScore,
+                    showDirectionPad = state.movementControlMode == ControlMode.BUTTONS,
+                    onDirectionClick = {
+                        onAction(GameAction.OnDirectionClick(it))
                     },
-            ) {
-                val tileSize = maxWidth / BOARD_SIZE
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .tileGridBackground(
-                            tileSize = tileSize,
-                        ),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    GameBoard(
-                        food = state.food,
-                        snake = state.snake,
-                        currentMovementDirection = state.currentMovementDirection
-                    )
-                    GameControls(
-                        score = state.score,
-                        highscore = state.highScore,
-                        showDirectionPad = state.movementControlMode == ControlMode.BUTTONS,
-                        onDirectionClick = {
-                            onAction(GameAction.OnDirectionClick(it))
-                        },
-                        onPauseClick = {},
-                        onSettingsClick = {}
-                    )
-                }
-            }
-
-            state.countdownSecondsRemaining?.let {
-                StartCountdown(
-                    secondsRemaining = "$it",
-                    modifier = Modifier.fillMaxSize()
+                    onPauseClick = {},
+                    onSettingsClick = {}
                 )
             }
+        }
 
-            if ((state.currentPlayState == PlayState.READY_TO_PLAY
-                        || state.currentPlayState == PlayState.FINISHED
-                        || state.currentPlayState == PlayState.PAUSED)
-                && state.countdownSecondsRemaining == null
-            ) {
-                StartGameDialog(
-                    title = stringResource(Res.string.snake_game),
-                    onStartGameClick = { onAction(GameAction.OnGameStarted) },
-                    onDismiss = { onAction(GameAction.OnGameStarted) }
-                )
-            }
+        state.countdownSecondsRemaining?.let {
+            StartCountdown(
+                secondsRemaining = "$it",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        if ((state.currentPlayState == PlayState.READY_TO_PLAY
+                    || state.currentPlayState == PlayState.FINISHED
+                    || state.currentPlayState == PlayState.PAUSED)
+            && state.countdownSecondsRemaining == null
+        ) {
+            StartGameDialog(
+                title = stringResource(Res.string.snake_game),
+                onStartGameClick = { onAction(GameAction.OnGameStarted) },
+                onDismiss = { onAction(GameAction.OnGameStarted) }
+            )
         }
     }
 }
