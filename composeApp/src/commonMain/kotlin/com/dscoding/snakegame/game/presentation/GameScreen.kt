@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +26,7 @@ import com.dscoding.snakegame.game.presentation.components.game_board.GameBoard
 import com.dscoding.snakegame.game.presentation.components.game_controls.GameControls
 import com.dscoding.snakegame.game.presentation.models.ControlMode
 import com.dscoding.snakegame.game.presentation.models.PlayState
+import com.dscoding.snakegame.game.presentation.utils.isAppInForeground
 import com.dscoding.snakegame.game.presentation.utils.snakeSwipeControls
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -36,6 +38,14 @@ fun GameRoot(
     viewModel: GameViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val isAppInForeground by isAppInForeground()
+
+    LaunchedEffect(isAppInForeground, state.currentPlayState) {
+        if (state.currentPlayState == PlayState.PLAYING && !isAppInForeground) {
+            viewModel.onAction(GameAction.OnGamePaused)
+        }
+    }
 
     GameScreen(
         state = state,
@@ -100,7 +110,8 @@ fun GameScreen(
             }
 
             if ((state.currentPlayState == PlayState.READY_TO_PLAY
-                        || state.currentPlayState == PlayState.FINISHED)
+                        || state.currentPlayState == PlayState.FINISHED
+                        || state.currentPlayState == PlayState.PAUSED)
                 && state.countdownSecondsRemaining == null
             ) {
                 StartGameDialog(

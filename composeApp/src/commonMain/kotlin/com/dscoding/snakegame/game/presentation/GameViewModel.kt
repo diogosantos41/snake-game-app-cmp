@@ -60,6 +60,7 @@ class GameViewModel(
 
             GameAction.OnGamePaused -> {
                 gameEngine.pauseGame()
+                gameAudio.stopMusic()
                 _state.update {
                     it.copy(currentPlayState = PlayState.PAUSED)
                 }
