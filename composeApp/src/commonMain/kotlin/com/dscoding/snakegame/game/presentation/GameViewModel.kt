@@ -55,7 +55,30 @@ class GameViewModel(
     fun onAction(action: GameAction) {
         when (action) {
             is GameAction.OnDirectionClick -> {
-                gameEngine.requestDirectionChange(action.movementDirection)
+                if (state.value.currentPlayState == PlayState.PLAYING) {
+                    gameEngine.requestDirectionChange(action.movementDirection)
+                }
+            }
+
+            GameAction.OnGameStarted, GameAction.OnGameRestarted -> {
+                _state.update {
+                    it.copy(
+                        currentPlayState = PlayState.PLAYING,
+                        score = 0
+                    )
+                }
+                runSnakeGame()
+            }
+
+            GameAction.OnGameResumed -> {
+                startCountdownThen {
+                    gameEngine.resumeGame()
+                    _state.update {
+                        it.copy(
+                            currentPlayState = PlayState.PLAYING
+                        )
+                    }
+                }
             }
 
             GameAction.OnGamePaused -> {
@@ -63,18 +86,6 @@ class GameViewModel(
                 gameAudio.stopMusic()
                 _state.update {
                     it.copy(currentPlayState = PlayState.PAUSED)
-                }
-            }
-
-            GameAction.OnGameStarted -> {
-                startCountdownThen {
-                    _state.update {
-                        it.copy(
-                            currentPlayState = PlayState.PLAYING,
-                            score = 0
-                        )
-                    }
-                    runSnakeGame()
                 }
             }
         }

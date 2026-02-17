@@ -20,6 +20,7 @@ import com.dscoding.snakegame.core.presentation.theme.orangeAlphaGradient
 import com.dscoding.snakegame.core.presentation.util.tileGridBackground
 import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
 import com.dscoding.snakegame.game.presentation.GameViewModel.Companion.BOARD_SIZE
+import com.dscoding.snakegame.game.presentation.components.GamePausedDialog
 import com.dscoding.snakegame.game.presentation.components.StartCountdown
 import com.dscoding.snakegame.game.presentation.components.StartGameDialog
 import com.dscoding.snakegame.game.presentation.components.game_board.GameBoard
@@ -103,7 +104,7 @@ fun GameScreen(
                     onDirectionClick = {
                         onAction(GameAction.OnDirectionClick(it))
                     },
-                    onPauseClick = {},
+                    onPauseClick = { onAction(GameAction.OnGamePaused) },
                     onSettingsClick = {}
                 )
             }
@@ -116,9 +117,19 @@ fun GameScreen(
             )
         }
 
+        if (state.currentPlayState == PlayState.PAUSED
+            && state.countdownSecondsRemaining == null
+        ) {
+            GamePausedDialog(
+                currentScore = state.score,
+                onResumeClick = { onAction(GameAction.OnGameResumed) },
+                onRestartClick = { onAction(GameAction.OnGameRestarted) },
+                onDismiss = { onAction(GameAction.OnGameResumed) },
+            )
+        }
+
         if ((state.currentPlayState == PlayState.READY_TO_PLAY
-                    || state.currentPlayState == PlayState.FINISHED
-                    || state.currentPlayState == PlayState.PAUSED)
+                    || state.currentPlayState == PlayState.FINISHED)
             && state.countdownSecondsRemaining == null
         ) {
             StartGameDialog(

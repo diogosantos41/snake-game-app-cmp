@@ -8,6 +8,10 @@ interface GameEngine {
     fun runGame(boardSize: Int): Flow<GameEngineResult>
 
     fun requestDirectionChange(movementDirection: MovementDirection)
-    fun pauseGame()
+
     fun resumeGame()
+    fun restartGame()
+    fun pauseGame()
+
+
 }

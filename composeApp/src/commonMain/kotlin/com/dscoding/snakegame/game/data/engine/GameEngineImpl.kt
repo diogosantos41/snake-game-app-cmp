@@ -5,10 +5,14 @@ import com.dscoding.snakegame.game.domain.engine.GameEngine
 import com.dscoding.snakegame.game.domain.engine.models.GameEndReason
 import com.dscoding.snakegame.game.domain.engine.models.GameEngineResult
 import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.isActive
 import kotlin.random.Random
 
 class GameEngineImpl : GameEngine {
@@ -43,8 +47,12 @@ class GameEngineImpl : GameEngine {
             )
         )
 
-        while (!isPaused.value) {
+        while (currentCoroutineContext().isActive) {
+            if (isPaused.value) waitUntilResumed()
+
             delay(TICK_SPEED)
+
+            if (isPaused.value) continue
 
             val move = pendingNextMoves.removeFirstOrNull() ?: lastMove
             lastMove = move
@@ -54,20 +62,22 @@ class GameEngineImpl : GameEngine {
                 ((snakeHeadPosition.first + move.first + gameBoardSize) % gameBoardSize) to
                         ((snakeHeadPosition.second + move.second + gameBoardSize) % gameBoardSize)
 
-            val snakeAteFood = newSnakeHeadPosition == food || snake.contains(food)
             val snakeHitItself = snake.contains(newSnakeHeadPosition)
-
             if (snakeHitItself) {
                 emit(GameEngineResult.GameEnded(reason = GameEndReason.HitSelf))
                 return@flow
             }
 
+            val snakeAteFood = newSnakeHeadPosition == food
             if (snakeAteFood) {
                 snakeLength++
-                food = spawnFoodAvoidingSnake(snake)
             }
 
             snake = listOf(newSnakeHeadPosition) + snake.take(snakeLength - 1)
+
+            if (snakeAteFood) {
+                food = spawnFoodAvoidingSnake(snake)
+            }
 
             emit(
                 GameEngineResult.Tick(
@@ -91,19 +101,24 @@ class GameEngineImpl : GameEngine {
         }
     }
 
-    override fun pauseGame() {
-        pendingNextMoves.clear()
-        isPaused.value = true
-    }
-
     override fun resumeGame() {
         isPaused.value = false
     }
 
+    override fun restartGame() {
+        //
+    }
+
+    override fun pauseGame() {
+        isPaused.value = true
+        pendingNextMoves.clear()
+    }
+
     private fun resetGame() {
+        isPaused.value = false
         pendingNextMoves.clear()
         lastMove = MovementDirection.RIGHT.delta
-        isPaused.value = false
+
     }
 
     private fun isReverse(a: Pair<Int, Int>, b: Pair<Int, Int>): Boolean {
@@ -119,5 +134,9 @@ class GameEngineImpl : GameEngine {
             val spawnLocation = Random.nextInt(gameBoardSize) to Random.nextInt(gameBoardSize)
             if (spawnLocation !in snake) return spawnLocation
         }
+    }
+
+    private suspend fun waitUntilResumed() {
+        isPaused.filter { paused -> !paused }.first()
     }
 }

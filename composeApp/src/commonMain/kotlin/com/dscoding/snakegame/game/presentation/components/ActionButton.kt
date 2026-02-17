@@ -16,8 +16,8 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dscoding.snakegame.core.presentation.theme.GameOrange
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
-import com.dscoding.snakegame.core.presentation.theme.Violet
 
 @Composable
 fun ActionButton(
@@ -28,19 +28,19 @@ fun ActionButton(
 
     Button(
         onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = GameOrange,
+            contentColor = White
+        ),
         shape = RoundedCornerShape(size = 15.dp),
         modifier = modifier
             .widthIn(max = 400.dp)
             .fillMaxWidth()
-            .height(70.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Violet,
-            contentColor = White
-        ),
+            .height(60.dp),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
     ) {
         Text(
-            text = text.uppercase(),
+            text = text,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = Bold)
         )
