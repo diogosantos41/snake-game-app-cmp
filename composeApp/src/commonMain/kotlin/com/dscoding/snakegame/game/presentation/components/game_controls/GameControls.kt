@@ -36,7 +36,7 @@ fun GameControls(
     onSettingsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+    Box(modifier = modifier, contentAlignment = Alignment.TopCenter) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -78,8 +78,7 @@ fun GameControls(
         if (showDirectionPad) {
             DirectionPad(
                 onDirectionClick = onDirectionClick,
-                modifier = Modifier.offset(y = (-25).dp)
-            )
+                modifier = Modifier.padding(top = 45.dp))
         }
     }
 

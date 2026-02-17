@@ -1,5 +1,6 @@
 package com.dscoding.snakegame.game.presentation.components.game_controls
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,9 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dscoding.snakegame.core.presentation.theme.ContainerBorderWhite
+import com.dscoding.snakegame.core.presentation.theme.ContainerBackgroundBlack
+import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerBorderWidth
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 
 
@@ -33,14 +36,18 @@ fun ScoreChip(
         Text(
             text = title,
             color = Color.White,
-            style = MaterialTheme.typography.labelLarge.copy(fontWeight = Bold)
+            style = MaterialTheme.typography.bodyMedium
         )
 
-        Spacer(Modifier.height(2.dp))
+        Spacer(Modifier.height(4.dp))
 
         Surface(
             shape = RoundedCornerShape(10.dp),
-            color = Color.Black.copy(alpha = 0.5f)
+            color = ContainerBackgroundBlack,
+            border = BorderStroke(
+                width = ContainerBorderWidth,
+                color = ContainerBorderWhite
+            )
         ) {
             Box(
                 contentAlignment = Alignment.Center,
@@ -51,9 +58,7 @@ fun ScoreChip(
                 Text(
                     text = value.toString(),
                     color = Color.White,
-                    style = MaterialTheme.typography.headlineSmall.copy(
-                        fontWeight = Bold
-                    )
+                    style = MaterialTheme.typography.titleSmall
                 )
             }
         }

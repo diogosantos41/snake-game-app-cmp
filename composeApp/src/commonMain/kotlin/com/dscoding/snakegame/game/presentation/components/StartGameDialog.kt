@@ -16,8 +16,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.dscoding.snakegame.core.presentation.theme.ContainerBackgroundBlack
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
-import com.dscoding.snakegame.core.presentation.theme.Violet
 import org.jetbrains.compose.resources.stringResource
 import snakegame.composeapp.generated.resources.Res
 import snakegame.composeapp.generated.resources.start
@@ -33,7 +33,7 @@ fun StartGameDialog(
         Column(
             modifier = modifier
                 .clip(RoundedCornerShape(15.dp))
-                .background(White)
+                .background(color = ContainerBackgroundBlack)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
 
@@ -42,7 +42,6 @@ fun StartGameDialog(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Violet)
                         .padding(15.dp),
                     contentAlignment = Alignment.Center
                 ) {

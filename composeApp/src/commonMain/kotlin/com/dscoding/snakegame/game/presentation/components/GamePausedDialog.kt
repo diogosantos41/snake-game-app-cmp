@@ -1,6 +1,7 @@
 package com.dscoding.snakegame.game.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,18 +15,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.dscoding.snakegame.core.presentation.theme.GameOrange
+import androidx.compose.ui.window.DialogProperties
+import com.dscoding.snakegame.core.presentation.theme.ContainerBorderWhite
+import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerBorderWidth
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import org.jetbrains.compose.resources.stringResource
 import snakegame.composeapp.generated.resources.Res
 import snakegame.composeapp.generated.resources.game_paused
 import snakegame.composeapp.generated.resources.restart
 import snakegame.composeapp.generated.resources.resume
+import snakegame.composeapp.generated.resources.score
 
 @Composable
 fun GamePausedDialog(
@@ -35,45 +40,71 @@ fun GamePausedDialog(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Dialog(onDismissRequest = onDismiss) {
+
+    val dialogShape = RoundedCornerShape(15.dp)
+
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(
+            dismissOnClickOutside = false,
+            dismissOnBackPress = false
+        )
+    ) {
         Column(
             modifier = modifier
-                .clip(RoundedCornerShape(15.dp))
-                .background(Black.copy(alpha = 0.7f))
                 .fillMaxWidth()
+                .clip(dialogShape)
+                .background(Black.copy(alpha = 0.85f))
+                .border(
+                    width = ContainerBorderWidth,
+                    color = ContainerBorderWhite,
+                    shape = dialogShape
+                )
                 .padding(vertical = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(25.dp)
+            verticalArrangement = Arrangement.spacedBy(20.dp)
 
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = stringResource(Res.string.game_paused),
-                        textAlign = TextAlign.Center,
-                        color = White,
-                    )
-                }
+                Text(
+                    text = stringResource(Res.string.game_paused),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+            }
 
             Text(
-                text = "Score: $currentScore",
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.headlineSmall,
-                color = White,
+                text = buildAnnotatedString {
+                    withStyle(
+                        style = MaterialTheme.typography.bodyMedium.toSpanStyle()
+                    ) {
+                        append(stringResource(Res.string.score) + ": ")
+                    }
+                    withStyle(
+                        style = MaterialTheme.typography.labelMedium.toSpanStyle()
+                    ) {
+                        append("$currentScore")
+                    }
+                },
+                textAlign = TextAlign.Center
             )
             ActionButton(
                 text = stringResource(Res.string.resume),
                 onClick = onResumeClick,
-                modifier = Modifier.padding(horizontal = 60.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 60.dp)
             )
             ActionButton(
                 text = stringResource(Res.string.restart),
                 onClick = onRestartClick,
-                modifier = Modifier.padding(horizontal = 60.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 60.dp)
             )
         }
     }

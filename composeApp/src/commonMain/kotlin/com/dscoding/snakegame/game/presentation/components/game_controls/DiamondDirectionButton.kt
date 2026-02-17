@@ -1,5 +1,6 @@
 package com.dscoding.snakegame.game.presentation.components.game_controls
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -12,11 +13,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.dscoding.snakegame.core.presentation.theme.ContainerBorderWhite
+import com.dscoding.snakegame.core.presentation.theme.ContainerBackgroundBlack
+import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerBorderWidth
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 
 @Composable
@@ -25,14 +30,15 @@ fun DiamondDirectionButton(
     modifier: Modifier = Modifier,
     size: Dp = 100.dp,
     iconSize: Dp = 60.dp,
-    containerColor: Color = Color.Black.copy(alpha = 0.5f),
-    iconTint: Color = Color.White,
+    containerColor: Color = ContainerBackgroundBlack,
+    iconTint: Color = White,
     onClick: () -> Unit,
 ) {
     Button(
         onClick = onClick,
         shape = RoundedCornerShape(14.dp),
         colors = ButtonDefaults.buttonColors(containerColor = containerColor),
+        border = BorderStroke(width = ContainerBorderWidth, color = ContainerBorderWhite),
         contentPadding = PaddingValues(0.dp),
         modifier = modifier.size(size).graphicsLayer { rotationZ = 45f }) {
         Icon(

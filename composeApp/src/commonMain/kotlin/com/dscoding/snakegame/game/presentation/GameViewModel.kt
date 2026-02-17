@@ -73,6 +73,7 @@ class GameViewModel(
             GameAction.OnGameResumed -> {
                 startCountdownThen {
                     gameEngine.resumeGame()
+                    gameAudio.startMusic()
                     _state.update {
                         it.copy(
                             currentPlayState = PlayState.PLAYING

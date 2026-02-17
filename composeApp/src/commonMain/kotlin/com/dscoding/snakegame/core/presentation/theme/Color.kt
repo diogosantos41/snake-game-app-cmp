@@ -1,18 +1,15 @@
 package com.dscoding.snakegame.core.presentation.theme
 
-import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
-
-val Blue = Color(0xFFA2C0FF)
-val Purple = Color(0xFFCAADFF)
-val Violet = Color(0xFFFCB6FF)
-val Pink = Color(0xFFFFA6AF)
+import androidx.compose.ui.graphics.Color.Companion.White
 
 val GameOrange = Color(0xFFD35D17)
 val GameYellow = Color(0xFFFAFA05)
 
+val ContainerBorderWhite = White.copy(alpha = 0.5f)
+val ContainerBackgroundBlack = Black.copy(alpha = 0.5f)
 
 val orangeAlphaGradient: Brush
     get() = Brush.verticalGradient(
