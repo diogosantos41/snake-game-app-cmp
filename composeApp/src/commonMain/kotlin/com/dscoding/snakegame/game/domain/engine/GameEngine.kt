@@ -6,11 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface GameEngine {
     fun runGame(boardSize: Int): Flow<GameEngineResult>
-
     fun requestDirectionChange(movementDirection: MovementDirection)
-
     fun resumeGame()
-    fun restartGame()
     fun pauseGame()
 
 

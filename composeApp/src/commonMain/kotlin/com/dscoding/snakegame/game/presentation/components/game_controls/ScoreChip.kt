@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.dscoding.snakegame.core.presentation.theme.ContainerBorderWhite
 import com.dscoding.snakegame.core.presentation.theme.ContainerBackgroundBlack
 import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerBorderWidth
+import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerRoundedCornerShapeSize
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 
 
@@ -42,7 +43,7 @@ fun ScoreChip(
         Spacer(Modifier.height(4.dp))
 
         Surface(
-            shape = RoundedCornerShape(10.dp),
+            shape = RoundedCornerShape(size = ContainerRoundedCornerShapeSize),
             color = ContainerBackgroundBlack,
             border = BorderStroke(
                 width = ContainerBorderWidth,

@@ -1,7 +1,6 @@
 package com.dscoding.snakegame.game.presentation.components.game_controls
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,14 +18,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.dscoding.snakegame.core.presentation.theme.ContainerBorderWhite
 import com.dscoding.snakegame.core.presentation.theme.ContainerBackgroundBlack
+import com.dscoding.snakegame.core.presentation.theme.ContainerBorderWhite
 import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerBorderWidth
+import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerRoundedCornerShapeSize
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 
 @Composable
 fun DiamondDirectionButton(
     icon: ImageVector,
+    enabled: Boolean,
     modifier: Modifier = Modifier,
     size: Dp = 100.dp,
     iconSize: Dp = 60.dp,
@@ -35,11 +36,17 @@ fun DiamondDirectionButton(
     onClick: () -> Unit,
 ) {
     Button(
+        enabled = enabled,
         onClick = onClick,
-        shape = RoundedCornerShape(14.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = containerColor),
-        border = BorderStroke(width = ContainerBorderWidth, color = ContainerBorderWhite),
-        contentPadding = PaddingValues(0.dp),
+        shape = RoundedCornerShape(size = ContainerRoundedCornerShapeSize),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = containerColor,
+            disabledContainerColor = containerColor
+        ),
+        border = BorderStroke(
+            width = ContainerBorderWidth,
+            color = ContainerBorderWhite
+        ),
         modifier = modifier.size(size).graphicsLayer { rotationZ = 45f }) {
         Icon(
             imageVector = icon,
@@ -55,6 +62,7 @@ private fun DiamondDirectionButtonPreview() {
     SnakeGameTheme {
         DiamondDirectionButton(
             icon = Icons.Default.KeyboardArrowRight,
+            enabled = true,
             onClick = {},
             modifier = Modifier.padding(30.dp)
         )

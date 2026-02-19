@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.dscoding.snakegame.core.presentation.theme.ContainerBackgroundBlack
+import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerRoundedCornerShapeSize
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import org.jetbrains.compose.resources.stringResource
 import snakegame.composeapp.generated.resources.Res
@@ -32,7 +33,7 @@ fun StartGameDialog(
     Dialog(onDismissRequest = onDismiss) {
         Column(
             modifier = modifier
-                .clip(RoundedCornerShape(15.dp))
+                .clip(RoundedCornerShape(size = ContainerRoundedCornerShapeSize))
                 .background(color = ContainerBackgroundBlack)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,

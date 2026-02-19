@@ -13,4 +13,9 @@ data class GameState(
     val food: Pair<Int, Int>? = null,
     val snake: List<Pair<Int, Int>> = emptyList(),
     val currentMovementDirection: MovementDirection = MovementDirection.RIGHT
-)
+) {
+    val isInCountdown: Boolean
+        get() = countdownSecondsRemaining != null
+    val isGameplayInputEnabled: Boolean
+        get() = currentPlayState == PlayState.PLAYING && !isInCountdown
+}

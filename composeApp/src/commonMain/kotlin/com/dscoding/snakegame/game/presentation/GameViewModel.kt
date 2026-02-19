@@ -55,12 +55,10 @@ class GameViewModel(
     fun onAction(action: GameAction) {
         when (action) {
             is GameAction.OnDirectionClick -> {
-                if (state.value.currentPlayState == PlayState.PLAYING) {
-                    gameEngine.requestDirectionChange(action.movementDirection)
-                }
+                gameEngine.requestDirectionChange(action.movementDirection)
             }
 
-            GameAction.OnGameStarted, GameAction.OnGameRestarted -> {
+            GameAction.OnStartGameClick, GameAction.OnRestartGameClick -> {
                 _state.update {
                     it.copy(
                         currentPlayState = PlayState.PLAYING,
@@ -70,29 +68,35 @@ class GameViewModel(
                 runSnakeGame()
             }
 
-            GameAction.OnGameResumed -> {
+            GameAction.OnResumeGameClick -> {
+                // TODO [BUG] Pause Dialog Flashes because countdown ends but playState == PAUSE for 0.01 seconds
                 startCountdownThen {
+                    _state.update {
+                        it.copy(currentPlayState = PlayState.PLAYING)
+                    }
                     gameEngine.resumeGame()
                     gameAudio.startMusic()
-                    _state.update {
-                        it.copy(
-                            currentPlayState = PlayState.PLAYING
-                        )
-                    }
+
                 }
             }
 
-            GameAction.OnGamePaused -> {
-                gameEngine.pauseGame()
-                gameAudio.stopMusic()
+            GameAction.OnPauseGameClick -> {
+                // TODO [BUG] If I pause right after loosing, the games ends but still becomes paused.
                 _state.update {
                     it.copy(currentPlayState = PlayState.PAUSED)
                 }
+                gameEngine.pauseGame()
+                gameAudio.stopMusic()
+            }
+
+            GameAction.OnSettingsClick -> {
+
             }
         }
     }
 
     private fun runSnakeGame() {
+        // TODO Stop all SFX sounds (and music maybe) before starting the music
         gameAudio.startMusic()
         gameEngineJob?.cancel()
         gameEngineJob = null
@@ -111,13 +115,14 @@ class GameViewModel(
                     )
                 }
             }.onGameEnded {
-                gameEndedFeedback()
-                saveHighscore()
                 _state.update {
                     it.copy(
                         currentPlayState = PlayState.FINISHED,
                     )
                 }
+                gameEndedFeedback()
+                saveHighscore()
+
             }.launchIn(viewModelScope)
     }
 

@@ -8,4 +8,5 @@
     <string name="resume">Resume</string>
     <string name="restart">Restart</string>
     <string name="rotate_device_to_continue">Rotate your device to continue</string>
+    <string name="settings">Settings</string>
 </resources>

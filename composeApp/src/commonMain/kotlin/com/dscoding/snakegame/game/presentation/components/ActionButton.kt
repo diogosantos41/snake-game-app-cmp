@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dscoding.snakegame.core.presentation.theme.ContainerBackgroundBlack
 import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerBorderWidth
+import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerRoundedCornerShapeSize
 import com.dscoding.snakegame.core.presentation.theme.GameOrange
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 
@@ -34,7 +35,7 @@ fun ActionButton(
             contentColor = White
         ),
         border = BorderStroke(width = ContainerBorderWidth, color = GameOrange),
-        shape = RoundedCornerShape(size = 15.dp),
+        shape = RoundedCornerShape(size = ContainerRoundedCornerShapeSize),
         modifier = modifier
             .widthIn(max = 400.dp)
             .height(60.dp),

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
@@ -18,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dscoding.snakegame.core.presentation.theme.Dimens.GameControlsPadding
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.core.presentation.theme.blackAlphaGradient
 import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
@@ -31,6 +31,7 @@ fun GameControls(
     score: Int,
     highscore: Int,
     showDirectionPad: Boolean,
+    isGameplayInputEnabled: Boolean,
     onDirectionClick: (movementDirection: MovementDirection) -> Unit,
     onPauseClick: () -> Unit,
     onSettingsClick: () -> Unit,
@@ -43,7 +44,7 @@ fun GameControls(
                 .background(
                     brush = blackAlphaGradient
                 )
-                .padding(20.dp),
+                .padding(GameControlsPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
@@ -67,18 +68,22 @@ fun GameControls(
             ) {
                 SmallActionButton(
                     icon = Icons.Default.Tune,
+                    enabled = isGameplayInputEnabled,
                     onClick = onSettingsClick
                 )
                 SmallActionButton(
                     icon = Icons.Default.Pause,
+                    enabled = isGameplayInputEnabled,
                     onClick = onPauseClick
                 )
             }
         }
         if (showDirectionPad) {
             DirectionPad(
+                enabled = isGameplayInputEnabled,
                 onDirectionClick = onDirectionClick,
-                modifier = Modifier.padding(top = 45.dp))
+                modifier = Modifier.padding(top = 45.dp)
+            )
         }
     }
 
@@ -92,6 +97,7 @@ private fun GameControlsPreview() {
             score = 10,
             highscore = 20,
             showDirectionPad = true,
+            isGameplayInputEnabled = true,
             onDirectionClick = {},
             onPauseClick = {},
             onSettingsClick = {},

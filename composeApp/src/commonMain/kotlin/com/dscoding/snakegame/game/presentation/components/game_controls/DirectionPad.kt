@@ -22,6 +22,7 @@ import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
 
 @Composable
 fun DirectionPad(
+    enabled: Boolean,
     onDirectionClick: (movementDirection: MovementDirection) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -32,21 +33,25 @@ fun DirectionPad(
         verticalArrangement = Arrangement.spacedBy((-20).dp)
     ) {
         DiamondDirectionButton(
+            enabled = enabled,
             onClick = { onDirectionClick(MovementDirection.UP) },
             icon = Icons.Default.KeyboardArrowUp,
         )
         Row {
             DiamondDirectionButton(
+                enabled = enabled,
                 onClick = { onDirectionClick(MovementDirection.LEFT) },
                 icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
             )
             Spacer(modifier = Modifier.width(60.dp))
             DiamondDirectionButton(
+                enabled = enabled,
                 onClick = { onDirectionClick(MovementDirection.RIGHT) },
                 icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             )
         }
         DiamondDirectionButton(
+            enabled = enabled,
             onClick = { onDirectionClick(MovementDirection.DOWN) },
             icon = Icons.Default.KeyboardArrowDown,
         )
@@ -58,6 +63,7 @@ fun DirectionPad(
 private fun DirectionPadPreview() {
     SnakeGameTheme {
         DirectionPad(
+            enabled = true,
             onDirectionClick = {}
         )
     }

@@ -44,13 +44,15 @@ fun GameRoot(
     val isAppInForeground by isAppInForeground()
     val isOrientationLandscape by isOrientationLandscape()
 
+    // TODO [BUG] background on countdown, games resumes anyway
+    // TODO [BUG] iOS Rotations creates a offset effect on the dialog
     LaunchedEffect(isAppInForeground, isOrientationLandscape, state.currentPlayState) {
         val shouldPause =
             state.currentPlayState == PlayState.PLAYING &&
                     (!isAppInForeground || isOrientationLandscape)
 
         if (shouldPause) {
-            viewModel.onAction(GameAction.OnGamePaused)
+            viewModel.onAction(GameAction.OnPauseGameClick)
         }
     }
 
@@ -78,6 +80,7 @@ fun GameScreen(
                 )
                 .snakeSwipeControls(
                     enabled = state.movementControlMode == ControlMode.SWIPE
+                            && state.isGameplayInputEnabled
                 ) { direction ->
                     onAction(GameAction.OnDirectionClick(direction))
                 },
@@ -101,10 +104,11 @@ fun GameScreen(
                     score = state.score,
                     highscore = state.highScore,
                     showDirectionPad = state.movementControlMode == ControlMode.BUTTONS,
+                    isGameplayInputEnabled = state.isGameplayInputEnabled,
                     onDirectionClick = {
                         onAction(GameAction.OnDirectionClick(it))
                     },
-                    onPauseClick = { onAction(GameAction.OnGamePaused) },
+                    onPauseClick = { onAction(GameAction.OnPauseGameClick) },
                     onSettingsClick = {}
                 )
             }
@@ -117,25 +121,24 @@ fun GameScreen(
             )
         }
 
-        if (state.currentPlayState == PlayState.PAUSED
-            && state.countdownSecondsRemaining == null
-        ) {
+        if (state.currentPlayState == PlayState.PAUSED && !state.isInCountdown) {
             GamePausedDialog(
                 currentScore = state.score,
-                onResumeClick = { onAction(GameAction.OnGameResumed) },
-                onRestartClick = { onAction(GameAction.OnGameRestarted) },
-                onDismiss = { onAction(GameAction.OnGameResumed) },
+                onResumeClick = { onAction(GameAction.OnResumeGameClick) },
+                onRestartClick = { onAction(GameAction.OnRestartGameClick) },
+                onSettingsClick = { onAction(GameAction.OnSettingsClick) },
+                onDismiss = { onAction(GameAction.OnResumeGameClick) },
             )
         }
 
         if ((state.currentPlayState == PlayState.READY_TO_PLAY
                     || state.currentPlayState == PlayState.FINISHED)
-            && state.countdownSecondsRemaining == null
+            && !state.isInCountdown
         ) {
             StartGameDialog(
                 title = stringResource(Res.string.snake_game),
-                onStartGameClick = { onAction(GameAction.OnGameStarted) },
-                onDismiss = { onAction(GameAction.OnGameStarted) }
+                onStartGameClick = { onAction(GameAction.OnStartGameClick) },
+                onDismiss = { onAction(GameAction.OnStartGameClick) }
             )
         }
     }

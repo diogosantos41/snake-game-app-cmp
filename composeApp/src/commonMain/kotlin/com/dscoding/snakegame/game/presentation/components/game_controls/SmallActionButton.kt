@@ -1,7 +1,6 @@
 package com.dscoding.snakegame.game.presentation.components.game_controls
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -18,18 +17,24 @@ import androidx.compose.ui.unit.dp
 import com.dscoding.snakegame.core.presentation.theme.ContainerBorderWhite
 import com.dscoding.snakegame.core.presentation.theme.ContainerBackgroundBlack
 import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerBorderWidth
+import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerRoundedCornerShapeSize
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 
 @Composable
-fun SmallActionButton(icon: ImageVector, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun SmallActionButton(
+    icon: ImageVector,
+    enabled: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier) {
     Button(
+        enabled = enabled,
         onClick = onClick,
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(size = ContainerRoundedCornerShapeSize),
         colors = ButtonDefaults.buttonColors(
-            containerColor = ContainerBackgroundBlack
+            containerColor = ContainerBackgroundBlack,
+            disabledContainerColor = ContainerBackgroundBlack
         ),
         border = BorderStroke(width = ContainerBorderWidth, color = ContainerBorderWhite),
-        contentPadding = PaddingValues(0.dp),
         modifier = modifier.size(80.dp)
     ) {
         Icon(
@@ -47,6 +52,7 @@ private fun SmallActionButtonPreview() {
     SnakeGameTheme {
         SmallActionButton(
             icon = Icons.Default.Pause,
+            enabled = true,
             onClick = {}
         )
     }

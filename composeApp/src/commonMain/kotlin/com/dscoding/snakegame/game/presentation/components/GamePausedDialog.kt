@@ -1,29 +1,23 @@
 package com.dscoding.snakegame.game.presentation.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import com.dscoding.snakegame.core.presentation.theme.ContainerBorderWhite
-import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerBorderWidth
+import com.dscoding.snakegame.core.presentation.components.GameDialogContent
+import com.dscoding.snakegame.core.presentation.theme.Dimens.VerticalSpacingBetweenDialogComponents
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import org.jetbrains.compose.resources.stringResource
 import snakegame.composeapp.generated.resources.Res
@@ -31,39 +25,26 @@ import snakegame.composeapp.generated.resources.game_paused
 import snakegame.composeapp.generated.resources.restart
 import snakegame.composeapp.generated.resources.resume
 import snakegame.composeapp.generated.resources.score
+import snakegame.composeapp.generated.resources.settings
 
 @Composable
 fun GamePausedDialog(
     currentScore: Int,
     onResumeClick: () -> Unit,
     onRestartClick: () -> Unit,
+    onSettingsClick: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
-    val dialogShape = RoundedCornerShape(15.dp)
-
-    Dialog(
-        onDismissRequest = onDismiss,
-        properties = DialogProperties(
-            dismissOnClickOutside = false,
-            dismissOnBackPress = false
-        )
+    GameDialogContent(
+        onDismiss = onDismiss,
+        modifier = modifier
     ) {
         Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .clip(dialogShape)
-                .background(Black.copy(alpha = 0.85f))
-                .border(
-                    width = ContainerBorderWidth,
-                    color = ContainerBorderWhite,
-                    shape = dialogShape
-                )
-                .padding(vertical = 20.dp),
+            modifier = Modifier
+                .padding(vertical = VerticalSpacingBetweenDialogComponents),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-
+            verticalArrangement = Arrangement.spacedBy(VerticalSpacingBetweenDialogComponents)
         ) {
             Box(
                 modifier = Modifier
@@ -76,7 +57,7 @@ fun GamePausedDialog(
                     style = MaterialTheme.typography.titleMedium,
                 )
             }
-
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 50.dp))
             Text(
                 text = buildAnnotatedString {
                     withStyle(
@@ -97,14 +78,22 @@ fun GamePausedDialog(
                 onClick = onResumeClick,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 60.dp)
+                    .padding(horizontal = 50.dp)
             )
             ActionButton(
                 text = stringResource(Res.string.restart),
                 onClick = onRestartClick,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 60.dp)
+                    .padding(horizontal = 50.dp)
+            )
+
+            ActionButton(
+                text = stringResource(Res.string.settings),
+                onClick = onSettingsClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 50.dp)
             )
         }
     }
@@ -120,6 +109,7 @@ private fun GamePausedDialogPreview() {
                 currentScore = 12,
                 onResumeClick = {},
                 onRestartClick = {},
+                onSettingsClick = {},
                 onDismiss = {}
             )
         }
