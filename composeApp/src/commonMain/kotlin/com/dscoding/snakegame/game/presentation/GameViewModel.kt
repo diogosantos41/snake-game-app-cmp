@@ -12,6 +12,7 @@ import com.dscoding.snakegame.game.domain.engine.models.onTick
 import com.dscoding.snakegame.game.domain.haptics.GameHaptics
 import com.dscoding.snakegame.game.domain.haptics.models.HapticType.HEAVY
 import com.dscoding.snakegame.game.domain.haptics.models.HapticType.LIGHT
+import com.dscoding.snakegame.game.presentation.models.PausedState
 import com.dscoding.snakegame.game.presentation.models.PlayState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -61,7 +62,7 @@ class GameViewModel(
             GameAction.OnStartGameClick, GameAction.OnRestartGameClick -> {
                 _state.update {
                     it.copy(
-                        currentPlayState = PlayState.PLAYING,
+                        currentPlayState = PlayState.Playing,
                         score = 0
                     )
                 }
@@ -70,27 +71,39 @@ class GameViewModel(
 
             GameAction.OnResumeGameClick -> {
                 // TODO [BUG] Pause Dialog Flashes because countdown ends but playState == PAUSE for 0.01 seconds
+                _state.update {
+                    it.copy(
+                        currentPlayState = PlayState.Paused(PausedState.COUNTDOWN),
+                    )
+                }
                 startCountdownThen {
                     _state.update {
-                        it.copy(currentPlayState = PlayState.PLAYING)
+                        it.copy(
+                            currentPlayState = PlayState.Playing,
+                        )
                     }
                     gameEngine.resumeGame()
                     gameAudio.startMusic()
-
                 }
             }
 
             GameAction.OnPauseGameClick -> {
                 // TODO [BUG] If I pause right after loosing, the games ends but still becomes paused.
                 _state.update {
-                    it.copy(currentPlayState = PlayState.PAUSED)
+                    it.copy(
+                        currentPlayState = PlayState.Paused(PausedState.MENU),
+                    )
                 }
                 gameEngine.pauseGame()
                 gameAudio.stopMusic()
             }
 
             GameAction.OnSettingsClick -> {
-
+                _state.update {
+                    it.copy(
+                        currentPlayState = PlayState.Paused(PausedState.SETTINGS),
+                    )
+                }
             }
         }
     }
@@ -117,7 +130,7 @@ class GameViewModel(
             }.onGameEnded {
                 _state.update {
                     it.copy(
-                        currentPlayState = PlayState.FINISHED,
+                        currentPlayState = PlayState.Finished,
                     )
                 }
                 gameEndedFeedback()

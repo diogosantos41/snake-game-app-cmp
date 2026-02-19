@@ -2,9 +2,11 @@ package com.dscoding.snakegame.di
 
 import com.dscoding.snakegame.core.data.datastore.DataStoreGamePreferences
 import com.dscoding.snakegame.core.domain.GamePreferences
+import com.dscoding.snakegame.core.presentation.util.ScopedStoreRegistryViewModel
 import com.dscoding.snakegame.game.data.engine.GameEngineImpl
 import com.dscoding.snakegame.game.domain.engine.GameEngine
 import com.dscoding.snakegame.game.presentation.GameViewModel
+import com.dscoding.snakegame.game.presentation.settings.SettingsViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
@@ -16,6 +18,8 @@ expect val platformAppModule: Module
 val appModule = module {
     includes(platformAppModule)
     viewModelOf(::GameViewModel)
+    viewModelOf(::SettingsViewModel)
+    viewModelOf(::ScopedStoreRegistryViewModel)
     singleOf(::GameEngineImpl) bind GameEngine::class
     singleOf(::DataStoreGamePreferences) bind GamePreferences::class
 }

@@ -17,6 +17,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dscoding.snakegame.core.presentation.components.PortraitGuard
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.core.presentation.theme.orangeAlphaGradient
+import com.dscoding.snakegame.core.presentation.util.DialogScopedViewModel
 import com.dscoding.snakegame.core.presentation.util.tileGridBackground
 import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
 import com.dscoding.snakegame.game.presentation.GameViewModel.Companion.BOARD_SIZE
@@ -26,7 +27,9 @@ import com.dscoding.snakegame.game.presentation.components.StartGameDialog
 import com.dscoding.snakegame.game.presentation.components.game_board.GameBoard
 import com.dscoding.snakegame.game.presentation.components.game_controls.GameControls
 import com.dscoding.snakegame.game.presentation.models.ControlMode
+import com.dscoding.snakegame.game.presentation.models.PausedState
 import com.dscoding.snakegame.game.presentation.models.PlayState
+import com.dscoding.snakegame.game.presentation.settings.SettingsRoot
 import com.dscoding.snakegame.game.presentation.utils.isAppInForeground
 import com.dscoding.snakegame.game.presentation.utils.isOrientationLandscape
 import com.dscoding.snakegame.game.presentation.utils.snakeSwipeControls
@@ -48,7 +51,7 @@ fun GameRoot(
     // TODO [BUG] iOS Rotations creates a offset effect on the dialog
     LaunchedEffect(isAppInForeground, isOrientationLandscape, state.currentPlayState) {
         val shouldPause =
-            state.currentPlayState == PlayState.PLAYING &&
+            state.currentPlayState is PlayState.Playing &&
                     (!isAppInForeground || isOrientationLandscape)
 
         if (shouldPause) {
@@ -80,7 +83,7 @@ fun GameScreen(
                 )
                 .snakeSwipeControls(
                     enabled = state.movementControlMode == ControlMode.SWIPE
-                            && state.isGameplayInputEnabled
+                            && state.currentPlayState is PlayState.Playing
                 ) { direction ->
                     onAction(GameAction.OnDirectionClick(direction))
                 },
@@ -104,7 +107,7 @@ fun GameScreen(
                     score = state.score,
                     highscore = state.highScore,
                     showDirectionPad = state.movementControlMode == ControlMode.BUTTONS,
-                    isGameplayInputEnabled = state.isGameplayInputEnabled,
+                    isGameplayInputEnabled = state.currentPlayState is PlayState.Playing,
                     onDirectionClick = {
                         onAction(GameAction.OnDirectionClick(it))
                     },
@@ -121,7 +124,7 @@ fun GameScreen(
             )
         }
 
-        if (state.currentPlayState == PlayState.PAUSED && !state.isInCountdown) {
+        if (state.currentPlayState == PlayState.Paused(PausedState.MENU)) {
             GamePausedDialog(
                 currentScore = state.score,
                 onResumeClick = { onAction(GameAction.OnResumeGameClick) },
@@ -131,15 +134,20 @@ fun GameScreen(
             )
         }
 
-        if ((state.currentPlayState == PlayState.READY_TO_PLAY
-                    || state.currentPlayState == PlayState.FINISHED)
-            && !state.isInCountdown
+        if (state.currentPlayState is PlayState.ReadyToPlay
+            || state.currentPlayState is PlayState.Finished
         ) {
             StartGameDialog(
                 title = stringResource(Res.string.snake_game),
                 onStartGameClick = { onAction(GameAction.OnStartGameClick) },
                 onDismiss = { onAction(GameAction.OnStartGameClick) }
             )
+        }
+
+        DialogScopedViewModel(
+            visible = state.currentPlayState == PlayState.Paused(PausedState.SETTINGS)
+        ) {
+            SettingsRoot()
         }
     }
 }
@@ -150,7 +158,7 @@ private fun GameScreenPreview() {
     SnakeGameTheme {
         GameScreen(
             state = GameState(
-                currentPlayState = PlayState.PLAYING,
+                currentPlayState = PlayState.Playing,
                 movementControlMode = ControlMode.BUTTONS,
                 score = 20,
                 highScore = 200,
