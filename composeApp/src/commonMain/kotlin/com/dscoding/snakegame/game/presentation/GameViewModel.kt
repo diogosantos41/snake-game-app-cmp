@@ -4,11 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dscoding.snakegame.core.domain.GamePreferences
 import com.dscoding.snakegame.game.domain.GameCoordinator
+import com.dscoding.snakegame.game.presentation.models.ControlMode
 import com.dscoding.snakegame.game.presentation.models.PausedState
 import com.dscoding.snakegame.game.presentation.models.PlayState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -22,19 +25,22 @@ class GameViewModel(
         const val BOARD_SIZE = 14
     }
 
+    private var hasLoadedInitialData = false
+
     private val _state = MutableStateFlow(GameState())
-    val state = combine(
-        _state,
-        gamePreferences.observeHighscore()
-    ) { currentState, highscore ->
-        currentState.copy(
-            highScore = highscore
+    val state = _state
+        .onStart {
+            if (!hasLoadedInitialData) {
+                observeGamePreferences()
+                hasLoadedInitialData = true
+
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000L),
+            initialValue = GameState()
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000L),
-        initialValue = GameState()
-    )
 
     fun onAction(action: GameAction) {
         when (action) {
@@ -147,5 +153,19 @@ class GameViewModel(
             val currentHigh = state.value.highScore
             if (finalScore > currentHigh) gamePreferences.setHighscore(finalScore)
         }
+    }
+
+    private fun observeGamePreferences() {
+        combine(
+            gamePreferences.observeHighscore(),
+            gamePreferences.observeControlMode(),
+        ) { highScore, controlMode ->
+            _state.update {
+                it.copy(
+                    highScore = highScore,
+                    movementControlMode = ControlMode.valueOf(controlMode.name)
+                )
+            }
+        }.launchIn(viewModelScope)
     }
 }

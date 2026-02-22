@@ -1,13 +1,14 @@
 package com.dscoding.snakegame.game.presentation.settings
 
 import com.dscoding.snakegame.game.presentation.models.ControlMode
+import com.dscoding.snakegame.game.presentation.settings.models.ColorUi
 
 sealed interface SettingsAction {
     data class OnToggleSoundClick(val enabled: Boolean) : SettingsAction
     data class OnToggleVibrationClick(val enabled: Boolean) : SettingsAction
     data class OnToggleControlModeClick(val controlMode: ControlMode) : SettingsAction
-    data class OnGameColorSelected(val color: Int) : SettingsAction
-    data class OnFoodColorSelected(val color: Int) : SettingsAction
+    data class OnGameColorSelected(val color: ColorUi) : SettingsAction
+    data class OnFoodColorSelected(val color: ColorUi) : SettingsAction
     data object OnRateAppClick : SettingsAction
     data object OnShareAppClick : SettingsAction
     data object OnGithubClick : SettingsAction

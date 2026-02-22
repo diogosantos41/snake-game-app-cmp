@@ -16,6 +16,7 @@ import com.dscoding.snakegame.core.presentation.components.GameDialogHeader
 import com.dscoding.snakegame.core.presentation.theme.Dimens.HorizontalSpacingDialogComponent
 import com.dscoding.snakegame.core.presentation.theme.Dimens.VerticalSpacingBetweenDialogComponent
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
+import com.dscoding.snakegame.game.presentation.models.ControlMode
 import com.dscoding.snakegame.game.presentation.settings.components.SettingsField
 import com.dscoding.snakegame.game.presentation.settings.components.SwitchField
 import org.jetbrains.compose.resources.stringResource
@@ -78,22 +79,32 @@ fun SettingsScreen(
         SwitchField(
             title = stringResource(Res.string.sound),
             value = stringResource(Res.string.enabled),
-            enabled = true,
-            onToggle = {},
+            enabled = state.isSoundEnabled,
+            onToggle = { onAction(SettingsAction.OnToggleSoundClick(it)) },
             modifier = Modifier.fillMaxWidth()
         )
         SwitchField(
             title = stringResource(Res.string.vibration),
             value = stringResource(Res.string.enabled),
-            enabled = false,
-            onToggle = {},
+            enabled = state.isVibrationEnabled,
+            onToggle = { onAction(SettingsAction.OnToggleVibrationClick(it)) },
             modifier = Modifier.fillMaxWidth()
         )
         SwitchField(
             title = stringResource(Res.string.control_mode),
             value = stringResource(Res.string.swipe),
-            enabled = true,
-            onToggle = {},
+            enabled = state.selectedControlMode == ControlMode.SWIPE,
+            onToggle = {
+                onAction(
+                    SettingsAction.OnToggleControlModeClick(
+                        if (it) {
+                            ControlMode.SWIPE
+                        } else {
+                            ControlMode.BUTTONS
+                        }
+                    )
+                )
+            },
             modifier = Modifier.fillMaxWidth()
         )
         SettingsField(
