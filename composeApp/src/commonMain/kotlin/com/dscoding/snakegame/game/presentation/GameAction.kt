@@ -9,4 +9,5 @@ sealed interface GameAction {
     data object OnRestartGameClick : GameAction
     data object OnPauseGameClick : GameAction
     data object OnSettingsClick : GameAction
+    data object OnSettingsDismissClick : GameAction
 }

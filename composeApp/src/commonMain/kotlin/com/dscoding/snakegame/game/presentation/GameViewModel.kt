@@ -104,6 +104,25 @@ class GameViewModel(
                         currentPlayState = PlayState.Paused(PausedState.SETTINGS),
                     )
                 }
+                gameEngineJob?.let {
+                    gameEngine.pauseGame()
+                    gameAudio.stopMusic()
+                }
+            }
+            GameAction.OnSettingsDismissClick -> {
+                if(gameEngineJob?.isActive ?: false) {
+                    _state.update {
+                        it.copy(
+                            currentPlayState = PlayState.Paused(PausedState.MENU),
+                        )
+                    }
+                } else {
+                    _state.update {
+                        it.copy(
+                            currentPlayState = PlayState.ReadyToPlay,
+                        )
+                    }
+                }
             }
         }
     }
@@ -135,6 +154,8 @@ class GameViewModel(
                 }
                 gameEndedFeedback()
                 saveHighscore()
+                gameEngineJob?.cancel()
+                gameEngineJob = null
 
             }.launchIn(viewModelScope)
     }

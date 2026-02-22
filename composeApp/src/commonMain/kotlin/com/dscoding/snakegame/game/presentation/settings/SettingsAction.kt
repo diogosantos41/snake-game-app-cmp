@@ -12,5 +12,5 @@ sealed interface SettingsAction {
     data object OnShareAppClick : SettingsAction
     data object OnGithubClick : SettingsAction
     data object OnPrivacyPolicyClick : SettingsAction
-    data object OnDismissDialog : SettingsAction
+    data object OnDismissClick : SettingsAction
 }

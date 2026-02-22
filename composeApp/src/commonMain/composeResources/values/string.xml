@@ -9,4 +9,37 @@
     <string name="restart">Restart</string>
     <string name="rotate_device_to_continue">Rotate your device to continue</string>
     <string name="settings">Settings</string>
+    <string name="sound">Sound</string>
+    <string name="vibration">Vibration</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+    <string name="control_mode">Control Mode</string>
+    <string name="swipe">Swipe</string>
+    <string name="direction_pad">Direction Pad</string>
+    <string name="game_color">Game Color</string>
+    <string name="food_color">Food Color</string>
+    <string name="color_burnt_orange">Burnt Orange</string>
+    <string name="color_red">Red</string>
+    <string name="color_light_coral">Light Coral</string>
+    <string name="color_pink">Pink</string>
+    <string name="color_purple">Purple</string>
+    <string name="color_indigo">Indigo</string>
+    <string name="color_blue">Blue</string>
+    <string name="color_cyan">Cyan</string>
+    <string name="color_mint_green">Mint Green</string>
+    <string name="color_retro_green">Retro Green</string>
+    <string name="color_bright_yellow">Bright Yellow</string>
+
+    <string name="settings_rate_app_title">Rate app</string>
+    <string name="settings_rate_app_message">Reviews help us a lot. Thank you!</string>
+    <string name="settings_share_app_title">Share app</string>
+    <string name="settings_share_app_message">Share message</string>
+    <string name="settings_share_app_intent_message">Check out \'Snake Game App\'</string>
+    <string name="settings_privacy_policy_title">Privacy policy</string>
+    <string name="settings_privacy_policy_message">How do we handle your data?</string>
+    <string name="settings_github_title">Github</string>
+    <string name="settings_github_message">Check the source code</string>
+    <string name="settings_app_version_title">Version</string>
+
+
 </resources>

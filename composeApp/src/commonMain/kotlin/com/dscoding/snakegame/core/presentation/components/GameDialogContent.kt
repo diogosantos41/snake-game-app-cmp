@@ -9,14 +9,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.dscoding.snakegame.core.presentation.theme.ContainerBackgroundBlack
 import com.dscoding.snakegame.core.presentation.theme.ContainerBorderWhite
+import com.dscoding.snakegame.core.presentation.theme.DialogBackgroundBlack
 import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerBorderWidth
 import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerRoundedCornerShapeSize
 
 @Composable
 fun GameDialogContent(
     onDismiss: () -> Unit,
+    dismissOnBackPress: Boolean = true,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
@@ -26,14 +27,14 @@ fun GameDialogContent(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
             dismissOnClickOutside = false,
-            dismissOnBackPress = true
+            dismissOnBackPress = dismissOnBackPress
         )
     ) {
         Surface(
             modifier = modifier
                 .fillMaxWidth()
                 .clip(dialogShape),
-            color = ContainerBackgroundBlack,
+            color = DialogBackgroundBlack,
             shape = dialogShape,
             border = BorderStroke(
                 width = ContainerBorderWidth,

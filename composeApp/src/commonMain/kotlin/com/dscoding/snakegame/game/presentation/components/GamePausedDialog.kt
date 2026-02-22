@@ -17,7 +17,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dscoding.snakegame.core.presentation.components.GameDialogContent
-import com.dscoding.snakegame.core.presentation.theme.Dimens.VerticalSpacingBetweenDialogComponents
+import com.dscoding.snakegame.core.presentation.components.GameDialogHeader
+import com.dscoding.snakegame.core.presentation.theme.Dimens.HorizontalSpacingDialogComponent
+import com.dscoding.snakegame.core.presentation.theme.Dimens.VerticalSpacingBetweenDialogComponent
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import org.jetbrains.compose.resources.stringResource
 import snakegame.composeapp.generated.resources.Res
@@ -42,22 +44,20 @@ fun GamePausedDialog(
     ) {
         Column(
             modifier = Modifier
-                .padding(vertical = VerticalSpacingBetweenDialogComponents),
+                .padding(
+                    vertical = VerticalSpacingBetweenDialogComponent,
+                    horizontal = HorizontalSpacingDialogComponent
+                ),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(VerticalSpacingBetweenDialogComponents)
+            verticalArrangement = Arrangement.spacedBy(VerticalSpacingBetweenDialogComponent)
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(Res.string.game_paused),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleMedium,
-                )
-            }
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 50.dp))
+            GameDialogHeader(
+                title = stringResource(Res.string.game_paused),
+                showClose = true,
+                onCloseClick = onDismiss,
+                modifier = Modifier.fillMaxWidth()
+            )
+            HorizontalDivider()
             Text(
                 text = buildAnnotatedString {
                     withStyle(
@@ -76,24 +76,18 @@ fun GamePausedDialog(
             ActionButton(
                 text = stringResource(Res.string.resume),
                 onClick = onResumeClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 50.dp)
+                modifier = Modifier.fillMaxWidth()
             )
             ActionButton(
                 text = stringResource(Res.string.restart),
                 onClick = onRestartClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 50.dp)
+                modifier = Modifier.fillMaxWidth()
             )
 
             ActionButton(
                 text = stringResource(Res.string.settings),
                 onClick = onSettingsClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 50.dp)
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

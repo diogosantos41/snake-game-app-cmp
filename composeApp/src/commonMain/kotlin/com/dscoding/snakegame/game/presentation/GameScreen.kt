@@ -33,10 +33,7 @@ import com.dscoding.snakegame.game.presentation.settings.SettingsRoot
 import com.dscoding.snakegame.game.presentation.utils.isAppInForeground
 import com.dscoding.snakegame.game.presentation.utils.isOrientationLandscape
 import com.dscoding.snakegame.game.presentation.utils.snakeSwipeControls
-import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import snakegame.composeapp.generated.resources.Res
-import snakegame.composeapp.generated.resources.snake_game
 
 @Composable
 fun GameRoot(
@@ -112,7 +109,7 @@ fun GameScreen(
                         onAction(GameAction.OnDirectionClick(it))
                     },
                     onPauseClick = { onAction(GameAction.OnPauseGameClick) },
-                    onSettingsClick = {}
+                    onSettingsClick = { onAction(GameAction.OnSettingsClick) }
                 )
             }
         }
@@ -138,8 +135,8 @@ fun GameScreen(
             || state.currentPlayState is PlayState.Finished
         ) {
             StartGameDialog(
-                title = stringResource(Res.string.snake_game),
                 onStartGameClick = { onAction(GameAction.OnStartGameClick) },
+                onSettingsClick = { onAction(GameAction.OnSettingsClick) },
                 onDismiss = { onAction(GameAction.OnStartGameClick) }
             )
         }
@@ -147,7 +144,8 @@ fun GameScreen(
         DialogScopedViewModel(
             visible = state.currentPlayState == PlayState.Paused(PausedState.SETTINGS)
         ) {
-            SettingsRoot()
+            SettingsRoot(onDismiss = { onAction(GameAction.OnSettingsDismissClick) })
+
         }
     }
 }
