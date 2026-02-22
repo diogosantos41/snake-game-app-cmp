@@ -1,4 +1,4 @@
-package com.dscoding.snakegame.game.presentation.components
+package com.dscoding.snakegame.game.presentation.components.dialogs
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +16,7 @@ import com.dscoding.snakegame.core.presentation.components.GameDialogHeader
 import com.dscoding.snakegame.core.presentation.theme.Dimens.HorizontalSpacingDialogComponent
 import com.dscoding.snakegame.core.presentation.theme.Dimens.VerticalSpacingBetweenDialogComponent
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
+import com.dscoding.snakegame.game.presentation.components.ActionButton
 import org.jetbrains.compose.resources.stringResource
 import snakegame.composeapp.generated.resources.Res
 import snakegame.composeapp.generated.resources.settings

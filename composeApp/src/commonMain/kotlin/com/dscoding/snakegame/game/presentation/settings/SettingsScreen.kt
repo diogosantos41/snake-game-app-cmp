@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dscoding.snakegame.core.presentation.components.GameDialogContent
 import com.dscoding.snakegame.core.presentation.components.GameDialogHeader
 import com.dscoding.snakegame.core.presentation.theme.Dimens.HorizontalSpacingDialogComponent
@@ -20,6 +19,7 @@ import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.game.presentation.settings.components.SettingsField
 import com.dscoding.snakegame.game.presentation.settings.components.SwitchField
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import snakegame.composeapp.generated.resources.Res
 import snakegame.composeapp.generated.resources.control_mode
 import snakegame.composeapp.generated.resources.enabled
@@ -33,7 +33,7 @@ import snakegame.composeapp.generated.resources.vibration
 fun SettingsRoot(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: SettingsViewModel = viewModel()
+    viewModel: SettingsViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 

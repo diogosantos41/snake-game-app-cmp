@@ -21,9 +21,10 @@ import com.dscoding.snakegame.core.presentation.util.DialogScopedViewModel
 import com.dscoding.snakegame.core.presentation.util.tileGridBackground
 import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
 import com.dscoding.snakegame.game.presentation.GameViewModel.Companion.BOARD_SIZE
-import com.dscoding.snakegame.game.presentation.components.GamePausedDialog
 import com.dscoding.snakegame.game.presentation.components.StartCountdown
-import com.dscoding.snakegame.game.presentation.components.StartGameDialog
+import com.dscoding.snakegame.game.presentation.components.dialogs.GameFinishedDialog
+import com.dscoding.snakegame.game.presentation.components.dialogs.GamePausedDialog
+import com.dscoding.snakegame.game.presentation.components.dialogs.StartGameDialog
 import com.dscoding.snakegame.game.presentation.components.game_board.GameBoard
 import com.dscoding.snakegame.game.presentation.components.game_controls.GameControls
 import com.dscoding.snakegame.game.presentation.models.ControlMode
@@ -114,10 +115,11 @@ fun GameScreen(
             }
         }
 
-        state.countdownSecondsRemaining?.let {
-            StartCountdown(
-                secondsRemaining = "$it",
-                modifier = Modifier.fillMaxSize()
+        if (state.currentPlayState is PlayState.ReadyToPlay) {
+            StartGameDialog(
+                onStartGameClick = { onAction(GameAction.OnStartGameClick) },
+                onSettingsClick = { onAction(GameAction.OnSettingsClick) },
+                onDismiss = { onAction(GameAction.OnStartGameClick) }
             )
         }
 
@@ -131,21 +133,31 @@ fun GameScreen(
             )
         }
 
-        if (state.currentPlayState is PlayState.ReadyToPlay
-            || state.currentPlayState is PlayState.Finished
-        ) {
-            StartGameDialog(
-                onStartGameClick = { onAction(GameAction.OnStartGameClick) },
-                onSettingsClick = { onAction(GameAction.OnSettingsClick) },
-                onDismiss = { onAction(GameAction.OnStartGameClick) }
-            )
-        }
-
         DialogScopedViewModel(
             visible = state.currentPlayState == PlayState.Paused(PausedState.SETTINGS)
         ) {
             SettingsRoot(onDismiss = { onAction(GameAction.OnSettingsDismissClick) })
 
+        }
+
+        state.countdownSecondsRemaining?.let {
+            StartCountdown(
+                secondsRemaining = "$it",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        if (state.currentPlayState is PlayState.Finished) {
+            GameFinishedDialog(
+                finalScore = state.score,
+                finalFood = state.food,
+                finalSnake = state.snake,
+                finalMovementDirection = state.currentMovementDirection,
+                highScore = state.highScore,
+                onPlayAgainClick = { onAction(GameAction.OnRestartGameClick) },
+                onShareClick = {},
+                onDismiss = { onAction(GameAction.OnRestartGameClick) },
+            )
         }
     }
 }
