@@ -17,18 +17,16 @@ import com.dscoding.snakegame.core.presentation.theme.Dimens.HorizontalSpacingDi
 import com.dscoding.snakegame.core.presentation.theme.Dimens.VerticalSpacingBetweenDialogComponent
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.game.presentation.models.ControlMode
-import com.dscoding.snakegame.game.presentation.settings.components.SettingsField
-import com.dscoding.snakegame.game.presentation.settings.components.SwitchField
+import com.dscoding.snakegame.game.presentation.settings.components.ColorSettings
+import com.dscoding.snakegame.game.presentation.settings.components.LabelSetting
+import com.dscoding.snakegame.game.presentation.settings.components.SwitchSetting
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import snakegame.composeapp.generated.resources.Res
-import snakegame.composeapp.generated.resources.control_mode
-import snakegame.composeapp.generated.resources.enabled
+import snakegame.composeapp.generated.resources.food_color
+import snakegame.composeapp.generated.resources.game_color
 import snakegame.composeapp.generated.resources.settings
 import snakegame.composeapp.generated.resources.settings_app_version_title
-import snakegame.composeapp.generated.resources.sound
-import snakegame.composeapp.generated.resources.swipe
-import snakegame.composeapp.generated.resources.vibration
 
 @Composable
 fun SettingsRoot(
@@ -76,24 +74,24 @@ fun SettingsScreen(
             modifier = Modifier.fillMaxWidth()
         )
         HorizontalDivider()
-        SwitchField(
-            title = stringResource(Res.string.sound),
-            value = stringResource(Res.string.enabled),
-            enabled = state.isSoundEnabled,
+        SwitchSetting(
+            title = state.soundSwitchSetting.title.asString(),
+            value = state.soundSwitchSetting.valueText.asString(),
+            enabled = state.soundSwitchSetting.checked,
             onToggle = { onAction(SettingsAction.OnToggleSoundClick(it)) },
             modifier = Modifier.fillMaxWidth()
         )
-        SwitchField(
-            title = stringResource(Res.string.vibration),
-            value = stringResource(Res.string.enabled),
-            enabled = state.isVibrationEnabled,
+        SwitchSetting(
+            title = state.vibrationSwitchSetting.title.asString(),
+            value = state.vibrationSwitchSetting.valueText.asString(),
+            enabled = state.vibrationSwitchSetting.checked,
             onToggle = { onAction(SettingsAction.OnToggleVibrationClick(it)) },
             modifier = Modifier.fillMaxWidth()
         )
-        SwitchField(
-            title = stringResource(Res.string.control_mode),
-            value = stringResource(Res.string.swipe),
-            enabled = state.selectedControlMode == ControlMode.SWIPE,
+        SwitchSetting(
+            title = state.controlModeSwitchSetting.title.asString(),
+            value = state.controlModeSwitchSetting.valueText.asString(),
+            enabled = state.controlModeSwitchSetting.checked,
             onToggle = {
                 onAction(
                     SettingsAction.OnToggleControlModeClick(
@@ -107,7 +105,19 @@ fun SettingsScreen(
             },
             modifier = Modifier.fillMaxWidth()
         )
-        SettingsField(
+        ColorSettings(
+            title = stringResource(Res.string.game_color),
+            selectedColor = state.selectedGameColor,
+            onColorSelected = { onAction(SettingsAction.OnGameColorSelected(it)) },
+            modifier = Modifier.fillMaxWidth()
+        )
+        ColorSettings(
+            title = stringResource(Res.string.food_color),
+            selectedColor = state.selectedFoodColor,
+            onColorSelected = { onAction(SettingsAction.OnFoodColorSelected(it)) },
+            modifier = Modifier.fillMaxWidth()
+        )
+        LabelSetting(
             title = stringResource(Res.string.settings_app_version_title),
             value = "1.0.0",
             onClick = {},

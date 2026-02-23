@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.dscoding.snakegame.core.presentation.theme.GameOrange
 
 @Composable
 fun GameDialogHeader(
@@ -45,7 +44,7 @@ fun GameDialogHeader(
                 modifier = Modifier
                     .border(
                         width = 1.dp,
-                        color = GameOrange,
+                        color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(8.dp)
                     )
                     .size(28.dp)

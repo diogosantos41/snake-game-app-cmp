@@ -33,7 +33,6 @@ class GameViewModel(
             if (!hasLoadedInitialData) {
                 observeGamePreferences()
                 hasLoadedInitialData = true
-
             }
         }
         .stateIn(

@@ -3,7 +3,7 @@ package com.dscoding.snakegame.game.data.engine
 import com.dscoding.snakegame.game.data.engine.mappers.toMovementDirection
 import com.dscoding.snakegame.game.domain.engine.GameEngine
 import com.dscoding.snakegame.game.domain.engine.models.GameEndReason
-import com.dscoding.snakegame.game.domain.engine.models.GameEngineResult
+import com.dscoding.snakegame.game.domain.engine.models.GameResult
 import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
@@ -31,7 +31,7 @@ class GameEngineImpl : GameEngine {
 
     private val isPaused = MutableStateFlow(false)
 
-    override fun runGame(boardSize: Int): Flow<GameEngineResult> = flow {
+    override fun runGame(boardSize: Int): Flow<GameResult> = flow {
         gameBoardSize = boardSize
         resetGame()
         var snakeLength = SNAKE_START_LENGTH
@@ -39,7 +39,7 @@ class GameEngineImpl : GameEngine {
         var food: Pair<Int, Int> = spawnFoodAvoidingSnake(snake)
 
         emit(
-            GameEngineResult.Tick(
+            GameResult.Tick(
                 ateFood = false,
                 food = food,
                 snake = snake,
@@ -65,7 +65,7 @@ class GameEngineImpl : GameEngine {
             // TODO [BUG] snake still hits itself even if there's still a 1 tile space between the head and tail.
             val snakeHitItself = snake.contains(newSnakeHeadPosition)
             if (snakeHitItself) {
-                emit(GameEngineResult.GameEnded(reason = GameEndReason.HitSelf))
+                emit(GameResult.GameEnded(reason = GameEndReason.HitSelf))
                 return@flow
             }
 
@@ -81,7 +81,7 @@ class GameEngineImpl : GameEngine {
             }
 
             emit(
-                GameEngineResult.Tick(
+                GameResult.Tick(
                     ateFood = snakeAteFood,
                     food = food,
                     snake = snake,

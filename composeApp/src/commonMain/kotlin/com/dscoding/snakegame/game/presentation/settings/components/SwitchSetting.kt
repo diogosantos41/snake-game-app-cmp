@@ -17,11 +17,10 @@ import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.dscoding.snakegame.core.presentation.theme.GameOrange
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 
 @Composable
-fun SwitchField(
+fun SwitchSetting(
     title: String,
     value: String,
     enabled: Boolean,
@@ -51,7 +50,7 @@ fun SwitchField(
             checked = enabled,
             onCheckedChange = onToggle,
             colors = SwitchDefaults.colors(
-                checkedThumbColor = GameOrange,
+                checkedThumbColor = MaterialTheme.colorScheme.primary,
                 uncheckedThumbColor = Gray,
                 checkedTrackColor = Gray,
                 uncheckedTrackColor = LightGray,
@@ -62,20 +61,20 @@ fun SwitchField(
 
 @Preview
 @Composable
-private fun SwitchFieldPreview() {
+private fun SwitchSettingPreview() {
     SnakeGameTheme {
         Column(
             Modifier.fillMaxWidth().padding(30.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            SwitchField(
+            SwitchSetting(
                 title = "Title here",
                 value = "Value here",
                 enabled = true,
                 onToggle = {},
                 modifier = Modifier.fillMaxWidth()
             )
-            SwitchField(
+            SwitchSetting(
                 title = "Title here",
                 value = "Value here",
                 enabled = false,

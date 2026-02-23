@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +22,7 @@ import com.dscoding.snakegame.core.presentation.components.GameStat
 import com.dscoding.snakegame.core.presentation.theme.Dimens.HorizontalSpacingDialogComponent
 import com.dscoding.snakegame.core.presentation.theme.Dimens.VerticalSpacingBetweenDialogComponent
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
-import com.dscoding.snakegame.core.presentation.theme.orangeAlphaGradient
+import com.dscoding.snakegame.core.presentation.theme.alphaVerticalGradient
 import com.dscoding.snakegame.core.presentation.util.tileGridBackground
 import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
 import com.dscoding.snakegame.game.presentation.GameViewModel.Companion.BOARD_SIZE
@@ -77,7 +78,11 @@ fun GameFinishedDialog(
             )
             BoxWithConstraints(
                 modifier = Modifier
-                    .background(orangeAlphaGradient)
+                    .background(
+                        alphaVerticalGradient(
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    )
                     .border(width = 1.dp, color = White)
             ) {
                 val tileSize = maxWidth / BOARD_SIZE

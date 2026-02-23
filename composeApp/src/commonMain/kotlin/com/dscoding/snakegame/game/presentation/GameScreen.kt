@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dscoding.snakegame.core.presentation.components.PortraitGuard
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
-import com.dscoding.snakegame.core.presentation.theme.orangeAlphaGradient
+import com.dscoding.snakegame.core.presentation.theme.alphaVerticalGradient
 import com.dscoding.snakegame.core.presentation.util.DialogScopedViewModel
 import com.dscoding.snakegame.core.presentation.util.tileGridBackground
 import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
@@ -47,6 +48,7 @@ fun GameRoot(
 
     // TODO [BUG] background on countdown, games resumes anyway
     // TODO [BUG] iOS Rotations creates a offset effect on the dialog
+    // TODO [BUG] Game keeps going a bit after background
     LaunchedEffect(isAppInForeground, isOrientationLandscape, state.currentPlayState) {
         val shouldPause =
             state.currentPlayState is PlayState.Playing &&
@@ -74,7 +76,11 @@ fun GameScreen(
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
-                .background(brush = orangeAlphaGradient)
+                .background(
+                    brush = alphaVerticalGradient(
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                )
                 .padding(
                     top = paddingValues.calculateTopPadding(),
                     bottom = 0.dp

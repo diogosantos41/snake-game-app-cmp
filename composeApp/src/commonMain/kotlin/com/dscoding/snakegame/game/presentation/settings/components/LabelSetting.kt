@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 
 @Composable
-fun SettingsField(
+fun LabelSetting(
     title: String,
     value: String,
     onClick: () -> Unit,
@@ -44,19 +44,19 @@ fun SettingsField(
 
 @Preview
 @Composable
-private fun SettingsFieldPreview() {
+private fun LabelSettingPreview() {
     SnakeGameTheme {
         Column(
             Modifier.fillMaxWidth().padding(30.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            SettingsField(
+            LabelSetting(
                 title = "Title here",
                 value = "Value here",
                 onClick = {},
                 modifier = Modifier.fillMaxWidth()
             )
-            SettingsField(
+            LabelSetting(
                 title = "Title here",
                 value = "Value here",
                 onClick = {},

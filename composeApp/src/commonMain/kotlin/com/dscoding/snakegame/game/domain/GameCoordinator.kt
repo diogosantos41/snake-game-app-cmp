@@ -3,7 +3,7 @@ package com.dscoding.snakegame.game.domain
 import com.dscoding.snakegame.game.domain.audio.GameAudio
 import com.dscoding.snakegame.game.domain.audio.models.SoundEffect
 import com.dscoding.snakegame.game.domain.engine.GameEngine
-import com.dscoding.snakegame.game.domain.engine.models.GameEngineResult
+import com.dscoding.snakegame.game.domain.engine.models.GameResult
 import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
 import com.dscoding.snakegame.game.domain.engine.models.onGameEnded
 import com.dscoding.snakegame.game.domain.engine.models.onTick
@@ -31,7 +31,7 @@ class GameCoordinator(
     fun startNewGame(
         scope: CoroutineScope,
         boardSize: Int,
-        onTick: (GameEngineResult.Tick) -> Unit,
+        onTick: (GameResult.Tick) -> Unit,
         onGameEnded: () -> Unit
     ) {
         gameAudio.startMusic()

@@ -42,7 +42,5 @@
     <string name="settings_privacy_policy_message">How do we handle your data?</string>
     <string name="settings_github_title">Github</string>
     <string name="settings_github_message">Check the source code</string>
-    <string name="settings_app_version_title">Version</string>
-
-
+    <string name="settings_app_version_title">App Version</string>
 </resources>

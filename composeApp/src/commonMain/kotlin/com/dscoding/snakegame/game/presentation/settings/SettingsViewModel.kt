@@ -3,35 +3,61 @@ package com.dscoding.snakegame.game.presentation.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dscoding.snakegame.core.domain.GamePreferences
+import com.dscoding.snakegame.core.presentation.util.UiText
+import com.dscoding.snakegame.game.presentation.models.ControlMode
 import com.dscoding.snakegame.game.presentation.settings.models.ColorUi
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.dscoding.snakegame.game.presentation.settings.models.SwitchSettingUi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import snakegame.composeapp.generated.resources.Res
+import snakegame.composeapp.generated.resources.control_mode
+import snakegame.composeapp.generated.resources.direction_pad
+import snakegame.composeapp.generated.resources.disabled
+import snakegame.composeapp.generated.resources.enabled
+import snakegame.composeapp.generated.resources.sound
+import snakegame.composeapp.generated.resources.swipe
+import snakegame.composeapp.generated.resources.vibration
 
 class SettingsViewModel(
     private val gamePreferences: GamePreferences,
 ) : ViewModel() {
 
-    private var hasLoadedInitialData = false
-
-    private val _state = MutableStateFlow(SettingsState())
-    val state = _state
-        .onStart {
-            if (!hasLoadedInitialData) {
-                observeGamePreferences()
-                hasLoadedInitialData = true
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000L),
-            initialValue = SettingsState()
+    val state = combine(
+        gamePreferences.observeSoundEnabled(),
+        gamePreferences.observeHapticsEnabled(),
+        gamePreferences.observeControlMode(),
+        gamePreferences.observeGameColor(),
+        gamePreferences.observeFoodColor(),
+    ) { soundEnabled, hapticsEnabled, controlMode, gameColor, foodColor ->
+        SettingsState(
+            soundSwitchSetting = SwitchSettingUi(
+                title = UiText.Resource(Res.string.sound),
+                checked = soundEnabled,
+                checkedText = UiText.Resource(Res.string.enabled),
+                uncheckedText = UiText.Resource(Res.string.disabled),
+            ),
+            vibrationSwitchSetting = SwitchSettingUi(
+                title = UiText.Resource(Res.string.vibration),
+                checked = hapticsEnabled,
+                checkedText = UiText.Resource(Res.string.enabled),
+                uncheckedText = UiText.Resource(Res.string.disabled),
+            ),
+            controlModeSwitchSetting = SwitchSettingUi(
+                title = UiText.Resource(Res.string.control_mode),
+                checked = (controlMode == ControlMode.SWIPE),
+                checkedText = UiText.Resource(Res.string.swipe),
+                uncheckedText = UiText.Resource(Res.string.direction_pad),
+            ),
+            selectedGameColor = gameColor,
+            selectedFoodColor = foodColor
         )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000L),
+        initialValue = SettingsState()
+    )
 
     fun onAction(action: SettingsAction) {
         when (action) {
@@ -77,26 +103,4 @@ class SettingsViewModel(
             else -> Unit
         }
     }
-
-    private fun observeGamePreferences() {
-        combine(
-            gamePreferences.observeSoundEnabled(),
-            gamePreferences.observeHapticsEnabled(),
-            gamePreferences.observeControlMode(),
-            gamePreferences.observeGameColor(),
-            gamePreferences.observeFoodColor(),
-        ) { soundEnabled, hapticsEnabled, controlMode, gameColor, foodColor ->
-            _state.update {
-                it.copy(
-                    isSoundEnabled = soundEnabled,
-                    isVibrationEnabled = hapticsEnabled,
-                    selectedControlMode = controlMode,
-                    selectedGameColor = gameColor,
-                    selectedFoodColor = foodColor
-
-                )
-            }
-        }.launchIn(viewModelScope)
-    }
-
 }

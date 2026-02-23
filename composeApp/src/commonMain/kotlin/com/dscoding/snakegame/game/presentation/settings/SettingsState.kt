@@ -1,12 +1,12 @@
 package com.dscoding.snakegame.game.presentation.settings
 
-import com.dscoding.snakegame.game.presentation.models.ControlMode
 import com.dscoding.snakegame.game.presentation.settings.models.ColorUi
+import com.dscoding.snakegame.game.presentation.settings.models.SwitchSettingUi
 
 data class SettingsState(
-    val isSoundEnabled: Boolean = true,
-    val isVibrationEnabled: Boolean = true,
-    val selectedControlMode: ControlMode = ControlMode.SWIPE,
+    val soundSwitchSetting: SwitchSettingUi = SwitchSettingUi(),
+    val vibrationSwitchSetting: SwitchSettingUi = SwitchSettingUi(),
+    val controlModeSwitchSetting: SwitchSettingUi = SwitchSettingUi(),
     val selectedGameColor: ColorUi = ColorUi.BURNT_ORANGE,
     val selectedFoodColor: ColorUi = ColorUi.BRIGHT_YELLOW
 )

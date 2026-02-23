@@ -1,5 +1,6 @@
 package com.dscoding.snakegame.di
 
+import com.dscoding.snakegame.app.MainViewModel
 import com.dscoding.snakegame.core.data.datastore.DataStoreGamePreferences
 import com.dscoding.snakegame.core.domain.GamePreferences
 import com.dscoding.snakegame.core.presentation.util.ScopedStoreRegistryViewModel
@@ -19,6 +20,8 @@ expect val platformAppModule: Module
 
 val appModule = module {
     includes(platformAppModule)
+
+    viewModelOf(::MainViewModel)
 
     viewModelOf(::GameViewModel)
     factoryOf(::GameCoordinator)
