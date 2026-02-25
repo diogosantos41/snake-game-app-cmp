@@ -17,6 +17,7 @@ import com.dscoding.snakegame.core.presentation.theme.Dimens.ContainerRoundedCor
 @Composable
 fun GameDialogContent(
     onDismiss: () -> Unit,
+    dismissOnClickOutside: Boolean = false,
     dismissOnBackPress: Boolean = true,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
@@ -26,7 +27,7 @@ fun GameDialogContent(
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
-            dismissOnClickOutside = false,
+            dismissOnClickOutside = dismissOnClickOutside,
             dismissOnBackPress = dismissOnBackPress
         )
     ) {

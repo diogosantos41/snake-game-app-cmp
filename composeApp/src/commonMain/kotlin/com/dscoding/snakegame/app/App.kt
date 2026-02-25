@@ -18,16 +18,13 @@ fun App(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-
-    // TODO Splashscreen keep condition will actually solve this default color issue
     val primary = state.primaryColor?.color ?: Transparent
-
     val primaryAnim = remember { Animatable(primary) }
 
     LaunchedEffect(primary) {
         primaryAnim.animateTo(
             targetValue = primary,
-            animationSpec = tween(500)
+            animationSpec = tween(300)
         )
     }
 

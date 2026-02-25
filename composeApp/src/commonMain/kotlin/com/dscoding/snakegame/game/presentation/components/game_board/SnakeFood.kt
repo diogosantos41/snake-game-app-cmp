@@ -24,27 +24,40 @@ import com.dscoding.snakegame.core.presentation.theme.FoodYellow
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 
 @Composable
-fun SnakeFood(offsetX: Dp, offsetY: Dp, size: Dp) {
+fun SnakeFood(
+    offsetX: Dp,
+    offsetY: Dp,
+    size: Dp,
+    isAnimated: Boolean
+) {
 
     val outerRingWidth = 4.dp
 
-    val infinite = rememberInfiniteTransition(label = "foodPulse")
-    val pulse by infinite.animateFloat(
-        initialValue = 0.90f,
-        targetValue = 1.05f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 800, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "pulse"
-    )
+    val scale = if (!isAnimated) {
+        1f
+    } else {
+        val infinite = rememberInfiniteTransition(label = "foodPulse")
+        val pulse by infinite.animateFloat(
+            initialValue = 0.90f,
+            targetValue = 1.05f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(
+                    durationMillis = 800,
+                    easing = FastOutSlowInEasing
+                ),
+                repeatMode = RepeatMode.Reverse
+            ),
+            label = "pulse"
+        )
+        pulse
+    }
 
     Box(
         modifier = Modifier
             .offset(x = offsetX, y = offsetY)
             .graphicsLayer {
-                scaleX = pulse
-                scaleY = pulse
+                scaleX = scale
+                scaleY = scale
             },
         contentAlignment = Alignment.Center
     ) {
@@ -52,8 +65,8 @@ fun SnakeFood(offsetX: Dp, offsetY: Dp, size: Dp) {
             modifier = Modifier
                 .size(size)
                 .graphicsLayer {
-                    scaleX = pulse
-                    scaleY = pulse
+                    scaleX = scale
+                    scaleY = scale
                 }
                 .padding(outerRingWidth)
                 .background(
@@ -78,7 +91,8 @@ private fun SnakeFoodPreview() {
         SnakeFood(
             offsetX = 0.dp,
             offsetY = 0.dp,
-            size = 20.dp
+            size = 20.dp,
+            isAnimated = true
         )
     }
 }

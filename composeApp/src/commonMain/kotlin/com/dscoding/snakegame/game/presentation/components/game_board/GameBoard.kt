@@ -26,6 +26,7 @@ fun GameBoard(
     food: Pair<Int, Int>?,
     snake: List<Pair<Int, Int>>,
     currentMovementDirection: MovementDirection,
+    isFoodAnimated: Boolean,
     modifier: Modifier = Modifier
 ) {
     BoxWithConstraints {
@@ -39,7 +40,8 @@ fun GameBoard(
                 SnakeFood(
                     offsetX = tileSize * (food.first),
                     offsetY = tileSize * (food.second),
-                    size = tileSize
+                    size = tileSize,
+                    isAnimated = isFoodAnimated
                 )
             }
             snake.forEachIndexed { index, body ->
@@ -88,6 +90,7 @@ private fun GameBoardPreview() {
                 food = 2 to 3,
                 snake = (1..6).map { it to 1 },
                 currentMovementDirection = MovementDirection.LEFT,
+                isFoodAnimated = true,
                 modifier = Modifier.fillMaxSize().tileGridBackground(tileSize = tileSize)
             )
         }

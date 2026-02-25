@@ -113,7 +113,8 @@ fun GameScreen(
                 GameBoard(
                     food = state.food,
                     snake = state.snake,
-                    currentMovementDirection = state.currentMovementDirection
+                    currentMovementDirection = state.currentMovementDirection,
+                    isFoodAnimated = state.currentPlayState is PlayState.Playing
                 )
                 GameControls(
                     score = state.score,
@@ -150,7 +151,7 @@ fun GameScreen(
         DialogScopedViewModel(
             visible = state.currentPlayState == PlayState.Paused(PausedState.SETTINGS)
         ) {
-            SettingsRoot(onDismiss = { onAction(GameAction.OnSettingsDismissClick) })
+            SettingsRoot(onDismiss = { onAction(GameAction.OnSettingsDialogDismiss) })
 
         }
 
@@ -170,7 +171,7 @@ fun GameScreen(
                 highScore = state.highScoreAtGameEnd ?: state.highScore,
                 onPlayAgainClick = { onAction(GameAction.OnRestartGameClick) },
                 onShareClick = {},
-                onDismiss = { onAction(GameAction.OnRestartGameClick) },
+                onDismiss = { onAction(GameAction.OnFinishedDialogDismiss) },
             )
         }
     }

@@ -50,7 +50,7 @@ fun GameFinishedDialog(
 ) {
     GameDialogContent(
         onDismiss = onDismiss,
-        dismissOnBackPress = false,
+        dismissOnBackPress = true,
         modifier = modifier
     ) {
         Column(
@@ -90,6 +90,7 @@ fun GameFinishedDialog(
                     food = finalFood,
                     snake = finalSnake,
                     currentMovementDirection = finalMovementDirection,
+                    isFoodAnimated = false,
                     modifier = Modifier.tileGridBackground(tileSize = tileSize)
                 )
             }

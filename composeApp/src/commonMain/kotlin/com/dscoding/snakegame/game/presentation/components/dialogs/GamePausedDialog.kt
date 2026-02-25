@@ -36,6 +36,7 @@ fun GamePausedDialog(
     modifier: Modifier = Modifier,
 ) {
     GameDialogContent(
+        dismissOnClickOutside = true,
         onDismiss = onDismiss,
         modifier = modifier
     ) {

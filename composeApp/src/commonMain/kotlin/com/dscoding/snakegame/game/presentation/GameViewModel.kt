@@ -103,7 +103,7 @@ class GameViewModel(
                 if (gameCoordinator.isGameInProgress()) gameCoordinator.pauseGame()
             }
 
-            GameAction.OnSettingsDismissClick -> {
+            GameAction.OnSettingsDialogDismiss -> {
                 if (gameCoordinator.isGameInProgress()) {
                     _state.update {
                         it.copy(
@@ -116,6 +116,15 @@ class GameViewModel(
                             currentPlayState = PlayState.ReadyToPlay,
                         )
                     }
+                }
+            }
+
+            GameAction.OnFinishedDialogDismiss -> {
+                _state.update {
+                    it.copy(
+                        currentPlayState = PlayState.ReadyToPlay,
+                        score = 0
+                    )
                 }
             }
 

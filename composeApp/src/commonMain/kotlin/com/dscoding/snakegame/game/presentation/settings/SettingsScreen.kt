@@ -35,6 +35,7 @@ fun SettingsRoot(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     GameDialogContent(
+        dismissOnClickOutside = true,
         onDismiss = onDismiss,
         modifier = modifier
     ) {
