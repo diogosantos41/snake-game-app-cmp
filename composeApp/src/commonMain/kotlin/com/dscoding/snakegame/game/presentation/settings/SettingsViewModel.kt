@@ -29,8 +29,7 @@ class SettingsViewModel(
         gamePreferences.observeHapticsEnabled(),
         gamePreferences.observeControlMode(),
         gamePreferences.observeGameColor(),
-        gamePreferences.observeFoodColor(),
-    ) { soundEnabled, hapticsEnabled, controlMode, gameColor, foodColor ->
+    ) { soundEnabled, hapticsEnabled, controlMode, gameColor ->
         SettingsState(
             soundSwitchSetting = SwitchSettingUi(
                 title = UiText.Resource(Res.string.sound),
@@ -51,7 +50,6 @@ class SettingsViewModel(
                 uncheckedText = UiText.Resource(Res.string.direction_pad),
             ),
             selectedGameColor = gameColor,
-            selectedFoodColor = foodColor
         )
     }.stateIn(
         scope = viewModelScope,
@@ -61,13 +59,6 @@ class SettingsViewModel(
 
     fun onAction(action: SettingsAction) {
         when (action) {
-            is SettingsAction.OnFoodColorSelected -> {
-                viewModelScope.launch {
-                    gamePreferences.setFoodColor(
-                        ColorUi.valueOf(action.color.name)
-                    )
-                }
-            }
 
             is SettingsAction.OnGameColorSelected -> {
                 viewModelScope.launch {
@@ -79,7 +70,8 @@ class SettingsViewModel(
 
             is SettingsAction.OnToggleControlModeClick -> {
                 viewModelScope.launch {
-                    gamePreferences.setControlMode(action.controlMode)
+                    val mode = if (action.isSwipeSelected) ControlMode.SWIPE else ControlMode.BUTTONS
+                    gamePreferences.setControlMode(mode)
                 }
             }
 

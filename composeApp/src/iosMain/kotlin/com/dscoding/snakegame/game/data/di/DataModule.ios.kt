@@ -1,4 +1,4 @@
-package com.dscoding.snakegame.di
+package com.dscoding.snakegame.game.data.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -7,14 +7,16 @@ import com.dscoding.snakegame.data.datastore.createDataStore
 import com.dscoding.snakegame.data.haptics.IosGameHaptics
 import com.dscoding.snakegame.game.domain.audio.GameAudio
 import com.dscoding.snakegame.game.domain.haptics.GameHaptics
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.bind
 import org.koin.dsl.module
 
-actual val platformAppModule = module {
+actual val platformDataModule = module {
     single<DataStore<Preferences>> {
         createDataStore()
     }
-    singleOf(::IosGameAudio) bind GameAudio::class
-    singleOf(::IosGameHaptics) bind GameHaptics::class
+    single<GameAudio> {
+        IosGameAudio(get(), get())
+    }
+    single<GameHaptics> {
+        IosGameHaptics(get(), get())
+    }
 }

@@ -11,6 +11,7 @@ data class GameState(
     val movementControlMode: ControlMode = ControlMode.BUTTONS,
     val score: Int = 0,
     val highScore: Int = 0,
+    val highScoreAtGameEnd: Int? = null,
     val food: Pair<Int, Int>? = null,
     val snake: List<Pair<Int, Int>> = emptyList(),
     val currentMovementDirection: MovementDirection = MovementDirection.RIGHT,

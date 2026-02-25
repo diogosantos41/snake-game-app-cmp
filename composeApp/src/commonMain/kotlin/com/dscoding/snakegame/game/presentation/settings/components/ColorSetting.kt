@@ -26,8 +26,7 @@ import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.game.presentation.settings.models.ColorUi
 import org.jetbrains.compose.resources.stringResource
 import snakegame.composeapp.generated.resources.Res
-import snakegame.composeapp.generated.resources.food_color
-
+import snakegame.composeapp.generated.resources.game_color
 
 @Composable
 fun ColorSettings(
@@ -44,7 +43,7 @@ fun ColorSettings(
         )
         Spacer(modifier = Modifier.height(6.dp))
         FlowRow(
-            horizontalArrangement = Arrangement.SpaceAround,
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalArrangement = Arrangement.spacedBy(6.dp),
             maxLines = 2,
             modifier = Modifier.fillMaxWidth()
@@ -52,7 +51,7 @@ fun ColorSettings(
             ColorUi.entries.forEach { colorUi ->
                 Box(
                     modifier = Modifier
-                        .size(30.dp)
+                        .size(35.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .background(colorUi.color)
                         .border(
@@ -76,8 +75,8 @@ fun ColorSettings(
 private fun ColorSettingsPreview() {
     SnakeGameTheme {
         ColorSettings(
-            title = stringResource(Res.string.food_color),
-            selectedColor = ColorUi.BRIGHT_YELLOW,
+            title = stringResource(Res.string.game_color),
+            selectedColor = ColorUi.BLUE,
             onColorSelected = { },
             modifier = Modifier.padding(100.dp)
         )

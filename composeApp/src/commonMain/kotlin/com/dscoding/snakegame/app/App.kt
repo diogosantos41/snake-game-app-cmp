@@ -15,7 +15,6 @@ fun App(
 
     SnakeGameTheme(
         primary = state.primaryColor.color,
-        secondary = state.secondaryColor.color
     ) {
         GameRoot()
     }

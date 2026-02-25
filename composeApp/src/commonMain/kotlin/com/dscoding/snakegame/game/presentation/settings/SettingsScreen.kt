@@ -16,14 +16,12 @@ import com.dscoding.snakegame.core.presentation.components.GameDialogHeader
 import com.dscoding.snakegame.core.presentation.theme.Dimens.HorizontalSpacingDialogComponent
 import com.dscoding.snakegame.core.presentation.theme.Dimens.VerticalSpacingBetweenDialogComponent
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
-import com.dscoding.snakegame.game.presentation.models.ControlMode
 import com.dscoding.snakegame.game.presentation.settings.components.ColorSettings
 import com.dscoding.snakegame.game.presentation.settings.components.LabelSetting
 import com.dscoding.snakegame.game.presentation.settings.components.SwitchSetting
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import snakegame.composeapp.generated.resources.Res
-import snakegame.composeapp.generated.resources.food_color
 import snakegame.composeapp.generated.resources.game_color
 import snakegame.composeapp.generated.resources.settings
 import snakegame.composeapp.generated.resources.settings_app_version_title
@@ -94,13 +92,7 @@ fun SettingsScreen(
             enabled = state.controlModeSwitchSetting.checked,
             onToggle = {
                 onAction(
-                    SettingsAction.OnToggleControlModeClick(
-                        if (it) {
-                            ControlMode.SWIPE
-                        } else {
-                            ControlMode.BUTTONS
-                        }
-                    )
+                    SettingsAction.OnToggleControlModeClick(it)
                 )
             },
             modifier = Modifier.fillMaxWidth()
@@ -109,12 +101,6 @@ fun SettingsScreen(
             title = stringResource(Res.string.game_color),
             selectedColor = state.selectedGameColor,
             onColorSelected = { onAction(SettingsAction.OnGameColorSelected(it)) },
-            modifier = Modifier.fillMaxWidth()
-        )
-        ColorSettings(
-            title = stringResource(Res.string.food_color),
-            selectedColor = state.selectedFoodColor,
-            onColorSelected = { onAction(SettingsAction.OnFoodColorSelected(it)) },
             modifier = Modifier.fillMaxWidth()
         )
         LabelSetting(

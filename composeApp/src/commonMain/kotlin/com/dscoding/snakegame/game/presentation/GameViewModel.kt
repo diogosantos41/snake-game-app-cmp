@@ -51,7 +51,8 @@ class GameViewModel(
                 _state.update {
                     it.copy(
                         currentPlayState = PlayState.Playing,
-                        score = 0
+                        score = 0,
+                        highScoreAtGameEnd = null,
                     )
                 }
                 runSnakeGame()
@@ -138,7 +139,8 @@ class GameViewModel(
             onGameEnded = {
                 _state.update {
                     it.copy(
-                        currentPlayState = PlayState.Finished
+                        currentPlayState = PlayState.Finished,
+                        highScoreAtGameEnd = it.highScore
                     )
                 }
                 saveHighscore()

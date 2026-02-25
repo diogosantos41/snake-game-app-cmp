@@ -15,6 +15,4 @@ interface GamePreferences {
     fun observeControlMode(): Flow<ControlMode>
     suspend fun setGameColor(color: ColorUi)
     fun observeGameColor(): Flow<ColorUi>
-    suspend fun setFoodColor(color: ColorUi)
-    fun observeFoodColor(): Flow<ColorUi>
 }

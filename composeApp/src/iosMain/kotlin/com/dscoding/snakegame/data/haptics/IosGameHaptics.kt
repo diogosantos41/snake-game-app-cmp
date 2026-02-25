@@ -1,22 +1,22 @@
 package com.dscoding.snakegame.data.haptics
 
-import android.content.Context
-import android.os.VibrationEffect
-import android.os.Vibrator
 import com.dscoding.snakegame.core.domain.GamePreferences
 import com.dscoding.snakegame.game.domain.haptics.GameHaptics
 import com.dscoding.snakegame.game.domain.haptics.models.HapticType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import platform.UIKit.UIImpactFeedbackGenerator
+import platform.UIKit.UIImpactFeedbackStyle.UIImpactFeedbackStyleHeavy
+import platform.UIKit.UIImpactFeedbackStyle.UIImpactFeedbackStyleLight
 
-class AndroidGameHaptics(
-    context: Context,
+class IosGameHaptics(
     gamePreferences: GamePreferences,
     applicationScope: CoroutineScope
 ) : GameHaptics {
 
-    private val vibrator = context.getSystemService(Vibrator::class.java)
+    private val lightGen = UIImpactFeedbackGenerator(UIImpactFeedbackStyleLight)
+    private val heavyGen = UIImpactFeedbackGenerator(UIImpactFeedbackStyleHeavy)
 
     private val isHapticsEnabled = gamePreferences
         .observeHapticsEnabled()
@@ -27,12 +27,14 @@ class AndroidGameHaptics(
         )
 
     override fun vibrate(type: HapticType) {
-        if (!isHapticsEnabled.value || vibrator?.hasVibrator() == false) return
+        if (!isHapticsEnabled.value) return
 
-        val effect = when (type) {
-            HapticType.LIGHT -> VibrationEffect.createOneShot(15, 50)
-            HapticType.HEAVY -> VibrationEffect.createOneShot(250, 100)
+        val impactGen = when (type) {
+            HapticType.LIGHT -> lightGen
+            HapticType.HEAVY -> heavyGen
         }
-        vibrator?.vibrate(effect)
+
+        impactGen.prepare()
+        impactGen.impactOccurred()
     }
 }

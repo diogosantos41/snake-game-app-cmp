@@ -6,13 +6,19 @@ import android.media.MediaPlayer
 import android.media.SoundPool
 import android.util.Log
 import com.dscoding.snakegame.R
+import com.dscoding.snakegame.core.domain.GamePreferences
 import com.dscoding.snakegame.game.data.audio.GameAudioDefaults.MUSIC_VOLUME
 import com.dscoding.snakegame.game.data.audio.GameAudioDefaults.SFX_VOLUME
 import com.dscoding.snakegame.game.domain.audio.GameAudio
 import com.dscoding.snakegame.game.domain.audio.models.SoundEffect
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 
 class AndroidGameAudio(
-    context: Context
+    context: Context,
+    gamePreferences: GamePreferences,
+    applicationScope: CoroutineScope
 ) : GameAudio {
 
     private val appContext = context.applicationContext
@@ -20,6 +26,16 @@ class AndroidGameAudio(
     private val soundPool: SoundPool
     private val sfxMap: Map<SoundEffect, Int>
     private val loaded = mutableSetOf<Int>()
+
+
+
+    private val isSoundEnabled = gamePreferences
+        .observeSoundEnabled()
+        .stateIn(
+            scope = applicationScope,
+            started = SharingStarted.Eagerly,
+            initialValue = true
+        )
 
     init {
         val attrs = AudioAttributes.Builder()
@@ -45,6 +61,8 @@ class AndroidGameAudio(
     private var musicPlayer: MediaPlayer? = null
 
     override fun playSoundEffect(effect: SoundEffect) {
+        if(!isSoundEnabled.value) return
+
         val id = sfxMap[effect] ?: return
         if (id !in loaded) {
             Log.d("AndroidGameAudio", "SFX not loaded yet: $effect")
@@ -54,7 +72,7 @@ class AndroidGameAudio(
     }
 
     override fun startMusic() {
-        if (musicPlayer != null) return
+        if (!isSoundEnabled.value || musicPlayer != null) return
 
         musicPlayer = MediaPlayer.create(appContext, R.raw.music)?.apply {
             isLooping = true

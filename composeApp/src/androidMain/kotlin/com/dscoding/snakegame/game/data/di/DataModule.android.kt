@@ -1,4 +1,4 @@
-package com.dscoding.snakegame.di
+package com.dscoding.snakegame.game.data.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -10,14 +10,14 @@ import com.dscoding.snakegame.game.domain.haptics.GameHaptics
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
-actual val platformAppModule = module {
+actual val platformDataModule = module {
     single<DataStore<Preferences>> {
         createDataStore(androidContext())
     }
     single<GameAudio> {
-        AndroidGameAudio(androidContext())
+        AndroidGameAudio(androidContext(), get(), get())
     }
     single<GameHaptics> {
-        AndroidGameHaptics(androidContext())
+        AndroidGameHaptics(androidContext(), get(), get())
     }
 }

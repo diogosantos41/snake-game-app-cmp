@@ -8,7 +8,6 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun SnakeGameTheme(
     primary: Color = GameOrange,
-    secondary: Color = GameYellow,
     content: @Composable () -> Unit
 ) {
     val baseScheme = lightColorScheme()
@@ -16,7 +15,6 @@ fun SnakeGameTheme(
     MaterialTheme(
         colorScheme = baseScheme.copy(
             primary = primary,
-            secondary = secondary
         ),
         typography = Typography,
         content = content

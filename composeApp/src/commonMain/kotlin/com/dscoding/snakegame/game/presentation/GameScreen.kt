@@ -159,7 +159,7 @@ fun GameScreen(
                 finalFood = state.food,
                 finalSnake = state.snake,
                 finalMovementDirection = state.currentMovementDirection,
-                highScore = state.highScore,
+                highScore = state.highScoreAtGameEnd ?: state.highScore,
                 onPlayAgainClick = { onAction(GameAction.OnRestartGameClick) },
                 onShareClick = {},
                 onDismiss = { onAction(GameAction.OnRestartGameClick) },

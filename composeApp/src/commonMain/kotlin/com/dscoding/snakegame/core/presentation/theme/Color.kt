@@ -10,7 +10,8 @@ val GamePink = Color(0xFFE05C9A)
 val GamePurple = Color(0xFF7C5AD3)
 val GameBlue = Color(0xFF0393EA)
 val GameGreen = Color(0xFF8DA25A)
-val GameYellow = Color(0xFFFAFA05)
+
+val FoodYellow = Color(0xFFFAFA05)
 
 val ContainerBorderWhite = White.copy(alpha = 0.5f)
 val ContainerBackgroundBlack = Black.copy(alpha = 0.5f)

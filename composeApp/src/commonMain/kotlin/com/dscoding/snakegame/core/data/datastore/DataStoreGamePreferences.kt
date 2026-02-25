@@ -22,8 +22,6 @@ class DataStoreGamePreferences(
     private val hapticsKey = booleanPreferencesKey("KEY_HAPTICS")
     private val controlModeKey = stringPreferencesKey("KEY_CONTROL_MODE")
     private val gameColorKey = stringPreferencesKey("KEY_GAME_COLOR")
-    private val foodColorKey = stringPreferencesKey("KEY_FOOD_COLOR")
-
 
     override suspend fun setHighscore(value: Int) {
         dataStore.edit { prefs ->
@@ -87,21 +85,6 @@ class DataStoreGamePreferences(
             preferences[gameColorKey]?.let {
                 ColorUi.valueOf(it)
             } ?: ColorUi.BURNT_ORANGE
-        }
-            .distinctUntilChanged()
-    }
-
-    override suspend fun setFoodColor(color: ColorUi) {
-        dataStore.edit { prefs ->
-            prefs[foodColorKey] = color.name
-        }
-    }
-
-    override fun observeFoodColor(): Flow<ColorUi> {
-        return dataStore.data.map { preferences ->
-            preferences[foodColorKey]?.let {
-                ColorUi.valueOf(it)
-            } ?: ColorUi.BRIGHT_YELLOW
         }
             .distinctUntilChanged()
     }

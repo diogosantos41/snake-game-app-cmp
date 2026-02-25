@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -21,6 +20,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.dscoding.snakegame.core.presentation.theme.FoodYellow
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 
 @Composable
@@ -51,7 +51,7 @@ fun SnakeFood(offsetX: Dp, offsetY: Dp, size: Dp) {
                 .scale(pulse)
                 .padding(outerRingWidth)
                 .background(
-                    MaterialTheme.colorScheme.secondary, CircleShape
+                    FoodYellow, CircleShape
                 )
 
         )
@@ -59,7 +59,7 @@ fun SnakeFood(offsetX: Dp, offsetY: Dp, size: Dp) {
             modifier = Modifier
                 .size(size)
                 .background(
-                    MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f), CircleShape
+                    FoodYellow.copy(alpha = 0.3f), CircleShape
                 )
         )
     }

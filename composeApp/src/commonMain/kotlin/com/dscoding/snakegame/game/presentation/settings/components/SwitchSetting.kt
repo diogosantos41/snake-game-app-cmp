@@ -51,9 +51,11 @@ fun SwitchSetting(
             onCheckedChange = onToggle,
             colors = SwitchDefaults.colors(
                 checkedThumbColor = MaterialTheme.colorScheme.primary,
-                uncheckedThumbColor = Gray,
-                checkedTrackColor = Gray,
+                checkedTrackColor = White,
+                checkedBorderColor = MaterialTheme.colorScheme.primary,
+                uncheckedThumbColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
                 uncheckedTrackColor = LightGray,
+                uncheckedBorderColor = White
             ),
         )
     }
