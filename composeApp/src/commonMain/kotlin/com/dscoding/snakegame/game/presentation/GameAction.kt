@@ -10,4 +10,5 @@ sealed interface GameAction {
     data object OnPauseGameClick : GameAction
     data object OnSettingsClick : GameAction
     data object OnSettingsDismissClick : GameAction
+    data object GoBack : GameAction
 }

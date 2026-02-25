@@ -118,6 +118,8 @@ class GameViewModel(
                     }
                 }
             }
+
+            else -> Unit
         }
     }
 

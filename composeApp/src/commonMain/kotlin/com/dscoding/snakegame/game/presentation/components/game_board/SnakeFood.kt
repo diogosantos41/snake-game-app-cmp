@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -42,13 +42,19 @@ fun SnakeFood(offsetX: Dp, offsetY: Dp, size: Dp) {
     Box(
         modifier = Modifier
             .offset(x = offsetX, y = offsetY)
-            .scale(pulse),
+            .graphicsLayer {
+                scaleX = pulse
+                scaleY = pulse
+            },
         contentAlignment = Alignment.Center
     ) {
         Box(
             modifier = Modifier
                 .size(size)
-                .scale(pulse)
+                .graphicsLayer {
+                    scaleX = pulse
+                    scaleY = pulse
+                }
                 .padding(outerRingWidth)
                 .background(
                     FoodYellow, CircleShape

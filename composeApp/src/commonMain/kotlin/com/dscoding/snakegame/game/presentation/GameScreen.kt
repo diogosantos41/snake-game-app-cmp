@@ -19,13 +19,14 @@ import com.dscoding.snakegame.core.presentation.components.PortraitGuard
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.core.presentation.theme.alphaVerticalGradient
 import com.dscoding.snakegame.core.presentation.util.DialogScopedViewModel
+import com.dscoding.snakegame.core.presentation.util.rememberRootBackAction
 import com.dscoding.snakegame.core.presentation.util.tileGridBackground
 import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
 import com.dscoding.snakegame.game.presentation.GameViewModel.Companion.BOARD_SIZE
 import com.dscoding.snakegame.game.presentation.components.StartCountdown
 import com.dscoding.snakegame.game.presentation.components.dialogs.GameFinishedDialog
 import com.dscoding.snakegame.game.presentation.components.dialogs.GamePausedDialog
-import com.dscoding.snakegame.game.presentation.components.dialogs.StartGameDialog
+import com.dscoding.snakegame.game.presentation.components.dialogs.GameStartDialog
 import com.dscoding.snakegame.game.presentation.components.game_board.GameBoard
 import com.dscoding.snakegame.game.presentation.components.game_controls.GameControls
 import com.dscoding.snakegame.game.presentation.models.ControlMode
@@ -45,6 +46,7 @@ fun GameRoot(
 
     val isAppInForeground by isAppInForeground()
     val isOrientationLandscape by isOrientationLandscape()
+    val rootBackAction = rememberRootBackAction()
 
     // TODO [BUG] background on countdown, games resumes anyway
     // TODO [BUG] iOS Rotations creates a offset effect on the dialog
@@ -62,7 +64,13 @@ fun GameRoot(
     PortraitGuard(isLandscape = isOrientationLandscape) {
         GameScreen(
             state = state,
-            onAction = viewModel::onAction
+            onAction = { action ->
+                when (action) {
+                    is GameAction.GoBack -> rootBackAction()
+                    else -> Unit
+                }
+                viewModel.onAction(action)
+            }
         )
     }
 }
@@ -122,10 +130,10 @@ fun GameScreen(
         }
 
         if (state.currentPlayState is PlayState.ReadyToPlay) {
-            StartGameDialog(
+            GameStartDialog(
                 onStartGameClick = { onAction(GameAction.OnStartGameClick) },
                 onSettingsClick = { onAction(GameAction.OnSettingsClick) },
-                onDismiss = { onAction(GameAction.OnStartGameClick) }
+                onDismiss = { onAction(GameAction.GoBack) }
             )
         }
 

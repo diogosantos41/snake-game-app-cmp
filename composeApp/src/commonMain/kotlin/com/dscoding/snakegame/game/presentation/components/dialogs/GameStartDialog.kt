@@ -24,7 +24,7 @@ import snakegame.composeapp.generated.resources.snake_game
 import snakegame.composeapp.generated.resources.start
 
 @Composable
-fun StartGameDialog(
+fun GameStartDialog(
     onStartGameClick: () -> Unit,
     onSettingsClick: () -> Unit,
     onDismiss: () -> Unit,
@@ -32,7 +32,7 @@ fun StartGameDialog(
 ) {
     GameDialogContent(
         onDismiss = onDismiss,
-        dismissOnBackPress = false,
+        dismissOnBackPress = true,
         modifier = modifier
     ) {
         Column(
@@ -67,10 +67,10 @@ fun StartGameDialog(
 
 @Preview(showBackground = true)
 @Composable
-private fun StartGameDialogPreview() {
+private fun GameStartDialogPreview() {
     SnakeGameTheme {
         Box(modifier = Modifier.padding(all = 150.dp)) {
-            StartGameDialog(
+            GameStartDialog(
                 onStartGameClick = {},
                 onSettingsClick = {},
                 onDismiss = {}
