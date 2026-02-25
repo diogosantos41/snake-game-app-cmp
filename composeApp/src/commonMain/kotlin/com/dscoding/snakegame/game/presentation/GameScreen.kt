@@ -48,16 +48,11 @@ fun GameRoot(
     val isOrientationLandscape by isOrientationLandscape()
     val rootBackAction = rememberRootBackAction()
 
-    // TODO [BUG] background on countdown, games resumes anyway
     // TODO [BUG] iOS Rotations creates a offset effect on the dialog
-    // TODO [BUG] Game keeps going a bit after background
-    LaunchedEffect(isAppInForeground, isOrientationLandscape, state.currentPlayState) {
-        val shouldPause =
-            state.currentPlayState is PlayState.Playing &&
-                    (!isAppInForeground || isOrientationLandscape)
-
-        if (shouldPause) {
-            viewModel.onAction(GameAction.OnPauseGameClick)
+    LaunchedEffect(isAppInForeground, isOrientationLandscape) {
+        val isInvalidAppState = !isAppInForeground || isOrientationLandscape
+        if (isInvalidAppState) {
+            viewModel.onAction(GameAction.OnInvalidAppState)
         }
     }
 

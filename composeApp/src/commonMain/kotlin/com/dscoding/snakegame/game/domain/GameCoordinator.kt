@@ -59,6 +59,8 @@ class GameCoordinator(
     }
 
     fun pauseGame() {
+        countdownJob?.cancel()
+        countdownJob = null
         gameEngine.pauseGame()
         gameAudio.stopMusic()
     }

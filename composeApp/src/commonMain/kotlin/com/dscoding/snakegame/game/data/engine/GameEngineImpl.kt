@@ -62,14 +62,16 @@ class GameEngineImpl : GameEngine {
                 ((snakeHeadPosition.first + move.first + gameBoardSize) % gameBoardSize) to
                         ((snakeHeadPosition.second + move.second + gameBoardSize) % gameBoardSize)
 
-            // TODO [BUG] snake still hits itself even if there's still a 1 tile space between the head and tail.
-            val snakeHitItself = snake.contains(newSnakeHeadPosition)
+            val snakeAteFood = newSnakeHeadPosition == food
+
+            val bodyToCheck = if (snakeAteFood) snake else snake.dropLast(1)
+
+            val snakeHitItself = newSnakeHeadPosition in bodyToCheck
             if (snakeHitItself) {
                 emit(GameResult.GameEnded(reason = GameEndReason.HitSelf))
                 return@flow
             }
 
-            val snakeAteFood = newSnakeHeadPosition == food
             if (snakeAteFood) {
                 snakeLength++
             }

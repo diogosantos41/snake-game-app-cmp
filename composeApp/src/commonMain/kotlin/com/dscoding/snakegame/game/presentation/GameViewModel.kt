@@ -84,17 +84,20 @@ class GameViewModel(
             }
 
             GameAction.OnPauseGameClick -> {
-                // TODO [BUG] If I pause right after loosing, the games ends but still becomes paused.
-                // TODO The game end sound is played, its seems like a frame second.
+                if (!gameCoordinator.isGameInProgress()) return
+
                 _state.update {
                     it.copy(
                         currentPlayState = PlayState.Paused(PausedState.MENU),
+                        countdownSecondsRemaining = null
                     )
                 }
                 gameCoordinator.pauseGame()
             }
 
             GameAction.OnSettingsClick -> {
+                if (state.value.currentPlayState is PlayState.Finished) return
+
                 _state.update {
                     it.copy(
                         currentPlayState = PlayState.Paused(PausedState.SETTINGS),
@@ -125,6 +128,21 @@ class GameViewModel(
                         currentPlayState = PlayState.ReadyToPlay,
                         score = 0
                     )
+                }
+            }
+
+            GameAction.OnInvalidAppState -> {
+                val shouldPause =
+                    state.value.currentPlayState is PlayState.Playing
+                            || state.value.currentPlayState == PlayState.Paused(PausedState.COUNTDOWN)
+                if (shouldPause) {
+                    _state.update {
+                        it.copy(
+                            currentPlayState = PlayState.Paused(PausedState.MENU),
+                            countdownSecondsRemaining = null,
+                        )
+                    }
+                    gameCoordinator.pauseGame()
                 }
             }
 

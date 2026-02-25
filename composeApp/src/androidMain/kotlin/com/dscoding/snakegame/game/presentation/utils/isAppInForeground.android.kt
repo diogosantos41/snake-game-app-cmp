@@ -6,21 +6,22 @@ import androidx.compose.runtime.produceState
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 
 @Composable
 actual fun isAppInForeground(): State<Boolean> {
-    return produceState(initialValue = true) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    return produceState(initialValue = true, lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
-            when(event) {
-                Lifecycle.Event.ON_START -> value = true
-                Lifecycle.Event.ON_STOP -> value = false
+            when (event) {
+                Lifecycle.Event.ON_RESUME -> value = true
+                Lifecycle.Event.ON_PAUSE -> value = false
                 else -> Unit
             }
         }
-        ProcessLifecycleOwner.get().lifecycle.addObserver(observer)
 
-        awaitDispose {
-            ProcessLifecycleOwner.get().lifecycle.removeObserver(observer)
-        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        awaitDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 }
