@@ -96,4 +96,9 @@ class AndroidGameAudio(
         }
         musicPlayer = null
     }
+
+    override fun stopAll() {
+        stopMusic()
+        soundPool.autoPause()
+    }
 }

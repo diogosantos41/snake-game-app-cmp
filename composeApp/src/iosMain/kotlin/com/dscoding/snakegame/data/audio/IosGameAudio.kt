@@ -29,8 +29,9 @@ class IosGameAudio(
 
     private var musicPlayer: AVAudioPlayer? = null
 
-    override fun playSoundEffect(effect: SoundEffect) {
+    private val sfxPlayers = mutableMapOf<SoundEffect, AVAudioPlayer>()
 
+    override fun playSoundEffect(effect: SoundEffect) {
         if (!isSoundEnabled.value) return
 
         val fileName = when (effect) {
@@ -43,17 +44,20 @@ class IosGameAudio(
             withExtension = "mp3"
         ) ?: return
 
-        AVAudioPlayer(contentsOfURL = url, error = null).apply {
-            volume = SFX_VOLUME
-            prepareToPlay()
-            play()
+        val player = sfxPlayers.getOrPut(effect) {
+            AVAudioPlayer(contentsOfURL = url, error = null).apply {
+                volume = SFX_VOLUME
+                prepareToPlay()
+            }
         }
+
+        player.stop()
+        player.currentTime = 0.0
+        player.play()
     }
 
     override fun startMusic() {
-
         if (!isSoundEnabled.value) return
-
         if (musicPlayer != null) return
 
         val url = NSBundle.mainBundle.URLForResource(
@@ -72,5 +76,10 @@ class IosGameAudio(
     override fun stopMusic() {
         musicPlayer?.stop()
         musicPlayer = null
+    }
+
+    override fun stopAll() {
+        stopMusic()
+        sfxPlayers.values.forEach { it.stop() }
     }
 }

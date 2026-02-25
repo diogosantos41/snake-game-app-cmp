@@ -59,7 +59,6 @@ class GameViewModel(
             }
 
             GameAction.OnResumeGameClick -> {
-                // TODO [BUG] Pause Dialog Flashes because countdown ends but playState == PAUSE for 0.01 seconds
                 _state.update {
                     it.copy(
                         currentPlayState = PlayState.Paused(PausedState.COUNTDOWN),
@@ -86,6 +85,7 @@ class GameViewModel(
 
             GameAction.OnPauseGameClick -> {
                 // TODO [BUG] If I pause right after loosing, the games ends but still becomes paused.
+                // TODO The game end sound is played, its seems like a frame second.
                 _state.update {
                     it.copy(
                         currentPlayState = PlayState.Paused(PausedState.MENU),
@@ -133,7 +133,6 @@ class GameViewModel(
     }
 
     private fun runSnakeGame() {
-        // TODO Stop all SFX sounds (and music maybe) before starting the music
         gameCoordinator.startNewGame(
             scope = viewModelScope,
             boardSize = BOARD_SIZE,

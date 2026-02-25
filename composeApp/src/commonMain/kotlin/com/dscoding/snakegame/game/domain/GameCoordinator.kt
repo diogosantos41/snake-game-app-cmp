@@ -34,6 +34,7 @@ class GameCoordinator(
         onTick: (GameResult.Tick) -> Unit,
         onGameEnded: () -> Unit
     ) {
+        gameAudio.stopAll()
         gameAudio.startMusic()
         gameEngineJob?.cancel()
         gameEngineJob = null

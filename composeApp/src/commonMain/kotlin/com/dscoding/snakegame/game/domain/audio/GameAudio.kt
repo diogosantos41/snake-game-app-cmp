@@ -6,4 +6,5 @@ interface GameAudio {
     fun playSoundEffect(effect: SoundEffect)
     fun startMusic()
     fun stopMusic()
+    fun stopAll()
 }
