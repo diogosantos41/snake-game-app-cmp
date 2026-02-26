@@ -16,15 +16,24 @@ import com.dscoding.snakegame.core.presentation.components.GameDialogHeader
 import com.dscoding.snakegame.core.presentation.theme.Dimens.HorizontalSpacingDialogComponent
 import com.dscoding.snakegame.core.presentation.theme.Dimens.VerticalSpacingBetweenDialogComponent
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
+import com.dscoding.snakegame.core.presentation.util.UiText
 import com.dscoding.snakegame.game.presentation.settings.components.ColorSettings
 import com.dscoding.snakegame.game.presentation.settings.components.LabelSetting
 import com.dscoding.snakegame.game.presentation.settings.components.SwitchSetting
+import com.dscoding.snakegame.game.presentation.settings.models.SwitchSettingUi
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import snakegame.composeapp.generated.resources.Res
+import snakegame.composeapp.generated.resources.app_version
+import snakegame.composeapp.generated.resources.control_mode
+import snakegame.composeapp.generated.resources.direction_pad
+import snakegame.composeapp.generated.resources.disabled
+import snakegame.composeapp.generated.resources.enabled
 import snakegame.composeapp.generated.resources.game_color
 import snakegame.composeapp.generated.resources.settings
-import snakegame.composeapp.generated.resources.settings_app_version_title
+import snakegame.composeapp.generated.resources.sound
+import snakegame.composeapp.generated.resources.swipe
+import snakegame.composeapp.generated.resources.vibration
 
 @Composable
 fun SettingsRoot(
@@ -105,7 +114,7 @@ fun SettingsScreen(
             modifier = Modifier.fillMaxWidth()
         )
         LabelSetting(
-            title = stringResource(Res.string.settings_app_version_title),
+            title = stringResource(Res.string.app_version),
             value = "1.0.0",
             onClick = {},
             modifier = Modifier.fillMaxWidth()
@@ -119,7 +128,26 @@ private fun Preview() {
     SnakeGameTheme {
         GameDialogContent(onDismiss = {}) {
             SettingsScreen(
-                state = SettingsState(),
+                state = SettingsState(
+                    soundSwitchSetting = SwitchSettingUi(
+                        title = UiText.Resource(Res.string.sound),
+                        checked = true,
+                        checkedText = UiText.Resource(Res.string.enabled),
+                        uncheckedText = UiText.Resource(Res.string.disabled),
+                    ),
+                    vibrationSwitchSetting = SwitchSettingUi(
+                        title = UiText.Resource(Res.string.vibration),
+                        checked = false,
+                        checkedText = UiText.Resource(Res.string.enabled),
+                        uncheckedText = UiText.Resource(Res.string.disabled),
+                    ),
+                    controlModeSwitchSetting = SwitchSettingUi(
+                        title = UiText.Resource(Res.string.control_mode),
+                        checked = true,
+                        checkedText = UiText.Resource(Res.string.swipe),
+                        uncheckedText = UiText.Resource(Res.string.direction_pad),
+                    ),
+                ),
                 onAction = {}
             )
         }
