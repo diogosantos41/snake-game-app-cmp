@@ -10,6 +10,7 @@ import com.dscoding.snakegame.app.App
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         installSplashScreen()
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
