@@ -11,6 +11,7 @@ sealed interface GameAction {
     data object OnSettingsClick : GameAction
     data object OnSettingsDialogDismiss : GameAction
     data object OnFinishedDialogDismiss : GameAction
+    data class OnShareResultClick(val shareMessage: String) : GameAction
     data object OnInvalidAppState : GameAction
     data object GoBack : GameAction
 }

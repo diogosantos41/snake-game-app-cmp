@@ -7,6 +7,7 @@ import com.dscoding.snakegame.game.domain.GameCoordinator
 import com.dscoding.snakegame.game.presentation.models.ControlMode
 import com.dscoding.snakegame.game.presentation.models.PausedState
 import com.dscoding.snakegame.game.presentation.models.PlayState
+import com.dscoding.snakegame.game.presentation.utils.PlatformShareSheet
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -18,7 +19,8 @@ import kotlinx.coroutines.launch
 
 class GameViewModel(
     private val gamePreferences: GamePreferences,
-    private val gameCoordinator: GameCoordinator
+    private val gameCoordinator: GameCoordinator,
+    private val shareSheet: PlatformShareSheet
 ) : ViewModel() {
 
     companion object {
@@ -129,6 +131,12 @@ class GameViewModel(
                         score = 0
                     )
                 }
+            }
+
+            is GameAction.OnShareResultClick -> {
+                shareSheet.shareText(
+                    text = action.shareMessage
+                )
             }
 
             GameAction.OnInvalidAppState -> {

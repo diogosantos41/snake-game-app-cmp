@@ -35,8 +35,12 @@ import com.dscoding.snakegame.game.presentation.models.PlayState
 import com.dscoding.snakegame.game.presentation.settings.SettingsRoot
 import com.dscoding.snakegame.game.presentation.utils.isAppInForeground
 import com.dscoding.snakegame.game.presentation.utils.isOrientationLandscape
+import com.dscoding.snakegame.game.presentation.utils.rememberShareHandler
 import com.dscoding.snakegame.game.presentation.utils.snakeSwipeControls
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import snakegame.composeapp.generated.resources.Res
+import snakegame.composeapp.generated.resources.share_url
 
 @Composable
 fun GameRoot(
@@ -158,6 +162,19 @@ fun GameScreen(
         }
 
         if (state.currentPlayState is PlayState.Finished) {
+
+            val onShareClick =
+                rememberShareHandler(
+                    score = state.score,
+                    url = stringResource(Res.string.share_url)
+                ) { shareMessage ->
+                    onAction(
+                        GameAction.OnShareResultClick(
+                            shareMessage = shareMessage
+                        )
+                    )
+                }
+
             GameFinishedDialog(
                 finalScore = state.score,
                 finalFood = state.food,
@@ -165,7 +182,7 @@ fun GameScreen(
                 finalMovementDirection = state.currentMovementDirection,
                 highScore = state.highScoreAtGameEnd ?: state.highScore,
                 onPlayAgainClick = { onAction(GameAction.OnRestartGameClick) },
-                onShareClick = {},
+                onShareClick = onShareClick,
                 onDismiss = { onAction(GameAction.OnFinishedDialogDismiss) },
             )
         }
