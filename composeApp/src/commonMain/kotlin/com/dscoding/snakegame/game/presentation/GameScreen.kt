@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dscoding.snakegame.core.presentation.components.PortraitGuard
+import com.dscoding.snakegame.core.presentation.components.MobileLandscapeGuard
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.core.presentation.theme.alphaVerticalGradient
 import com.dscoding.snakegame.core.presentation.util.DialogScopedViewModel
@@ -38,7 +38,7 @@ import com.dscoding.snakegame.game.presentation.models.PausedState
 import com.dscoding.snakegame.game.presentation.models.PlayState
 import com.dscoding.snakegame.game.presentation.settings.SettingsRoot
 import com.dscoding.snakegame.game.presentation.utils.isAppInForeground
-import com.dscoding.snakegame.game.presentation.utils.isOrientationLandscape
+import com.dscoding.snakegame.game.presentation.utils.isLandscapeMobile
 import com.dscoding.snakegame.game.presentation.utils.rememberShareHandler
 import com.dscoding.snakegame.game.presentation.utils.snakeSwipeControls
 import org.jetbrains.compose.resources.stringResource
@@ -52,19 +52,18 @@ fun GameRoot(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val isAppInForeground by isAppInForeground()
-    val isOrientationLandscape by isOrientationLandscape()
-    val rootBackAction = rememberRootBackAction()
 
-    // TODO [BUG] iOS Rotations creates a offset effect on the dialog
-    LaunchedEffect(isAppInForeground, isOrientationLandscape) {
-        val isInvalidAppState = !isAppInForeground || isOrientationLandscape
-        if (isInvalidAppState) {
+    val rootBackAction = rememberRootBackAction()
+    val isAppInForeground by isAppInForeground()
+    val isLandscapeMobile by isLandscapeMobile()
+
+    LaunchedEffect(isAppInForeground, isLandscapeMobile) {
+        if (!isAppInForeground || isLandscapeMobile) {
             viewModel.onAction(GameAction.OnInvalidAppState)
         }
     }
 
-    PortraitGuard(isLandscape = isOrientationLandscape) {
+    MobileLandscapeGuard(isLandscapeMobile = isLandscapeMobile) {
         GameScreen(
             state = state,
             onAction = { action ->

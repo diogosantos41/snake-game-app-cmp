@@ -2,28 +2,27 @@
 
 package com.dscoding.snakegame.game.presentation.utils
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import platform.Foundation.NSNotificationCenter
-import platform.UIKit.UIDevice
-import platform.UIKit.UIDeviceOrientation
-import platform.UIKit.UIDeviceOrientationDidChangeNotification
+import platform.UIKit.*
 
 @Composable
-actual fun isOrientationLandscape(): State<Boolean> {
+actual fun isLandscapeMobile(): State<Boolean> {
     val state = remember { mutableStateOf(false) }
 
     DisposableEffect(Unit) {
         fun update() {
             val orientation = UIDevice.currentDevice.orientation
-            state.value = when (orientation) {
+
+            val isLandscape = when (orientation) {
                 UIDeviceOrientation.UIDeviceOrientationLandscapeLeft,
                 UIDeviceOrientation.UIDeviceOrientationLandscapeRight -> true
                 else -> false
             }
+
+            val isPhone = UIDevice.currentDevice.userInterfaceIdiom.toInt() == 0
+
+            state.value = isLandscape && isPhone
         }
 
         UIDevice.currentDevice.beginGeneratingDeviceOrientationNotifications()

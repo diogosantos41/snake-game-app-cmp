@@ -8,9 +8,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 
 @Composable
-actual fun isOrientationLandscape(): State<Boolean> {
+actual fun isLandscapeMobile(): State<Boolean> {
     val config = LocalConfiguration.current
+
     return remember(config) {
-        derivedStateOf { config.orientation == Configuration.ORIENTATION_LANDSCAPE }
+        derivedStateOf {
+            val isLandscape =
+                config.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+            val isMobile =
+                config.smallestScreenWidthDp < 600
+
+            isLandscape && isMobile
+        }
     }
 }

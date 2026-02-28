@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ScreenRotation
@@ -26,12 +24,12 @@ import snakegame.composeapp.generated.resources.Res
 import snakegame.composeapp.generated.resources.rotate_device_to_continue
 
 @Composable
-fun PortraitGuard(
-    isLandscape: Boolean = false,
+fun MobileLandscapeGuard(
+    isLandscapeMobile: Boolean = false,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
-    if (isLandscape) {
+    if (isLandscapeMobile) {
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -70,8 +68,8 @@ fun PortraitGuard(
     showSystemUi = true,
 )
 @Composable
-private fun PortraitGuardPreview() {
+private fun MobileLandscapeGuardPreview() {
     SnakeGameTheme {
-        PortraitGuard(isLandscape = true, content = {})
+        MobileLandscapeGuard(isLandscapeMobile = true, content = {})
     }
 }

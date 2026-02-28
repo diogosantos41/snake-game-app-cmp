@@ -4,4 +4,4 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 
 @Composable
-expect fun isOrientationLandscape(): State<Boolean>
+expect fun isLandscapeMobile(): State<Boolean>
