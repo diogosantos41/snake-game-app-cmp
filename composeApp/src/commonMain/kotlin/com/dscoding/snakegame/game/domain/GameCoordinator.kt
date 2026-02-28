@@ -59,6 +59,7 @@ class GameCoordinator(
     }
 
     fun pauseGame() {
+        if (!isGameInProgress()) return
         countdownJob?.cancel()
         countdownJob = null
         gameEngine.pauseGame()

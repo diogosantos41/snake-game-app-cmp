@@ -24,7 +24,7 @@ class GameViewModel(
 ) : ViewModel() {
 
     companion object {
-        const val BOARD_SIZE = 14
+        const val BOARD_SIZE = 16
     }
 
     private var hasLoadedInitialData = false
@@ -86,7 +86,7 @@ class GameViewModel(
             }
 
             GameAction.OnPauseGameClick -> {
-                if (!gameCoordinator.isGameInProgress()) return
+                if (state.value.currentPlayState is PlayState.Finished) return
 
                 _state.update {
                     it.copy(
@@ -105,7 +105,7 @@ class GameViewModel(
                         currentPlayState = PlayState.Paused(PausedState.SETTINGS),
                     )
                 }
-                if (gameCoordinator.isGameInProgress()) gameCoordinator.pauseGame()
+                gameCoordinator.pauseGame()
             }
 
             GameAction.OnSettingsDialogDismiss -> {

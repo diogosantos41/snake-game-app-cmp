@@ -1,10 +1,13 @@
 package com.dscoding.snakegame.game.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -12,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -99,22 +103,29 @@ fun GameScreen(
                     onAction(GameAction.OnDirectionClick(direction))
                 },
         ) {
-            val tileSize = maxWidth / BOARD_SIZE
+            val minControlsHeight = 400.dp
+            val boardSize = minOf(maxWidth, maxHeight - minControlsHeight).coerceAtLeast(0.dp)
+            val tileSize = (boardSize / BOARD_SIZE).coerceAtLeast(1.dp)
 
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .tileGridBackground(
-                        tileSize = tileSize,
-                    ),
+                modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                GameBoard(
-                    food = state.food,
-                    snake = state.snake,
-                    currentMovementDirection = state.currentMovementDirection,
-                    isFoodAnimated = state.currentPlayState is PlayState.Playing
-                )
+                Box(
+                    modifier = Modifier
+                        .size(boardSize)
+                        .tileGridBackground(tileSize = tileSize)
+                        .border(1.dp, White.copy(alpha = 0.5f))
+                ) {
+                    GameBoard(
+                        food = state.food,
+                        snake = state.snake,
+                        currentMovementDirection = state.currentMovementDirection,
+                        isFoodAnimated = state.currentPlayState is PlayState.Playing,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
                 GameControls(
                     score = state.score,
                     highscore = state.highScore,
@@ -124,7 +135,8 @@ fun GameScreen(
                         onAction(GameAction.OnDirectionClick(it))
                     },
                     onPauseClick = { onAction(GameAction.OnPauseGameClick) },
-                    onSettingsClick = { onAction(GameAction.OnSettingsClick) }
+                    onSettingsClick = { onAction(GameAction.OnSettingsClick) },
+                    modifier = Modifier.tileGridBackground(tileSize = tileSize)
                 )
             }
         }
@@ -151,7 +163,6 @@ fun GameScreen(
             visible = state.currentPlayState == PlayState.Paused(PausedState.SETTINGS)
         ) {
             SettingsRoot(onDismiss = { onAction(GameAction.OnSettingsDialogDismiss) })
-
         }
 
         state.countdownSecondsRemaining?.let {
