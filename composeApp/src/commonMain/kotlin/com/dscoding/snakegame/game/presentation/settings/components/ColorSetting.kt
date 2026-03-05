@@ -43,7 +43,7 @@ fun ColorSettings(
         )
         Spacer(modifier = Modifier.height(6.dp))
         FlowRow(
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
             maxLines = 2,
             modifier = Modifier.fillMaxWidth()

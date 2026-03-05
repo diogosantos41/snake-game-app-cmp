@@ -2,11 +2,13 @@ package com.dscoding.snakegame.core.presentation.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.dscoding.snakegame.core.presentation.theme.ContainerBorderWhite
@@ -33,7 +35,7 @@ fun GameDialogContent(
     ) {
         Surface(
             modifier = modifier
-                .fillMaxWidth()
+                .widthIn(max = 450.dp)
                 .clip(dialogShape),
             color = DialogBackgroundBlack,
             shape = dialogShape,
