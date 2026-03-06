@@ -86,12 +86,6 @@ class SettingsViewModel(
                     gamePreferences.setHapticsEnabled(action.enabled)
                 }
             }
-
-            SettingsAction.OnGithubClick -> TODO()
-            SettingsAction.OnPrivacyPolicyClick -> TODO()
-            SettingsAction.OnRateAppClick -> TODO()
-            SettingsAction.OnShareAppClick -> TODO()
-
             else -> Unit
         }
     }

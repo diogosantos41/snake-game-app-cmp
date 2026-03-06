@@ -31,7 +31,7 @@
     <string name="play_again">Play Again</string>
     <string name="share">Share</string>
     <string name="share_message">I just achieved a score of %1$s on the Snake app. Try it yourself: %2$s</string>
-    <string name="share_url">https://snake.com</string>
+    <string name="share_url">https://insertsnakeurlhere.com</string>
 
     <!-- Portrait Guard -->
     <string name="rotate_device_to_continue">Rotate your device to continue</string>
