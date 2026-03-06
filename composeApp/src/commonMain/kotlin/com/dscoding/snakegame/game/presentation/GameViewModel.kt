@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dscoding.snakegame.core.domain.GamePreferences
 import com.dscoding.snakegame.game.domain.GameCoordinator
-import com.dscoding.snakegame.game.presentation.models.ControlMode
+import com.dscoding.snakegame.core.domain.models.ControlMode
 import com.dscoding.snakegame.game.presentation.models.PausedState
 import com.dscoding.snakegame.game.presentation.models.PlayState
 import com.dscoding.snakegame.game.presentation.utils.PlatformShareSheet

@@ -1,6 +1,6 @@
 package com.dscoding.snakegame.game.presentation.settings
 
-import com.dscoding.snakegame.game.presentation.settings.models.ColorUi
+import com.dscoding.snakegame.core.domain.models.ColorUi
 import com.dscoding.snakegame.game.presentation.settings.models.SwitchSettingUi
 
 data class SettingsState(

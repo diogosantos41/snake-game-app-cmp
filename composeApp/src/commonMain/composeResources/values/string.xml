@@ -34,17 +34,4 @@
 
     <!-- Portrait Guard -->
     <string name="rotate_device_to_continue">Rotate your device to continue</string>
-
-    <!-- Colors -->
-    <string name="color_burnt_orange">Burnt Orange</string>
-    <string name="color_red">Red</string>
-    <string name="color_light_coral">Light Coral</string>
-    <string name="color_pink">Pink</string>
-    <string name="color_purple">Purple</string>
-    <string name="color_indigo">Indigo</string>
-    <string name="color_blue">Blue</string>
-    <string name="color_cyan">Cyan</string>
-    <string name="color_mint_green">Mint Green</string>
-    <string name="color_retro_green">Retro Green</string>
-    <string name="color_bright_yellow">Bright Yellow</string>
 </resources>

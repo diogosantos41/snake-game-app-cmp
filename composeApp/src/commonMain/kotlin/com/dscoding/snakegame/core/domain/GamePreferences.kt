@@ -1,7 +1,7 @@
 package com.dscoding.snakegame.core.domain
 
-import com.dscoding.snakegame.game.presentation.models.ControlMode
-import com.dscoding.snakegame.game.presentation.settings.models.ColorUi
+import com.dscoding.snakegame.core.domain.models.ControlMode
+import com.dscoding.snakegame.core.domain.models.ColorUi
 import kotlinx.coroutines.flow.Flow
 
 interface GamePreferences {

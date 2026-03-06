@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
-import com.dscoding.snakegame.game.presentation.settings.models.ColorUi
+import com.dscoding.snakegame.core.domain.models.ColorUi
 import org.jetbrains.compose.resources.stringResource
 import snakegame.composeapp.generated.resources.Res
 import snakegame.composeapp.generated.resources.game_color

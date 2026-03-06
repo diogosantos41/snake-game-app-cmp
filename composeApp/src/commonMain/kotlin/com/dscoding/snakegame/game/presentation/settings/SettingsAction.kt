@@ -1,7 +1,6 @@
 package com.dscoding.snakegame.game.presentation.settings
 
-import com.dscoding.snakegame.game.presentation.models.ControlMode
-import com.dscoding.snakegame.game.presentation.settings.models.ColorUi
+import com.dscoding.snakegame.core.domain.models.ColorUi
 
 sealed interface SettingsAction {
     data class OnToggleSoundClick(val enabled: Boolean) : SettingsAction

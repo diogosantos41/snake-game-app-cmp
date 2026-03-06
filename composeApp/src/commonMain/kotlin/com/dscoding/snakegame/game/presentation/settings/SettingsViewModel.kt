@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dscoding.snakegame.core.domain.GamePreferences
 import com.dscoding.snakegame.core.presentation.util.UiText
-import com.dscoding.snakegame.game.presentation.models.ControlMode
-import com.dscoding.snakegame.game.presentation.settings.models.ColorUi
+import com.dscoding.snakegame.core.domain.models.ControlMode
+import com.dscoding.snakegame.core.domain.models.ColorUi
 import com.dscoding.snakegame.game.presentation.settings.models.SwitchSettingUi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine

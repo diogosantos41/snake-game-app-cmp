@@ -33,7 +33,7 @@ import com.dscoding.snakegame.game.presentation.components.dialogs.GamePausedDia
 import com.dscoding.snakegame.game.presentation.components.dialogs.GameStartDialog
 import com.dscoding.snakegame.game.presentation.components.game_board.GameBoard
 import com.dscoding.snakegame.game.presentation.components.game_controls.GameControls
-import com.dscoding.snakegame.game.presentation.models.ControlMode
+import com.dscoding.snakegame.core.domain.models.ControlMode
 import com.dscoding.snakegame.game.presentation.models.PausedState
 import com.dscoding.snakegame.game.presentation.models.PlayState
 import com.dscoding.snakegame.game.presentation.settings.SettingsRoot

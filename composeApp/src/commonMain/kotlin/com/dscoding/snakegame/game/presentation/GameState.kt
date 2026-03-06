@@ -1,8 +1,7 @@
 package com.dscoding.snakegame.game.presentation
 
 import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
-import com.dscoding.snakegame.game.presentation.models.ControlMode
-import com.dscoding.snakegame.game.presentation.models.PausedState
+import com.dscoding.snakegame.core.domain.models.ControlMode
 import com.dscoding.snakegame.game.presentation.models.PlayState
 
 data class GameState(

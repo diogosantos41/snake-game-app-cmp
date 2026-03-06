@@ -1,6 +1,6 @@
 package com.dscoding.snakegame.app
 
-import com.dscoding.snakegame.game.presentation.settings.models.ColorUi
+import com.dscoding.snakegame.core.domain.models.ColorUi
 
 data class MainState(
     val primaryColor: ColorUi? = null
