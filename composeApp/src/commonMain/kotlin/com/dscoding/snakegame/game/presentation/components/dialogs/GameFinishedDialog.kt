@@ -38,6 +38,7 @@ import snakegame.composeapp.generated.resources.share
 
 @Composable
 fun GameFinishedDialog(
+    title: String,
     finalScore: Int,
     finalFood: Pair<Int, Int>?,
     finalSnake: List<Pair<Int, Int>>,
@@ -63,7 +64,7 @@ fun GameFinishedDialog(
             verticalArrangement = Arrangement.spacedBy(VerticalSpacingBetweenDialogComponent)
         ) {
             GameDialogHeader(
-                title = stringResource(Res.string.game_over),
+                title = title,
                 showClose = false,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -115,6 +116,7 @@ private fun GameFinishedDialogPreview() {
     SnakeGameTheme {
         Box(modifier = Modifier.padding(all = 150.dp)) {
             GameFinishedDialog(
+                title = "Game Over!",
                 finalScore = 12,
                 finalFood = 2 to 3,
                 finalSnake = (1..6).map { it to 1 },

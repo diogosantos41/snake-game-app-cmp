@@ -79,6 +79,10 @@ class GameEngineImpl : GameEngine {
             snake = listOf(newSnakeHeadPosition) + snake.take(snakeLength - 1)
 
             if (snakeAteFood) {
+                if (checkVictory(snake)) {
+                    emit(GameResult.GameEnded(reason = GameEndReason.Victory))
+                    return@flow
+                }
                 food = spawnFoodAvoidingSnake(snake)
             }
 
@@ -137,5 +141,10 @@ class GameEngineImpl : GameEngine {
 
     private suspend fun waitUntilResumed() {
         isPaused.filter { paused -> !paused }.first()
+    }
+
+    private fun checkVictory(snake: List<Pair<Int, Int>>): Boolean {
+        val boardArea = gameBoardSize * gameBoardSize
+        return snake.size >= boardArea
     }
 }

@@ -32,7 +32,7 @@ class GameCoordinator(
         scope: CoroutineScope,
         boardSize: Int,
         onTick: (GameResult.Tick) -> Unit,
-        onGameEnded: () -> Unit
+        onGameEnded: (GameResult.GameEnded) -> Unit
     ) {
         gameAudio.stopAll()
         gameAudio.startMusic()
@@ -53,7 +53,7 @@ class GameCoordinator(
                 gameHaptics.vibrate(HapticType.HEAVY)
                 gameEngineJob?.cancel()
                 gameEngineJob = null
-                onGameEnded()
+                onGameEnded(it)
             }
             .launchIn(scope)
     }

@@ -57,6 +57,8 @@ fun GameRoot(
     val isAppInForeground by isAppInForeground()
     val isLandscapeMobile by isLandscapeMobile()
 
+    // When app goes to background or device is landscape on mobile,
+    // we force the game to pause.
     LaunchedEffect(isAppInForeground, isLandscapeMobile) {
         if (!isAppInForeground || isLandscapeMobile) {
             viewModel.onAction(GameAction.OnInvalidAppState)
@@ -186,6 +188,7 @@ fun GameScreen(
                 }
 
             GameFinishedDialog(
+                title = state.gameEndMessage?.asString() ?: "",
                 finalScore = state.score,
                 finalFood = state.food,
                 finalSnake = state.snake,

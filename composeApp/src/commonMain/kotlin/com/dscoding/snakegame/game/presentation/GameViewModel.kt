@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.dscoding.snakegame.core.domain.GamePreferences
 import com.dscoding.snakegame.game.domain.GameCoordinator
 import com.dscoding.snakegame.core.domain.models.ControlMode
+import com.dscoding.snakegame.core.presentation.util.UiText
+import com.dscoding.snakegame.game.domain.engine.models.GameEndReason
 import com.dscoding.snakegame.game.presentation.models.PausedState
 import com.dscoding.snakegame.game.presentation.models.PlayState
 import com.dscoding.snakegame.game.presentation.utils.PlatformShareSheet
@@ -16,6 +18,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import snakegame.composeapp.generated.resources.Res
+import snakegame.composeapp.generated.resources.game_over
+import snakegame.composeapp.generated.resources.victory
 
 class GameViewModel(
     private val gamePreferences: GamePreferences,
@@ -172,11 +177,16 @@ class GameViewModel(
                     )
                 }
             },
-            onGameEnded = {
+            onGameEnded = { endResult ->
+                val gameEndedMessage = when (endResult.reason) {
+                    GameEndReason.Victory -> UiText.Resource(Res.string.victory)
+                    else -> UiText.Resource(Res.string.game_over)
+                }
                 _state.update {
                     it.copy(
                         currentPlayState = PlayState.Finished,
-                        highScoreAtGameEnd = it.highScore
+                        highScoreAtGameEnd = it.highScore,
+                        gameEndMessage = gameEndedMessage
                     )
                 }
                 saveHighscore()

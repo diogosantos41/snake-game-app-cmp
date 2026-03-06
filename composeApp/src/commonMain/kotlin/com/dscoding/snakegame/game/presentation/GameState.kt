@@ -2,6 +2,7 @@ package com.dscoding.snakegame.game.presentation
 
 import com.dscoding.snakegame.game.domain.engine.models.MovementDirection
 import com.dscoding.snakegame.core.domain.models.ControlMode
+import com.dscoding.snakegame.core.presentation.util.UiText
 import com.dscoding.snakegame.game.presentation.models.PlayState
 
 data class GameState(
@@ -11,6 +12,7 @@ data class GameState(
     val score: Int = 0,
     val highScore: Int = 0,
     val highScoreAtGameEnd: Int? = null,
+    val gameEndMessage: UiText? = null,
     val food: Pair<Int, Int>? = null,
     val snake: List<Pair<Int, Int>> = emptyList(),
     val currentMovementDirection: MovementDirection = MovementDirection.RIGHT,

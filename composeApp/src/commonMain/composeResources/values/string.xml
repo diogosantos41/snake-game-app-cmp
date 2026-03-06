@@ -27,6 +27,7 @@
 
     <!-- Finished Dialog -->
     <string name="game_over">Game Over!</string>
+    <string name="victory">Victory!</string>
     <string name="play_again">Play Again</string>
     <string name="share">Share</string>
     <string name="share_message">I just achieved a score of %1$s on the Snake app. Try it yourself: %2$s</string>
