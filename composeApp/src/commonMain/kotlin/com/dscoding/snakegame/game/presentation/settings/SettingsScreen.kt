@@ -116,7 +116,6 @@ fun SettingsScreen(
         LabelSetting(
             title = stringResource(Res.string.app_version),
             value = "1.0.0",
-            onClick = {},
             modifier = Modifier.fillMaxWidth()
         )
     }

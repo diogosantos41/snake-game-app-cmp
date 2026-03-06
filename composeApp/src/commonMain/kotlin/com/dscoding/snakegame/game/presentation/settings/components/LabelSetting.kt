@@ -19,7 +19,7 @@ import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 fun LabelSetting(
     title: String,
     value: String,
-    onClick: () -> Unit,
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
