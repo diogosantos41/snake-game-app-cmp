@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dscoding.snakegame.core.domain.GamePreferences
 import com.dscoding.snakegame.game.domain.GameCoordinator
-import com.dscoding.snakegame.core.domain.models.ControlMode
 import com.dscoding.snakegame.core.presentation.util.UiText
 import com.dscoding.snakegame.game.domain.engine.models.GameEndReason
 import com.dscoding.snakegame.game.presentation.models.PausedState
@@ -196,9 +195,9 @@ class GameViewModel(
 
     private fun saveHighscore() {
         viewModelScope.launch {
-            val finalScore = _state.value.score
-            val currentHigh = state.value.highScore
-            if (finalScore > currentHigh) gamePreferences.setHighscore(finalScore)
+            val finalScore = state.value.score
+            val currentHighscore = state.value.highScore
+            if (finalScore > currentHighscore) gamePreferences.setHighscore(finalScore)
         }
     }
 
@@ -210,7 +209,7 @@ class GameViewModel(
             _state.update {
                 it.copy(
                     highScore = highScore,
-                    movementControlMode = ControlMode.valueOf(controlMode.name)
+                    movementControlMode = controlMode
                 )
             }
         }.launchIn(viewModelScope)

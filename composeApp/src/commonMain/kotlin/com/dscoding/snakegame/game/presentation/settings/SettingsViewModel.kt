@@ -62,9 +62,7 @@ class SettingsViewModel(
 
             is SettingsAction.OnGameColorSelected -> {
                 viewModelScope.launch {
-                    gamePreferences.setGameColor(
-                        ColorUi.valueOf(action.color.name)
-                    )
+                    gamePreferences.setGameColor(action.color)
                 }
             }
 
