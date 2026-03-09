@@ -21,11 +21,14 @@ fun App(
     val primary = state.primaryColor?.color ?: GameOrange
     val primaryAnim = remember { Animatable(primary) }
 
-    LaunchedEffect(primary) {
-        primaryAnim.animateTo(
-            targetValue = primary,
-            animationSpec = tween(800)
-        )
+    LaunchedEffect(state.primaryColor) {
+        state.primaryColor?.let { colorUi ->
+            if (state.shouldAnimatePrimaryColor) {
+                primaryAnim.animateTo(colorUi.color, animationSpec = tween(600))
+            } else {
+                primaryAnim.snapTo(colorUi.color)
+            }
+        }
     }
 
     SnakeGameTheme(

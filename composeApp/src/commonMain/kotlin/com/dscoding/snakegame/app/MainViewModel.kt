@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.withIndex
 
 class MainViewModel(
     gamePreferences: GamePreferences
@@ -16,9 +17,11 @@ class MainViewModel(
         gamePreferences
             .observeGameColor()
             .distinctUntilChanged()
-            .map { gameColor ->
+            .withIndex()
+            .map { (index, color) ->
                 MainState(
-                    primaryColor = gameColor
+                    primaryColor = color,
+                    shouldAnimatePrimaryColor = index > 0,
                 )
             }
             .stateIn(
