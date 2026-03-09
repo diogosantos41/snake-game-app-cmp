@@ -5,6 +5,9 @@ kotlin = "2.3.10"
 android-compileSdk = "36"
 android-minSdk = "24"
 android-targetSdk = "36"
+project-applicationId = "com.dscoding.snakegame"
+project-versionName = "1.0.0"
+buildkonfig = "0.17.1"
 androidx-activity = "1.12.4"
 androidx-lifecycle = "2.9.6"
 core-splashscreen = "1.2.0"
@@ -55,6 +58,7 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
 
 [bundles]
 koin-common = [

@@ -30,7 +30,6 @@ import com.dscoding.snakegame.game.presentation.components.ActionButton
 import com.dscoding.snakegame.game.presentation.components.game_board.GameBoard
 import org.jetbrains.compose.resources.stringResource
 import snakegame.composeapp.generated.resources.Res
-import snakegame.composeapp.generated.resources.game_over
 import snakegame.composeapp.generated.resources.high_score
 import snakegame.composeapp.generated.resources.play_again
 import snakegame.composeapp.generated.resources.score

@@ -7,7 +7,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dscoding.snakegame.core.presentation.theme.GameGreen
+import com.dscoding.snakegame.core.presentation.theme.GameOrange
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.game.presentation.GameRoot
 import org.koin.compose.viewmodel.koinViewModel
@@ -18,13 +18,13 @@ fun App(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val primary = state.primaryColor?.color ?: GameGreen
+    val primary = state.primaryColor?.color ?: GameOrange
     val primaryAnim = remember { Animatable(primary) }
 
     LaunchedEffect(primary) {
         primaryAnim.animateTo(
             targetValue = primary,
-            animationSpec = tween(1250)
+            animationSpec = tween(800)
         )
     }
 

@@ -15,6 +15,7 @@ import com.dscoding.snakegame.core.presentation.components.GameDialogContent
 import com.dscoding.snakegame.core.presentation.components.GameDialogHeader
 import com.dscoding.snakegame.core.presentation.theme.Dimens.HorizontalSpacingDialogComponent
 import com.dscoding.snakegame.core.presentation.theme.Dimens.VerticalSpacingBetweenDialogComponent
+import com.dscoding.snakegame.BuildKonfig
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.core.presentation.util.UiText
 import com.dscoding.snakegame.game.presentation.settings.components.ColorSettings
@@ -115,7 +116,7 @@ fun SettingsScreen(
         )
         LabelSetting(
             title = stringResource(Res.string.app_version),
-            value = "1.0.0",
+            value = BuildKonfig.VERSION_NAME,
             modifier = Modifier.fillMaxWidth()
         )
     }

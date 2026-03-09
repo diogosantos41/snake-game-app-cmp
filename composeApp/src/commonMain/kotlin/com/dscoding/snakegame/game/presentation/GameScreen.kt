@@ -52,7 +52,6 @@ fun GameRoot(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-
     val rootBackAction = rememberRootBackAction()
     val isAppInForeground by isAppInForeground()
     val isLandscapeMobile by isLandscapeMobile()
