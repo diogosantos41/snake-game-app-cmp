@@ -1,4 +1,4 @@
-package com.dscoding.snakegame
+package com.dscoding.androidapp
 
 import android.app.Application
 import com.dscoding.snakegame.di.initKoin

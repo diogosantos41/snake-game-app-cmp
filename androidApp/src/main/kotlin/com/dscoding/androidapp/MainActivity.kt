@@ -1,4 +1,4 @@
-package com.dscoding.snakegame
+package com.dscoding.androidapp
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
