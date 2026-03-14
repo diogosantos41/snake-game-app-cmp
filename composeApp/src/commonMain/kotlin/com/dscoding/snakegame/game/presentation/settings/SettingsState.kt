@@ -7,5 +7,5 @@ data class SettingsState(
     val soundSwitchSetting: SwitchSettingUi = SwitchSettingUi(),
     val vibrationSwitchSetting: SwitchSettingUi = SwitchSettingUi(),
     val controlModeSwitchSetting: SwitchSettingUi = SwitchSettingUi(),
-    val selectedGameColor: ColorUi = ColorUi.BURNT_ORANGE,
+    val selectedGameColor: ColorUi = ColorUi.RETRO_GREEN,
 )

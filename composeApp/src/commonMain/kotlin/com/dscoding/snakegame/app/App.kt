@@ -7,6 +7,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dscoding.snakegame.core.presentation.theme.GameGreen
 import com.dscoding.snakegame.core.presentation.theme.GameOrange
 import com.dscoding.snakegame.core.presentation.theme.SnakeGameTheme
 import com.dscoding.snakegame.game.presentation.GameRoot
@@ -18,7 +19,7 @@ fun App(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val primary = state.primaryColor?.color ?: GameOrange
+    val primary = state.primaryColor?.color ?: GameGreen
     val primaryAnim = remember { Animatable(primary) }
 
     LaunchedEffect(state.primaryColor) {

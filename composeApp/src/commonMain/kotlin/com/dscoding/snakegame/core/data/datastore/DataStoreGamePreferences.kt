@@ -43,7 +43,7 @@ class DataStoreGamePreferences(
 
     override fun observeSoundEnabled(): Flow<Boolean> {
         return dataStore.data.map { preferences ->
-            preferences[soundKey] ?: false
+            preferences[soundKey] ?: true
         }.distinctUntilChanged()
     }
 
@@ -55,7 +55,7 @@ class DataStoreGamePreferences(
 
     override fun observeHapticsEnabled(): Flow<Boolean> {
         return dataStore.data.map { preferences ->
-            preferences[hapticsKey] ?: false
+            preferences[hapticsKey] ?: true
         }.distinctUntilChanged()
     }
 
@@ -84,7 +84,7 @@ class DataStoreGamePreferences(
         return dataStore.data.map { preferences ->
             preferences[gameColorKey]?.let {
                 ColorUi.valueOf(it)
-            } ?: ColorUi.BURNT_ORANGE
+            } ?: ColorUi.RETRO_GREEN
         }
             .distinctUntilChanged()
     }
